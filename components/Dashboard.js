@@ -28,6 +28,7 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { Input, InputAdornment } from "@mui/material";
 import SearchField from "./SearchField";
+import DarkThemeToggler from "./DarkThemeToggler";
 
 const drawerWidth = 240;
 
@@ -76,10 +77,16 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const mdTheme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const [view, setView] = React.useState("Home");
+  const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
     if (view === "Home") return <Home />;
     if (view === "InvoiceList") return <InvoiceList />;
@@ -110,9 +117,12 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const toggleLightTheme = () => {
+    setLightTheme(!lightTheme);
+  };
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={lightTheme ? mdTheme : darkTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -150,6 +160,7 @@ function DashboardContent() {
                 { label: "Sara Micale", _id: "lslfkslekfse" },
               ]}
             />
+            <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
