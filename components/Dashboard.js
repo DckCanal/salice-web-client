@@ -25,6 +25,9 @@ import Deposits from "./Deposits";
 import Orders from "./Orders";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import { Input, InputAdornment } from "@mui/material";
+import SearchField from "./SearchField";
 
 const drawerWidth = 240;
 
@@ -137,13 +140,20 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              il Salice
             </Typography>
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
+            <SearchField
+              optionList={[
+                { label: "Claudia Boccalini", _id: "102983190283" },
+                { label: "Davide Vescovelli", _id: "lskeflkselfks" },
+                { label: "Sara Micale", _id: "lslfkslekfse" },
+              ]}
+            />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
