@@ -4,7 +4,7 @@ import Deposits from "./Deposits";
 import Orders from "./Orders";
 import Chart from "./Chart";
 
-export default function Home() {
+export default function Home({ lightTheme }) {
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -18,7 +18,7 @@ export default function Home() {
             margin: 3,
           }}
         >
-          <Chart />
+          <Chart lightTheme={lightTheme} />
         </Paper>
       </Grid>
       {/* Recent Deposits */}

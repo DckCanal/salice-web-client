@@ -88,7 +88,7 @@ function DashboardContent() {
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
-    if (view === "Home") return <Home />;
+    if (view === "Home") return <Home lightTheme={lightTheme} />;
     if (view === "InvoiceList") return <InvoiceList />;
     if (view === "PatientList") return <PatientList />;
     if (view === "Graph") return <Graph />;

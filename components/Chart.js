@@ -30,7 +30,7 @@ const data = [
   createData("24:00", undefined),
 ];
 
-export default function Chart() {
+export default function Chart({ lightTheme }) {
   const theme = useTheme();
 
   return (
@@ -67,9 +67,11 @@ export default function Chart() {
               Sales ($)
             </Label>
           </YAxis>
-          <Tooltip />
+          <Tooltip
+            contentStyle={{ backgroundColor: lightTheme ? "#ddd" : "#555" }}
+          />
           <Legend />
-          <CartesianGrid stroke="#f5f5f5" />
+          {/* <CartesianGrid stroke="#f5f5f5" /> */}
           <Line
             isAnimationActive={true}
             type="monotone"
