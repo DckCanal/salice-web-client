@@ -12,11 +12,14 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Home from "./Home";
+import PatientList from "./PatientList";
+import InvoiceList from "./InvoiceList";
+import Graph from "./Graph";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import ListItems from "./listItems";
 // import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
@@ -94,6 +97,30 @@ function DashboardContent() {
   const [view, setView] = React.useState("Home");
   const switchContent = () => {
     if (view === "Home") return <Home />;
+    if (view === "InvoiceList") return <InvoiceList />;
+    if (view === "PatientList") return <PatientList />;
+    if (view === "Graph") return <Graph />;
+  };
+  // const listItemMap = {
+  //   1: "Home",
+  //   2: "InvoiceList",
+  //   3: "PatientList",
+  //   4: "Graph",
+  //   5: "AggregateMonth",
+  //   6: "Aggregate4Months",
+  //   7: "AggregateYear",
+  // };
+  const getListItemKey = (view) => {
+    if (view === "Home") return 1;
+    if (view === "InvoiceList") return 2;
+    if (view === "PatientList") return 3;
+    if (view === "Graph") return 4;
+  };
+  const listItemClickHandler = (view) => {
+    return function (event) {
+      event.preventDefault();
+      setView(view);
+    };
   };
   const toggleDrawer = () => {
     setOpen(!open);
@@ -152,9 +179,12 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            <ListItems
+              sel={getListItemKey(view)}
+              clickHandler={listItemClickHandler}
+            />
+            {/* <Divider sx={{ my: 1 }} /> */}
+            {/* <SecondaryListItems sel={5} /> */}
           </List>
         </Drawer>
         <Box
