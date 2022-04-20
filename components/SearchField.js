@@ -5,7 +5,7 @@ export default function SearchField({ optionList }) {
   return (
     <Autocomplete
       disablePortal
-      autoComplete
+      //   autoComplete
       id="patient-list"
       options={optionList}
       sx={{ width: 300 }}
