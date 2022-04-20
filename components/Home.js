@@ -2,6 +2,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import Chart from "./Chart";
 
 export default function Home() {
   return (
@@ -17,7 +18,7 @@ export default function Home() {
             margin: 3,
           }}
         >
-          {/* <Chart /> */}
+          <Chart />
         </Paper>
       </Grid>
       {/* Recent Deposits */}

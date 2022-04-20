@@ -7,6 +7,9 @@ import {
   YAxis,
   Label,
   ResponsiveContainer,
+  Tooltip,
+  CartesianGrid,
+  Legend,
 } from "recharts";
 import Title from "./Title";
 
@@ -33,7 +36,7 @@ export default function Chart() {
   return (
     <React.Fragment>
       <Title>Today</Title>
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
           margin={{
@@ -64,12 +67,15 @@ export default function Chart() {
               Sales ($)
             </Label>
           </YAxis>
+          <Tooltip />
+          <Legend />
+          <CartesianGrid stroke="#f5f5f5" />
           <Line
-            isAnimationActive={false}
+            isAnimationActive={true}
             type="monotone"
             dataKey="amount"
             stroke={theme.palette.primary.main}
-            dot={false}
+            dot={true}
           />
         </LineChart>
       </ResponsiveContainer>
