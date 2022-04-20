@@ -39,12 +39,6 @@ export default function ListItems({ sel, clickHandler }) {
         </ListItemIcon>
         <ListItemText primary="Grafici" />
       </ListItemButton>
-      {/* <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton> */}
       <Divider sx={{ my: 1 }} />
       <ListSubheader component="div" inset>
         Saved reports
@@ -70,31 +64,3 @@ export default function ListItems({ sel, clickHandler }) {
     </React.Fragment>
   );
 }
-
-// export function SecondaryListItems({ sel }) {
-//   return (
-//     <React.Fragment>
-//       <ListSubheader component="div" inset>
-//         Saved reports
-//       </ListSubheader>
-//       <ListItemButton selected={sel == 5}>
-//         <ListItemIcon>
-//           <AssignmentIcon />
-//         </ListItemIcon>
-//         <ListItemText primary={italianMonth(new Date().getMonth())} />
-//       </ListItemButton>
-//       <ListItemButton selected={sel == 6}>
-//         <ListItemIcon>
-//           <AssignmentIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Quadrimestre" />
-//       </ListItemButton>
-//       <ListItemButton selected={sel == 7}>
-//         <ListItemIcon>
-//           <AssignmentIcon />
-//         </ListItemIcon>
-//         <ListItemText primary={new Date().getFullYear()} />
-//       </ListItemButton>
-//     </React.Fragment>
-//   );
-// }

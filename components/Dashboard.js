@@ -26,24 +26,6 @@ import Orders from "./Orders";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
-// function Copyright(props) {
-//   return (
-//     <Typography
-//       variant="body2"
-//       color="text.secondary"
-//       align="center"
-//       {...props}
-//     >
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
-
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -183,8 +165,6 @@ function DashboardContent() {
               sel={getListItemKey(view)}
               clickHandler={listItemClickHandler}
             />
-            {/* <Divider sx={{ my: 1 }} /> */}
-            {/* <SecondaryListItems sel={5} /> */}
           </List>
         </Drawer>
         <Box
@@ -202,9 +182,6 @@ function DashboardContent() {
           <Toolbar />
           {/* --- MAIN CONTENT ---  */}
           {switchContent()}
-          {/* <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>*/}
-          {/* <Copyright sx={{ pt: 4 }} /> */}
-          {/* </Container> */}
         </Box>
       </Box>
     </ThemeProvider>
