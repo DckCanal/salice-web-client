@@ -142,11 +142,7 @@ function DashboardContent() {
             >
               il Salice
             </Typography>
-            {/* <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+
             <SearchField
               optionList={[
                 { label: "Claudia Boccalini", _id: "102983190283" },

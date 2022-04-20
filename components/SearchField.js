@@ -10,7 +10,7 @@ export default function SearchField({ optionList }) {
       options={optionList}
       sx={{ width: 300 }}
       onChange={(ev, val) => {
-        val && console.log(val._id);
+        val && console.log(val.label, val._id);
       }}
       renderInput={(params) => (
         <TextField
@@ -22,7 +22,7 @@ export default function SearchField({ optionList }) {
             ),
           }}
           //   type="search"
-          //   variant="outlined"
+          variant="standard"
           placeholder="Cerca paziente"
           {...params}
         />
