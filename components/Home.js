@@ -14,6 +14,7 @@ export default function Home() {
             display: "flex",
             flexDirection: "column",
             height: 240,
+            margin: 3,
           }}
         >
           {/* <Chart /> */}
@@ -27,6 +28,7 @@ export default function Home() {
             display: "flex",
             flexDirection: "column",
             height: 240,
+            margin: 3,
           }}
         >
           <Deposits />
@@ -34,7 +36,9 @@ export default function Home() {
       </Grid>
       {/* Recent Orders */}
       <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <Paper
+          sx={{ p: 2, display: "flex", flexDirection: "column", margin: 3 }}
+        >
           <Orders />
         </Paper>
       </Grid>
