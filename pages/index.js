@@ -10,7 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 // --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
-import { invoices } from "../lib/data/invoices";
+import { invoices } from "../lib/data/invoicesSmall";
 import { patients } from "../lib/data/patients";
 
 export const getStaticProps = async () => {
