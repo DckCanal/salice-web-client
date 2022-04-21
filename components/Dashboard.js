@@ -83,15 +83,18 @@ const darkTheme = createTheme({
   },
 });
 
-function DashboardContent() {
+function DashboardContent({ invoices, patients }) {
   const [open, setOpen] = React.useState(true);
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
     if (view === "Home") return <Home lightTheme={lightTheme} />;
-    if (view === "InvoiceList") return <InvoiceList />;
-    if (view === "PatientList") return <PatientList />;
-    if (view === "Graph") return <Graph />;
+    if (view === "InvoiceList")
+      return <InvoiceList invoices={invoices} patients={patients} />;
+    if (view === "PatientList")
+      return <PatientList invoices={invoices} patients={patients} />;
+    if (view === "Graph")
+      return <Graph invoices={invoices} patients={patients} />;
   };
   // const listItemMap = {
   //   1: "Home",
@@ -205,6 +208,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function Dashboard({ invoices, patients }) {
+  return <DashboardContent invoices={invoices} patients={patients} />;
 }

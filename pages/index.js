@@ -9,7 +9,22 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-export default function Home() {
+// --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
+import { invoices } from "../lib/data/invoices";
+import { patients } from "../lib/data/patients";
+
+export const getStaticProps = async () => {
+  return {
+    props: {
+      invoices,
+      patients,
+    },
+  };
+};
+
+// -----------------------------------------------------
+
+export default function Home({ invoices, patients }) {
   const [loading, isLoading] = React.useState(true);
   return (
     <div>
@@ -21,7 +36,7 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Dashboard></Dashboard>
+      <Dashboard invoices={invoices} patients={patients}></Dashboard>
     </div>
   );
 }
