@@ -26,7 +26,7 @@ import Orders from "./Orders";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import { Input, InputAdornment } from "@mui/material";
+import { Autocomplete, Input, InputAdornment } from "@mui/material";
 import SearchField from "./SearchField";
 import DarkThemeToggler from "./DarkThemeToggler";
 
@@ -156,12 +156,18 @@ function DashboardContent({ invoices, patients }) {
               il Salice
             </Typography>
 
-            <SearchField
-              optionList={[
-                { label: "Claudia Boccalini", _id: "102983190283" },
-                { label: "Davide Vescovelli", _id: "lskeflkselfks" },
-                { label: "Sara Micale", _id: "lslfkslekfse" },
-              ]}
+            <Autocomplete
+              disablePortal
+              clearOnEscape
+              id="patient-search-field"
+              options={patients.map((p) => ({
+                label: `${p.nome} ${p.cognome}`,
+                _id: p._id,
+              }))}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Cerca..." />
+              )}
             />
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
           </Toolbar>
