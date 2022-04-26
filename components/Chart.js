@@ -12,6 +12,7 @@ import {
   Legend,
 } from "recharts";
 import Title from "./Title";
+import italianMonth from "../lib/dateTranslator";
 
 // Generate Sales Data
 function createData(time, amount) {
@@ -30,7 +31,7 @@ const data = [
   createData("24:00", undefined),
 ];
 
-export default function Chart({ lightTheme }) {
+export default function Chart({ lightTheme, currentIncome, previousIncome }) {
   const theme = useTheme();
 
   return (
@@ -38,7 +39,10 @@ export default function Chart({ lightTheme }) {
       <Title>Today</Title>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={data}
+          data={currentIncome.map((income, month) => ({
+            mese: italianMonth(month),
+            fatturato: income,
+          }))}
           margin={{
             top: 16,
             right: 16,
@@ -47,11 +51,12 @@ export default function Chart({ lightTheme }) {
           }}
         >
           <XAxis
-            dataKey="time"
+            dataKey="mese"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           />
           <YAxis
+            dataKey="fatturato"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           >
@@ -64,7 +69,7 @@ export default function Chart({ lightTheme }) {
                 ...theme.typography.body1,
               }}
             >
-              Sales ($)
+              Fatturato (€)
             </Label>
           </YAxis>
           <Tooltip
@@ -75,7 +80,7 @@ export default function Chart({ lightTheme }) {
           <Line
             isAnimationActive={true}
             type="monotone"
-            dataKey="amount"
+            dataKey="fatturato"
             stroke={theme.palette.primary.main}
             dot={true}
           />

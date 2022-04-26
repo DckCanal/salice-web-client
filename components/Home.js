@@ -51,6 +51,29 @@ export default function Home({ lightTheme, patients, invoices }) {
       }
       return sum;
     }, 0);
+  const currentIncomeByMonth = invoices
+    .filter(
+      (inv) => new Date(inv.dataEmissione).getFullYear() == now.getFullYear()
+    )
+    .reduce((monthlyIncome, inv) => {
+      const m = new Date(inv.dataEmissione).getMonth();
+      monthlyIncome[m] = monthlyIncome[m]
+        ? monthlyIncome[m] + inv.valore
+        : inv.valore;
+      return monthlyIncome;
+    }, new Array().fill(undefined, 0, 12));
+  const previousIncomeByMonth = invoices
+    .filter(
+      (inv) =>
+        new Date(inv.dataEmissione).getFullYear() == now.getFullYear() - 1
+    )
+    .reduce((monthlyIncome, inv) => {
+      const m = new Date(inv.dataEmissione).getMonth();
+      monthlyIncome[m] = monthlyIncome[m]
+        ? monthlyIncome[m] + inv.valore
+        : inv.valore;
+      return monthlyIncome;
+    }, new Array().fill(undefined, 0, 12));
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -64,7 +87,11 @@ export default function Home({ lightTheme, patients, invoices }) {
             margin: 3,
           }}
         >
-          <Chart lightTheme={lightTheme} />
+          <Chart
+            lightTheme={lightTheme}
+            currentIncome={currentIncomeByMonth}
+            previousIncome={previousIncomeByMonth}
+          />
         </Paper>
       </Grid>
       {/* Recent Deposits */}
