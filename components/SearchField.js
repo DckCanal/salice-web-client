@@ -16,13 +16,6 @@ export default function SearchField({ optionList }) {
       }}
       renderInput={(params) => (
         <TextField
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
           //   type="search"
           variant="standard"
           label="Paziente"
