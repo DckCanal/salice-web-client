@@ -5,12 +5,14 @@ export default function SearchField({ optionList }) {
   return (
     <Autocomplete
       disablePortal
+      clearOnEscape
       //   autoComplete
       id="patient-list"
       options={optionList}
       sx={{ width: 300 }}
       onChange={(ev, val) => {
-        val && console.log(val.label, val._id);
+        //val && console.log(val.label, val._id);
+        return;
       }}
       renderInput={(params) => (
         <TextField
@@ -23,7 +25,7 @@ export default function SearchField({ optionList }) {
           }}
           //   type="search"
           variant="standard"
-          placeholder="Cerca paziente"
+          label="Paziente"
           {...params}
         />
       )}

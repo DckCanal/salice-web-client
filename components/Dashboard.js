@@ -155,19 +155,11 @@ function DashboardContent({ invoices, patients }) {
             >
               il Salice
             </Typography>
-
-            <Autocomplete
-              disablePortal
-              clearOnEscape
-              id="patient-search-field"
-              options={patients.map((p) => ({
+            <SearchField
+              optionList={patients.map((p) => ({
                 label: `${p.nome} ${p.cognome}`,
                 _id: p._id,
               }))}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Cerca..." />
-              )}
             />
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
           </Toolbar>
