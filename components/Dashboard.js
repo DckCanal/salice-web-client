@@ -21,7 +21,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItems from "./listItems";
 // import Chart from "./Chart";
-import Deposits from "./Deposits";
+import IncomePaper from "./IncomePaper";
 import Orders from "./Orders";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -88,7 +88,10 @@ function DashboardContent({ invoices, patients }) {
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
-    if (view === "Home") return <Home lightTheme={lightTheme} />;
+    if (view === "Home")
+      return (
+        <Home lightTheme={lightTheme} invoices={invoices} patients={patients} />
+      );
     if (view === "InvoiceList")
       return <InvoiceList invoices={invoices} patients={patients} />;
     if (view === "PatientList")
