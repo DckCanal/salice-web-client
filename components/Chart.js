@@ -12,7 +12,7 @@ import {
   Legend,
 } from "recharts";
 import Title from "./Title";
-import italianMonth from "../lib/dateTranslator";
+import { getMonths, getShortMonths } from "../lib/dateTranslator";
 
 // Generate Sales Data
 function createData(time, amount) {
@@ -31,13 +31,23 @@ const data = [
   createData("24:00", undefined),
 ];
 
-export default function Chart({ lightTheme, currentIncome, previousIncome }) {
+export default function Chart({
+  lightTheme,
+  currentIncome,
+  previousIncome,
+  currentLabel,
+  previousLabel,
+}) {
   const theme = useTheme();
-  const data = new Array(12).map((_v, i) => ({
-    mese: italianMonth(i),
-    2021: previousIncome[i],
-    2022: currentIncome[i],
-  }));
+
+  const data = [];
+  getShortMonths().forEach((m, i) => {
+    const newData = {};
+    newData["mese"] = m;
+    newData[previousLabel] = previousIncome[i];
+    newData[currentLabel] = currentIncome[i];
+    data.push(newData);
+  });
 
   return (
     <React.Fragment>
@@ -45,10 +55,6 @@ export default function Chart({ lightTheme, currentIncome, previousIncome }) {
       <Title>Today</Title>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          // data={currentIncome.map((income, month) => ({
-          //   mese: italianMonth(month),
-          //   fatturato: income,
-          // }))}
           data={data}
           margin={{
             top: 16,
@@ -63,7 +69,6 @@ export default function Chart({ lightTheme, currentIncome, previousIncome }) {
             style={theme.typography.body2}
           />
           <YAxis
-            // dataKey="fatturato"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           >
@@ -87,8 +92,15 @@ export default function Chart({ lightTheme, currentIncome, previousIncome }) {
           <Line
             isAnimationActive={true}
             type="monotone"
-            dataKey="2021"
+            dataKey={currentLabel}
             stroke={theme.palette.primary.main}
+            dot={true}
+          />
+          <Line
+            isAnimationActive={true}
+            type="monotone"
+            dataKey={previousLabel}
+            stroke={theme.palette.secondary.main}
             dot={true}
           />
         </LineChart>

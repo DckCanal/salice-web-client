@@ -91,6 +91,8 @@ export default function Home({ lightTheme, patients, invoices }) {
             lightTheme={lightTheme}
             currentIncome={currentIncomeByMonth}
             previousIncome={previousIncomeByMonth}
+            currentLabel={now.getFullYear()}
+            previousLabel={now.getFullYear() - 1}
           />
         </Paper>
       </Grid>
