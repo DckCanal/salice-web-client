@@ -33,7 +33,6 @@ export default function Chart({
 
   return (
     <React.Fragment>
-      {console.log(data)}
       <Title>Today</Title>
       <ResponsiveContainer width="99%">
         <LineChart
