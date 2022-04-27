@@ -126,7 +126,7 @@ export default function Home({ lightTheme, patients, invoices }) {
         <Paper
           sx={{ p: 2, display: "flex", flexDirection: "column", margin: 3 }}
         >
-          <Orders />
+          <Orders invoices={invoices} patients={patients} />
         </Paper>
       </Grid>
     </Grid>
