@@ -24,7 +24,7 @@ export default function IncomePaper({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Fatturato corrente
       </Typography>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>
@@ -54,7 +54,7 @@ export default function IncomePaper({
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Anno precedente
       </Typography>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>

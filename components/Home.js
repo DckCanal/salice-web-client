@@ -83,7 +83,7 @@ export default function Home({ lightTheme, patients, invoices }) {
             p: 2,
             display: "flex",
             flexDirection: "column",
-            height: 240 + 160,
+            height: 240 + 80,
             margin: 3,
           }}
         >
@@ -101,7 +101,7 @@ export default function Home({ lightTheme, patients, invoices }) {
             p: 2,
             display: "flex",
             flexDirection: "column",
-            height: 240 + 160,
+            height: 240 + 80,
             margin: 3,
           }}
         >
