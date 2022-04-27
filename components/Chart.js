@@ -33,16 +33,23 @@ const data = [
 
 export default function Chart({ lightTheme, currentIncome, previousIncome }) {
   const theme = useTheme();
+  const data = new Array(12).map((_v, i) => ({
+    mese: italianMonth(i),
+    2021: previousIncome[i],
+    2022: currentIncome[i],
+  }));
 
   return (
     <React.Fragment>
+      {console.log(data)}
       <Title>Today</Title>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={currentIncome.map((income, month) => ({
-            mese: italianMonth(month),
-            fatturato: income,
-          }))}
+          // data={currentIncome.map((income, month) => ({
+          //   mese: italianMonth(month),
+          //   fatturato: income,
+          // }))}
+          data={data}
           margin={{
             top: 16,
             right: 16,
@@ -56,7 +63,7 @@ export default function Chart({ lightTheme, currentIncome, previousIncome }) {
             style={theme.typography.body2}
           />
           <YAxis
-            dataKey="fatturato"
+            // dataKey="fatturato"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           >
@@ -80,7 +87,7 @@ export default function Chart({ lightTheme, currentIncome, previousIncome }) {
           <Line
             isAnimationActive={true}
             type="monotone"
-            dataKey="fatturato"
+            dataKey="2021"
             stroke={theme.palette.primary.main}
             dot={true}
           />
