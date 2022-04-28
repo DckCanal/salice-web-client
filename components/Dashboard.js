@@ -22,7 +22,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItems from "./listItems";
 // import Chart from "./Chart";
 import IncomePaper from "./IncomePaper";
-import Orders from "./Orders";
+import LastInvoices from "./LastInvoices";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";

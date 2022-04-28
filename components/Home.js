@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import IncomePaper from "./IncomePaper";
-import Orders from "./Orders";
+import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
 import italianMonth from "../lib/dateTranslator";
 
@@ -126,7 +126,7 @@ export default function Home({ lightTheme, patients, invoices }) {
         <Paper
           sx={{ p: 2, display: "flex", flexDirection: "column", margin: 3 }}
         >
-          <Orders invoices={invoices} patients={patients} />
+          <LastInvoices invoices={invoices} patients={patients} />
         </Paper>
       </Grid>
     </Grid>
