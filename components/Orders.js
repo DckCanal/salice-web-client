@@ -63,12 +63,11 @@ export default function Orders({ invoices, patients }) {
   const rows = [];
   const lastPatients = patients
     .sort((p1, p2) => {
-      Date.parse(p1.ultimaModifica) < Date.parse(p2.ultimaModifica) ? -1 : 1;
+      return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica) ? -1 : 1;
     })
     .slice(0, 16);
   return (
     <React.Fragment>
-      {console.log(lastPatients.map((p) => new Date(p.ultimaModifica)))}
       <Title>Recent Orders</Title>
       <Table size="small">
         <TableHead>
