@@ -80,22 +80,28 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
+    id: "ordinal",
     numeric: true,
     disablePadding: false,
-    label: "Calories",
+    label: "Num",
+  },
+  {
+    id: "patient",
+    numeric: false,
+    disablePadding: true,
+    label: "Paziente",
+  },
+  {
+    id: "value",
+    numeric: true,
+    disablePadding: false,
+    label: "Valore",
   },
   {
     id: "fat",
     numeric: true,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Data",
   },
   {
     id: "carbs",
@@ -295,7 +301,7 @@ export default function SortTable() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", m: 2, p: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
