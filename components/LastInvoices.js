@@ -39,7 +39,7 @@ export default function LastInvoices({ invoices, patients }) {
     return {
       id: i,
       name: `${p.nome} ${p.cognome}`,
-      date: new Date(p.ultimaModifica).toISOString(),
+      date: new Date(p.ultimaModifica).toLocaleString(),
       codFisc: p.codiceFiscale,
       value: `${lastInvoiceFound}€ (${amount}€)`,
     };
