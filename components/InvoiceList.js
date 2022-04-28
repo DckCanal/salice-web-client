@@ -11,7 +11,7 @@ export default function InvoiceList({ invoices, patients }) {
           margin: 3,
         }}
       > */}
-      <SortTable />
+      <SortTable invoices={invoices} patients={patients} />
       {/* </Paper> */}
     </div>
   );
