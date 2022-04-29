@@ -34,10 +34,10 @@ function createData(id, ordinal, patient, value, issueDate, collectDate) {
 }
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (b[orderBy].val < a[orderBy].val) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b[orderBy].val > a[orderBy].val) {
     return 1;
   }
   return 0;
@@ -229,7 +229,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function SortTable({ invoices, patients }) {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("issueDate");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -239,11 +239,26 @@ export default function SortTable({ invoices, patients }) {
     const patient = patients.find((p) => p._id == i.paziente);
     return createData(
       i._id,
-      i.numeroOrdine,
-      patient ? `${patient.nome} ${patient.cognome}` : "ERROR",
-      i.valore,
-      new Date(i.dataEmissione).toLocaleDateString(),
-      new Date(i.dataIncasso).toLocaleDateString()
+      {
+        val: i.numeroOrdine,
+        showed: `${i.numeroOrdine}/${new Date(i.dataEmissione).getFullYear()}`,
+      },
+      {
+        showed: patient ? `${patient.nome} ${patient.cognome}` : "ERROR",
+        val: patient ? `${patient.cognome} ${patient.nome}` : "ERROR",
+      },
+      {
+        val: i.valore,
+        showed: `€ ${i.valore}`,
+      },
+      {
+        showed: new Date(i.dataEmissione).toLocaleDateString(),
+        val: Date.parse(i.dataEmissione),
+      },
+      {
+        showed: new Date(i.dataIncasso).toLocaleDateString(),
+        val: Date.parse(i.dataIncasso),
+      }
     );
   });
 
@@ -355,11 +370,15 @@ export default function SortTable({ invoices, patients }) {
                       >
                         {row.id}
                       </TableCell> */}
-                      <TableCell align="right">{row.ordinal}</TableCell>
-                      <TableCell align="right">{row.patient}</TableCell>
-                      <TableCell align="right">{row.value}</TableCell>
-                      <TableCell align="right">{row.issueDate}</TableCell>
-                      <TableCell align="right">{row.collectDate}</TableCell>
+                      <TableCell align="right">{row.ordinal.showed}</TableCell>
+                      <TableCell align="right">{row.patient.showed}</TableCell>
+                      <TableCell align="right">{row.value.showed}</TableCell>
+                      <TableCell align="right">
+                        {row.issueDate.showed}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.collectDate.showed}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
