@@ -22,9 +22,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(name, ordinal, patient, value, issueDate, collectDate) {
+function createData(id, ordinal, patient, value, issueDate, collectDate) {
   return {
-    name,
+    id,
     ordinal,
     patient,
     value,
@@ -65,7 +65,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "id",
     numeric: true,
     disablePadding: false,
     label: "id",
@@ -250,19 +250,19 @@ export default function SortTable({ invoices, patients }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -290,7 +290,7 @@ export default function SortTable({ invoices, patients }) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -320,17 +320,17 @@ export default function SortTable({ invoices, patients }) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -348,7 +348,7 @@ export default function SortTable({ invoices, patients }) {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.id}
                       </TableCell>
                       <TableCell align="right">{row.ordinal}</TableCell>
                       <TableCell align="right">{row.patient}</TableCell>
