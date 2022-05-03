@@ -4,6 +4,7 @@ import styles from "../styles/Home.module.css";
 import Layout from "../components/Layout";
 import React from "react";
 import Dashboard from "../components/Dashboard";
+import SignIn from "../components/SignIn";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -36,7 +37,8 @@ export default function Home({ invoices, patients }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Dashboard invoices={invoices} patients={patients}></Dashboard>
+      {/* <Dashboard invoices={invoices} patients={patients}></Dashboard> */}
+      <SignIn />
     </div>
   );
 }
