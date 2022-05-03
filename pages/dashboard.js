@@ -10,19 +10,32 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-export default function LoginPage() {
+// --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
+import { invoices } from "../lib/data/invoices";
+import { patients } from "../lib/data/patients";
+
+export const getStaticProps = async () => {
+  return {
+    props: {
+      invoices,
+      patients,
+    },
+  };
+};
+
+export default function DashboardPage({ invoices, patients }) {
   const [loading, isLoading] = React.useState(true);
   return (
     <div>
       <Head>
-        <title>Login - il Salice</title>
+        <title>il Salice - WebApp</title>
         <meta
           name="description"
           content="Web application to manage patients and invoices."
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SignIn />
+      <Dashboard invoices={invoices} patients={patients}></Dashboard>
     </div>
   );
 }
