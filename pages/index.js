@@ -11,6 +11,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 export default function LoginPage() {
+  const loginUrl = "http://localhost:3000/api/v1/users/login";
   const [loading, isLoading] = React.useState(true);
   return (
     <div>
@@ -22,7 +23,7 @@ export default function LoginPage() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SignIn />
+      <SignIn loginUrl={loginUrl} />
     </div>
   );
 }
