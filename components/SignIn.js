@@ -44,8 +44,14 @@ export default function SignIn({ loginUrl }) {
           password: data.get("password"),
         },
       });
+      if (res.data.status === "success") {
+        alert("Logged in successfully!");
+        window.setTimeout(() => {
+          location.assign("/dashboard");
+        }, 1500);
+      }
     } catch (err) {
-      console.error(err.response.data);
+      alert(err.response.data);
     }
   };
 
