@@ -51,8 +51,15 @@ export default function SignIn({ loginUrl }) {
         }, 1500);
       }
     } catch (err) {
-      alert(err.response.data);
-      console.error(err);
+      console.log(err.code, err.response.status);
+      const { status } = err.response;
+      if (status == 400) {
+        // BAD REQUEST, missing email or password
+      } else if (status == 401) {
+        // UNAUTHORIZED, wrong email or password
+      } else if (status == 500) {
+        // INTERNAL SERVER ERROR
+      }
     }
   };
 
