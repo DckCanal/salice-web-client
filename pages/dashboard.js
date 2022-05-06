@@ -13,32 +13,31 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 // --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
-import { invoices } from "../lib/data/invoices";
 import { patients } from "../lib/data/patients";
 
 export const getStaticProps = async () => {
   return {
     props: {
-      // invoices,
       patients,
     },
   };
 };
 
-export default function DashboardPage({ /*invoices,*/ patients }) {
-  const [isLoading, setLoading] = React.useState(true);
+export default function DashboardPage({ patients }) {
+  const [dataLoaded, setDataLoaded] = React.useState(false);
   const [invoices, setInvoices] = React.useState(undefined);
-  getAllInvoices()
-    .then((res) => res.json())
-    .then((res) => {
-      setInvoices(res.invoices);
-      console.log(res);
-    })
-    .finally(() => setLoading(false))
-    .catch((err) => {
-      setInvoices(invoices);
-      console.error(err);
-    });
+
+  if (!dataLoaded) {
+    getAllInvoices()
+      .then((res) => {
+        setInvoices(res.invoices);
+      })
+      .finally(() => setDataLoaded(true))
+      .catch((err) => {
+        setInvoices(invoices);
+        console.error(err);
+      });
+  }
   return (
     <div>
       <Head>
@@ -49,7 +48,7 @@ export default function DashboardPage({ /*invoices,*/ patients }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {!isLoading ? (
+      {dataLoaded ? (
         <Dashboard invoices={invoices} patients={patients}></Dashboard>
       ) : (
         <p>Loading...</p>
