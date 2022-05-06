@@ -39,6 +39,7 @@ export default function SignIn({ loginUrl }) {
       const res = await axios({
         method: "POST",
         url: loginUrl,
+        withCredentials: true,
         data: {
           email: data.get("email"),
           password: data.get("password"),
