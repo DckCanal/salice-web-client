@@ -46,7 +46,6 @@ export default function SignIn({ loginUrl }) {
         },
       });
       if (res.data.status === "success") {
-        alert(`Logged in successfully! Welcome ${res.data.data.user.email}!`);
         window.setTimeout(() => {
           location.assign("/dashboard");
         }, 1500);
