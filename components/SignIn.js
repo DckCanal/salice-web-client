@@ -35,17 +35,32 @@ const theme = createTheme({
 export default function SignIn({ loginUrl }) {
   const [inputError, setInputError] = React.useState(false);
   const [emailError, setEmailError] = React.useState(false);
+  const clearInputError = () => {
+    inputError & setInputError(false);
+  };
+  const validateEmail = (event) => {
+    clearInputError();
+    const email = event.target.value;
+    if (email && !validator.isEmail(email)) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  };
+  const handlePasswordTyping = (event) => {
+    clearInputError();
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    if (!validator.isEmail(email)) {
-      setInputError(false);
-      setEmailError(true);
-      console.log(`email error: ${emailError}`);
+    if (!email || !password) {
+      setInputError(true);
       return;
     }
+    if (!validator.isEmail(email)) return;
+
     try {
       const res = await axios({
         method: "POST",
@@ -113,6 +128,7 @@ export default function SignIn({ loginUrl }) {
                 autoComplete="email"
                 autoFocus
                 error={inputError || emailError}
+                onChange={validateEmail}
               />
               <TextField
                 margin="normal"
@@ -124,6 +140,7 @@ export default function SignIn({ loginUrl }) {
                 id="password"
                 autoComplete="current-password"
                 error={inputError}
+                onChange={clearInputError}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
