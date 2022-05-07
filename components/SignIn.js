@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import validator from "validator";
 
 // function Copyright(props) {
 //   return (
@@ -32,20 +33,32 @@ const theme = createTheme({
 });
 
 export default function SignIn({ loginUrl }) {
+  const [inputError, setInputError] = React.useState(false);
+  const [emailError, setEmailError] = React.useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
+    if (!validator.isEmail(email)) {
+      setInputError(false);
+      setEmailError(true);
+      console.log(`email error: ${emailError}`);
+      return;
+    }
     try {
       const res = await axios({
         method: "POST",
         url: loginUrl,
         withCredentials: true,
         data: {
-          email: data.get("email"),
-          password: data.get("password"),
+          email,
+          password,
         },
       });
       if (res.data.status === "success") {
+        setEmailError(false);
+        setInputError(false);
         window.setTimeout(() => {
           location.assign("/dashboard");
         }, 1500);
@@ -55,8 +68,10 @@ export default function SignIn({ loginUrl }) {
       const { status } = err.response;
       if (status == 400) {
         // BAD REQUEST, missing email or password
+        setInputError(true);
       } else if (status == 401) {
         // UNAUTHORIZED, wrong email or password
+        setInputError(true);
       } else if (status == 500) {
         // INTERNAL SERVER ERROR
       }
@@ -97,6 +112,7 @@ export default function SignIn({ loginUrl }) {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={inputError || emailError}
               />
               <TextField
                 margin="normal"
@@ -107,6 +123,7 @@ export default function SignIn({ loginUrl }) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={inputError}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
