@@ -6,7 +6,7 @@ import React from "react";
 import Dashboard from "../components/Dashboard";
 import SignIn from "../components/SignIn";
 
-import { getAllInvoices } from "../lib/controller";
+import { getAllInvoices, getAllPatients } from "../lib/controller";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -15,26 +15,39 @@ import "@fontsource/roboto/700.css";
 // --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
 import { patients } from "../lib/data/patients";
 
-export const getStaticProps = async () => {
-  return {
-    props: {
-      patients,
-    },
-  };
-};
+// export const getStaticProps = async () => {
+//   return {
+//     props: {
+//       patients,
+//     },
+//   };
+// };
 
-export default function DashboardPage({ patients }) {
-  const [dataLoaded, setDataLoaded] = React.useState(false);
+export default function DashboardPage() {
+  const [invoicesLoaded, setInvoicesLoaded] = React.useState(false);
+  const [patientsLoaded, setPatientsLoaded] = React.useState(false);
   const [invoices, setInvoices] = React.useState(undefined);
+  const [patients, setPatients] = React.useState(undefined);
 
-  if (!dataLoaded) {
+  if (!invoicesLoaded) {
     getAllInvoices()
       .then((res) => {
         setInvoices(res.invoices);
       })
-      .finally(() => setDataLoaded(true))
+      .finally(() => setInvoicesLoaded(true))
       .catch((err) => {
         setInvoices(invoices);
+        console.error(err);
+      });
+  }
+  if (!patientsLoaded) {
+    getAllPatients()
+      .then((res) => {
+        setPatients(res.patients);
+      })
+      .finally(() => setPatientsLoaded(true))
+      .catch((err) => {
+        setPatients(patients);
         console.error(err);
       });
   }
@@ -48,7 +61,7 @@ export default function DashboardPage({ patients }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {dataLoaded ? (
+      {invoicesLoaded && patientsLoaded ? (
         <Dashboard invoices={invoices} patients={patients}></Dashboard>
       ) : (
         <p>Loading...</p>
