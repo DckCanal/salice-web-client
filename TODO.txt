@@ -1,0 +1,3 @@
+Home graph has to be responsive.
+SignIn.js, manage HTTP error code 500
+Invoices pages: wrong Num ordering
