@@ -53,7 +53,7 @@ export default function LastInvoices({ invoices, patients }) {
             <TableCell>Nome</TableCell>
             <TableCell>Data</TableCell>
             <TableCell>Codice fiscale</TableCell>
-            <TableCell align="right">Valore (totale)</TableCell>
+            <TableCell align="right">Valore (ultimi 12 mesi)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
