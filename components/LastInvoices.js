@@ -15,6 +15,8 @@ export default function LastInvoices({ invoices, patients }) {
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+  // GET patients already ordered by server? This is only a slice()
   const lastPatients = patients
     .sort((p1, p2) => {
       return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica)
@@ -22,6 +24,8 @@ export default function LastInvoices({ invoices, patients }) {
         : 1;
     })
     .slice(0, 21);
+
+  // GET invoices already ordered by server? This is only a filter()
   const lastInvoices = invoices
     .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
     .sort((i1, i2) =>
