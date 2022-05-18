@@ -96,7 +96,7 @@ export default function Home({ lightTheme, patients, invoices }) {
           />
         </Paper>
       </Grid>
-      {/* Recent Deposits */}
+      {/* Income Paper */}
       <Grid item xs={12} md={4} lg={3}>
         <Paper
           sx={{
@@ -121,7 +121,7 @@ export default function Home({ lightTheme, patients, invoices }) {
           />
         </Paper>
       </Grid>
-      {/* Recent Orders */}
+      {/* Last invoices */}
       <Grid item xs={12}>
         <Paper
           sx={{ p: 2, display: "flex", flexDirection: "column", margin: 3 }}
