@@ -36,6 +36,7 @@ export default function DashboardPage() {
       })
       .finally(() => setInvoicesLoaded(true))
       .catch((err) => {
+        // TODO: manage err!
         setInvoices(invoices);
         console.error(err);
       });
@@ -47,6 +48,7 @@ export default function DashboardPage() {
       })
       .finally(() => setPatientsLoaded(true))
       .catch((err) => {
+        // TODO: manage err!
         setPatients(patients);
         console.error(err);
       });
