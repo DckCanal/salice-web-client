@@ -43,17 +43,19 @@ export default function ListItems({ sel, clickHandler }) {
       <ListSubheader component="div" inset>
         Saved reports
       </ListSubheader>
-      <ListItemButton selected={sel == 5}>
+      <ListItemButton selected={sel == 5} onClick={clickHandler("NewInvoice")}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary={italianMonth(new Date().getMonth())} />
+        <ListItemText
+          primary={/*italianMonth(new Date().getMonth())*/ "Nuova fattura"}
+        />
       </ListItemButton>
-      <ListItemButton selected={sel == 6}>
+      <ListItemButton selected={sel == 6} onClick={clickHandler("NewPatient")}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="Quadrimestre" />
+        <ListItemText primary="Nuovo paziente" />
       </ListItemButton>
       <ListItemButton selected={sel == 7}>
         <ListItemIcon>

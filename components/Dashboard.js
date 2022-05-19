@@ -117,6 +117,8 @@ function DashboardContent({ invoices, patients }) {
     if (view === "InvoiceList") return 2;
     if (view === "PatientList") return 3;
     if (view === "Graph") return 4;
+    if (view === "NewInvoice") return 5;
+    if (view === "NewPatient") return 6;
   };
   const listItemClickHandler = (view) => {
     return function (event) {
