@@ -6,6 +6,7 @@ export default function SearchField({ optionList }) {
     <Autocomplete
       disablePortal
       clearOnEscape
+      isOptionEqualToValue={(option, value) => option._id === value._id}
       //   autoComplete
       id="patient-list"
       options={optionList}
