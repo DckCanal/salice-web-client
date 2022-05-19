@@ -29,6 +29,8 @@ import TextField from "@mui/material/TextField";
 import { Autocomplete, Input, InputAdornment } from "@mui/material";
 import SearchField from "./SearchField";
 import DarkThemeToggler from "./DarkThemeToggler";
+import NewInvoiceView from "./NewInvoiceView";
+import NewPatientView from "./NewPatientView";
 
 const drawerWidth = 240;
 
@@ -84,7 +86,7 @@ const darkTheme = createTheme({
 });
 
 function DashboardContent({ invoices, patients }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
@@ -98,6 +100,8 @@ function DashboardContent({ invoices, patients }) {
       return <PatientList invoices={invoices} patients={patients} />;
     if (view === "Graph")
       return <Graph invoices={invoices} patients={patients} />;
+    if (view === "NewInvoice") return <NewInvoiceView patients={patients} />;
+    if (view === "NewPatient") return <NewPatientView />;
   };
   // const listItemMap = {
   //   1: "Home",
