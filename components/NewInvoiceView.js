@@ -11,30 +11,47 @@ import {
   Typography,
 } from "@mui/material";
 
+// TODO: get patient id
+// TODO: insert date picker for dataEmissione
+// TODO: send POST request
+// TODO: manage response errors
+
 export default function NewInvoiceView({ patients }) {
+  // --- COMPONENT STATE --- //
+  const [defaultInvoiceValue, setDefaultInvoiceValue] = React.useState(0);
+  const [automaticInvoiceValue, setAutomaticInvoiceValue] =
+    React.useState(true);
+  const [valueError, setValueError] = React.useState(false);
+
+  // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    // paziente, valore, testo, dataEmissione, dataIncasso
     const paziente = data.get("patient-id");
     const valore = data.get("value");
     const testo = data.get("text");
     const cashed = data.get("cashed");
+
     console.log(`Paziente: ${paziente} ${typeof paziente}
     valore: ${valore} ${typeof valore}
     testo: ${testo} ${typeof testo}
     cashed: ${cashed} ${typeof cashed}`);
   }
+
+  // HANDLER for Autocomplete change event
   function handlePatientSelectionChange(_event, autocompleteVal) {
     const newValue = autocompleteVal?.price || 0;
+    setAutomaticInvoiceValue(true);
     setDefaultInvoiceValue(newValue);
   }
+
+  // VALIDATOR for invoice amount TextField
   function validateValue(event) {
     const valueToCheck = event.target.value;
     setValueError(isNaN(valueToCheck));
   }
-  const [defaultInvoiceValue, setDefaultInvoiceValue] = React.useState(0);
-  const [valueError, setValueError] = React.useState(false);
+
   return (
     <Paper sx={{ p: 3, mt: 12, maxWidth: "800px", mr: "auto", ml: "auto" }}>
       <Box
@@ -58,13 +75,10 @@ export default function NewInvoiceView({ patients }) {
             alignItems: "left",
           }}
         >
-          {
-            // DatePicker per data emissione (default oggi)
-            // TextField con validator per ammontare (default in base a pz)
-          }
           <Autocomplete
             id="patient-id"
             name="patient-id"
+            isOptionEqualToValue={(option, value) => option._id === value._id}
             options={patients.map((p) => ({
               label: `${p.cognome} ${p.nome}`,
               _id: p._id,
@@ -91,13 +105,16 @@ export default function NewInvoiceView({ patients }) {
             variant="standard"
             error={valueError}
             onChange={validateValue}
+            onFocus={() => {
+              setAutomaticInvoiceValue(false);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">€</InputAdornment>
               ),
             }}
             sx={{ mt: 3 }}
-            defaultValue={defaultInvoiceValue}
+            value={automaticInvoiceValue ? defaultInvoiceValue : undefined}
           />
           <TextField
             label="Testo"
