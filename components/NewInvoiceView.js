@@ -11,30 +11,30 @@ import {
   Typography,
 } from "@mui/material";
 
-// TODO: get patient id
 // TODO: insert date picker for dataEmissione
 // TODO: send POST request
 // TODO: manage response errors
 
 export default function NewInvoiceView({ patients }) {
   // --- COMPONENT STATE --- //
-  // const [defaultInvoiceValue, setDefaultInvoiceValue] = React.useState(0);
-  // const [automaticInvoiceValue, setAutomaticInvoiceValue] =
-  //   React.useState(true);
   const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
+  const [selectedPatientId, setSelectedPatientId] = React.useState("");
   const [valueError, setValueError] = React.useState(false);
+  const [autocompleteError, setAutocompleteError] = React.useState(false);
 
   // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
 
+    if (selectedPatientId === "") return setAutocompleteError(true);
+    else setAutocompleteError(false);
+
     const data = new FormData(event.currentTarget);
-    const paziente = data.get("patient-id");
     const valore = data.get("value");
     const testo = data.get("text").trim();
     const cashed = data.get("cashed");
 
-    console.log(`Paziente: ${paziente} ${typeof paziente}
+    console.log(`Paziente: ${selectedPatientId} ${typeof selectedPatientId}
     valore: ${valore} ${typeof valore}
     testo: ${testo} ${typeof testo} (Len: ${testo.length})
     cashed: ${cashed} ${typeof cashed}`);
@@ -43,8 +43,10 @@ export default function NewInvoiceView({ patients }) {
   // HANDLER for Autocomplete change event
   function handlePatientSelectionChange(_event, autocompleteVal) {
     const patientPrice = autocompleteVal?.price || 0;
+    const patientId = autocompleteVal?._id || "";
     // setAutomaticInvoiceValue(true);
     // setDefaultInvoiceValue(newValue);
+    setSelectedPatientId(patientId);
     setInvoiceValueTextField(patientPrice);
     validateValue(patientPrice);
   }
@@ -97,7 +99,14 @@ export default function NewInvoiceView({ patients }) {
               mt: 3,
             }}
             renderInput={(params) => (
-              <TextField variant="standard" label="Paziente" {...params} />
+              <TextField
+                variant="standard"
+                label="Paziente"
+                name="pat-id"
+                error={autocompleteError}
+                helperText={autocompleteError ? "Seleziona un paziente" : null}
+                {...params}
+              />
             )}
             onChange={handlePatientSelectionChange}
           />
