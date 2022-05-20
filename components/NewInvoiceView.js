@@ -11,6 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+// import { DateTime } from "@date-io/luxon";
+
 // TODO: insert date picker for dataEmissione
 // TODO: send POST request
 // TODO: manage response errors
@@ -145,6 +150,9 @@ export default function NewInvoiceView({ patients }) {
               mt: 3,
             }}
           />
+          <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+          ></LocalizationProvider>
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
             Inserisci
           </Button>
