@@ -18,9 +18,10 @@ import {
 
 export default function NewInvoiceView({ patients }) {
   // --- COMPONENT STATE --- //
-  const [defaultInvoiceValue, setDefaultInvoiceValue] = React.useState(0);
-  const [automaticInvoiceValue, setAutomaticInvoiceValue] =
-    React.useState(true);
+  // const [defaultInvoiceValue, setDefaultInvoiceValue] = React.useState(0);
+  // const [automaticInvoiceValue, setAutomaticInvoiceValue] =
+  //   React.useState(true);
+  const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
   const [valueError, setValueError] = React.useState(false);
 
   // HANDLER for Form submit event
@@ -30,25 +31,32 @@ export default function NewInvoiceView({ patients }) {
     const data = new FormData(event.currentTarget);
     const paziente = data.get("patient-id");
     const valore = data.get("value");
-    const testo = data.get("text");
+    const testo = data.get("text").trim();
     const cashed = data.get("cashed");
 
     console.log(`Paziente: ${paziente} ${typeof paziente}
     valore: ${valore} ${typeof valore}
-    testo: ${testo} ${typeof testo}
+    testo: ${testo} ${typeof testo} (Len: ${testo.length})
     cashed: ${cashed} ${typeof cashed}`);
   }
 
   // HANDLER for Autocomplete change event
   function handlePatientSelectionChange(_event, autocompleteVal) {
-    const newValue = autocompleteVal?.price || 0;
-    setAutomaticInvoiceValue(true);
-    setDefaultInvoiceValue(newValue);
+    const patientPrice = autocompleteVal?.price || 0;
+    // setAutomaticInvoiceValue(true);
+    // setDefaultInvoiceValue(newValue);
+    setInvoiceValueTextField(patientPrice);
+    validateValue(patientPrice);
+  }
+
+  // HANDLER for invoice value TextField change event
+  function handleInvoiceValue(event) {
+    setInvoiceValueTextField(event.target.value);
+    validateValue(event.target.value);
   }
 
   // VALIDATOR for invoice amount TextField
-  function validateValue(event) {
-    const valueToCheck = event.target.value;
+  function validateValue(valueToCheck) {
     setValueError(isNaN(valueToCheck));
   }
 
@@ -104,17 +112,18 @@ export default function NewInvoiceView({ patients }) {
             name="value"
             variant="standard"
             error={valueError}
-            onChange={validateValue}
-            onFocus={() => {
-              setAutomaticInvoiceValue(false);
-            }}
+            onChange={handleInvoiceValue}
+            // onFocus={() => {
+            //   setAutomaticInvoiceValue(false);
+            // }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">€</InputAdornment>
               ),
             }}
             sx={{ mt: 3 }}
-            value={automaticInvoiceValue ? defaultInvoiceValue : undefined}
+            // value={automaticInvoiceValue ? defaultInvoiceValue : undefined}
+            value={invoiceValueTextField}
           />
           <TextField
             label="Testo"
