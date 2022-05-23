@@ -38,13 +38,14 @@ export default function NewInvoiceView({ patients }) {
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
 
-    newInvoice(
+    const newInv = await newInvoice(
       selectedPatientId,
       cashed,
       Number(invoiceAmountTextField),
       invoiceText,
       issueDateTime
     );
+    console.log(newInv);
   }
 
   // HANDLER for Autocomplete change event
