@@ -14,7 +14,8 @@ import {
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-// import { DateTime } from "@date-io/luxon";
+import { DatePicker } from "@mui/x-date-pickers";
+import { DateTime } from "luxon";
 
 // TODO: insert date picker for dataEmissione
 // TODO: send POST request
@@ -26,6 +27,10 @@ export default function NewInvoiceView({ patients }) {
   const [selectedPatientId, setSelectedPatientId] = React.useState("");
   const [valueError, setValueError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(false);
+  // const [issueDate, setIssueDate] = React.useState(
+  //   DateTime.now().setZone("Europe/Rome")
+  // );
+  console.log(DateTime.now().setZone("Europe/Rome").toLocaleString());
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -151,8 +156,17 @@ export default function NewInvoiceView({ patients }) {
             }}
           />
           <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-          ></LocalizationProvider>
+            dateAdapter={AdapterLuxon}
+            adapterLocale={"eu-IT"}
+          >
+            <DatePicker
+              label="Data emissione"
+              // onChange={(newValue) => {
+              //   setValue(newValue);
+              // }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
             Inserisci
           </Button>
