@@ -14,7 +14,7 @@ import {
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 
 // TODO: insert date picker for dataEmissione
@@ -25,9 +25,7 @@ export default function NewInvoiceView({ patients }) {
   // --- COMPONENT STATE --- //
   const [selectedPatientId, setSelectedPatientId] = React.useState("");
   const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
-  const [issueDate, setIssueDate] = React.useState(
-    DateTime.now().setZone("Europe/Rome")
-  );
+  const [issueDate, setIssueDate] = React.useState(DateTime.now());
   const [valueError, setValueError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(false);
 
@@ -35,6 +33,7 @@ export default function NewInvoiceView({ patients }) {
   async function submit(event) {
     event.preventDefault();
     if (!validateForm()) return;
+    console.log(issueDate.hour, issueDate.minute, issueDate.second);
 
     const data = new FormData(event.currentTarget);
     const testo = data.get("text").trim();
@@ -159,7 +158,7 @@ export default function NewInvoiceView({ patients }) {
             dateAdapter={AdapterLuxon}
             adapterLocale={"eu-IT"}
           >
-            <DatePicker
+            <DateTimePicker
               label="Data emissione"
               onChange={(newValue) => {
                 setIssueDate(newValue);
