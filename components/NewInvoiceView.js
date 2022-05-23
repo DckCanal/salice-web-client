@@ -16,31 +16,35 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
+import { newInvoice } from "../lib/controller";
 
-// TODO: insert date picker for dataEmissione
 // TODO: send POST request
 // TODO: manage response errors
 
 export default function NewInvoiceView({ patients }) {
   // --- COMPONENT STATE --- //
   const [selectedPatientId, setSelectedPatientId] = React.useState("");
-  const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
-  const [issueDate, setIssueDate] = React.useState(DateTime.now());
-  const [valueError, setValueError] = React.useState(false);
+  const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(0);
+  const [issueDateTime, setIssueDateTime] = React.useState(DateTime.now());
+  const [invoiceAmountError, setInvoiceAmountError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(false);
 
   // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
     if (!validateForm()) return;
-    console.log(issueDate.hour, issueDate.minute, issueDate.second);
 
     const data = new FormData(event.currentTarget);
-    const testo = data.get("text").trim();
-    const cashed = data.get("cashed");
+    const invoiceText = data.get("text").trim();
+    const cashed = data.get("cashed") === "on" ? true : false;
 
-    // RUN ALL VALIDATORS
-    // IF OK, SUBMIT
+    newInvoice(
+      selectedPatientId,
+      cashed,
+      Number(invoiceAmountTextField),
+      invoiceText,
+      issueDateTime
+    );
   }
 
   // HANDLER for Autocomplete change event
@@ -50,28 +54,28 @@ export default function NewInvoiceView({ patients }) {
 
     setSelectedPatientId(patientId);
     setAutocompleteError(patientId === "");
-    setInvoiceValueTextField(patientPrice);
+    setInvoiceAmountTextField(patientPrice);
     validateInvoiceValue(patientPrice);
   }
 
   // HANDLER for invoice value TextField change event
   function handleInvoiceValue(event) {
-    setInvoiceValueTextField(event.target.value);
+    setInvoiceAmountTextField(event.target.value);
     validateInvoiceValue(event.target.value);
   }
 
   // VALIDATOR for invoice amount TextField
   function validateInvoiceValue(valueToCheck) {
-    setValueError(isNaN(valueToCheck) || Number(valueToCheck) < 0);
+    setInvoiceAmountError(isNaN(valueToCheck) || Number(valueToCheck) < 0);
   }
 
   // VALIDATOR for STATE values
   function validateForm() {
     return (
       selectedPatientId !== "" &&
-      !isNaN(invoiceValueTextField) &&
-      Number(invoiceValueTextField) >= 0 &&
-      issueDate.isValid
+      !isNaN(invoiceAmountTextField) &&
+      Number(invoiceAmountTextField) >= 0 &&
+      issueDateTime.isValid
     );
   }
 
@@ -133,7 +137,7 @@ export default function NewInvoiceView({ patients }) {
             id="value"
             name="value"
             variant="standard"
-            error={valueError}
+            error={invoiceAmountError}
             onChange={handleInvoiceValue}
             InputProps={{
               startAdornment: (
@@ -141,7 +145,7 @@ export default function NewInvoiceView({ patients }) {
               ),
             }}
             sx={{ mt: 3 }}
-            value={invoiceValueTextField}
+            value={invoiceAmountTextField}
           />
           <TextField
             label="Testo"
@@ -161,9 +165,9 @@ export default function NewInvoiceView({ patients }) {
             <DateTimePicker
               label="Data emissione"
               onChange={(newValue) => {
-                setIssueDate(newValue);
+                setIssueDateTime(newValue);
               }}
-              value={issueDate}
+              value={issueDateTime}
               renderInput={(params) => (
                 <TextField
                   {...params}
