@@ -45,6 +45,7 @@ export default function NewInvoiceView({ patients }) {
       invoiceText,
       issueDateTime
     );
+    invoices.push(newInv);
     console.log(newInv);
   }
 
