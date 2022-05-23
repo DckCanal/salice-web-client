@@ -23,57 +23,61 @@ import { DateTime } from "luxon";
 
 export default function NewInvoiceView({ patients }) {
   // --- COMPONENT STATE --- //
-  const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
   const [selectedPatientId, setSelectedPatientId] = React.useState("");
+  const [invoiceValueTextField, setInvoiceValueTextField] = React.useState(0);
+  const [issueDate, setIssueDate] = React.useState(
+    DateTime.now().setZone("Europe/Rome")
+  );
   const [valueError, setValueError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(false);
-  // const [issueDate, setIssueDate] = React.useState(
-  //   DateTime.now().setZone("Europe/Rome")
-  // );
-  console.log(DateTime.now().setZone("Europe/Rome").toLocaleString());
 
   // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
-
-    if (selectedPatientId === "") return setAutocompleteError(true);
-    else setAutocompleteError(false);
+    if (!validateForm()) return;
 
     const data = new FormData(event.currentTarget);
-    const valore = data.get("value");
     const testo = data.get("text").trim();
     const cashed = data.get("cashed");
 
-    console.log(`Paziente: ${selectedPatientId} ${typeof selectedPatientId}
-    valore: ${valore} ${typeof valore}
-    testo: ${testo} ${typeof testo} (Len: ${testo.length})
-    cashed: ${cashed} ${typeof cashed}`);
+    // RUN ALL VALIDATORS
+    // IF OK, SUBMIT
   }
 
   // HANDLER for Autocomplete change event
   function handlePatientSelectionChange(_event, autocompleteVal) {
     const patientPrice = autocompleteVal?.price || 0;
     const patientId = autocompleteVal?._id || "";
-    // setAutomaticInvoiceValue(true);
-    // setDefaultInvoiceValue(newValue);
+
     setSelectedPatientId(patientId);
+    setAutocompleteError(patientId === "");
     setInvoiceValueTextField(patientPrice);
-    validateValue(patientPrice);
+    validateInvoiceValue(patientPrice);
   }
 
   // HANDLER for invoice value TextField change event
   function handleInvoiceValue(event) {
     setInvoiceValueTextField(event.target.value);
-    validateValue(event.target.value);
+    validateInvoiceValue(event.target.value);
   }
 
   // VALIDATOR for invoice amount TextField
-  function validateValue(valueToCheck) {
-    setValueError(isNaN(valueToCheck));
+  function validateInvoiceValue(valueToCheck) {
+    setValueError(isNaN(valueToCheck) || Number(valueToCheck) < 0);
+  }
+
+  // VALIDATOR for STATE values
+  function validateForm() {
+    return (
+      selectedPatientId !== "" &&
+      !isNaN(invoiceValueTextField) &&
+      Number(invoiceValueTextField) >= 0 &&
+      issueDate.isValid
+    );
   }
 
   return (
-    <Paper sx={{ p: 3, mt: 12, maxWidth: "800px", mr: "auto", ml: "auto" }}>
+    <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
       <Box
         sx={{
           display: "flex",
@@ -132,16 +136,12 @@ export default function NewInvoiceView({ patients }) {
             variant="standard"
             error={valueError}
             onChange={handleInvoiceValue}
-            // onFocus={() => {
-            //   setAutomaticInvoiceValue(false);
-            // }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">€</InputAdornment>
               ),
             }}
             sx={{ mt: 3 }}
-            // value={automaticInvoiceValue ? defaultInvoiceValue : undefined}
             value={invoiceValueTextField}
           />
           <TextField
@@ -161,10 +161,17 @@ export default function NewInvoiceView({ patients }) {
           >
             <DatePicker
               label="Data emissione"
-              // onChange={(newValue) => {
-              //   setValue(newValue);
-              // }}
-              renderInput={(params) => <TextField {...params} />}
+              onChange={(newValue) => {
+                setIssueDate(newValue);
+              }}
+              value={issueDate}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  sx={{ mt: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
             />
           </LocalizationProvider>
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
