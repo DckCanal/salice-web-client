@@ -45,7 +45,7 @@ export default function NewInvoiceView({ patients }) {
       invoiceText,
       issueDateTime
     );
-    invoices.push(newInv);
+    //invoices.push(newInv); BUG: INVOICES NOT DEFINED!
     console.log(newInv);
   }
 
