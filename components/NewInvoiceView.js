@@ -13,12 +13,10 @@ import {
 
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { newInvoice } from "../lib/controller";
 
-// TODO: send POST request
 // TODO: manage response errors
 
 export default function NewInvoiceView({ patients }) {
