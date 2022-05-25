@@ -228,8 +228,8 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function SortTable({ invoices, patients }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("issueDate");
+  const [order, setOrder] = React.useState("desc");
+  const [orderBy, setOrderBy] = React.useState("ordinal");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
