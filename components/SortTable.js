@@ -240,7 +240,9 @@ export default function SortTable({ invoices, patients }) {
     return createData(
       i._id,
       {
-        val: i.numeroOrdine,
+        val: `${new Date(i.dataEmissione).getFullYear()}-${String(
+          i.numeroOrdine
+        ).padStart(10, "0")}`,
         showed: `${i.numeroOrdine}/${new Date(i.dataEmissione).getFullYear()}`,
       },
       {
