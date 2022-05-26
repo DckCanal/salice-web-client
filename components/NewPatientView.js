@@ -18,6 +18,8 @@ import { DateTime } from "luxon";
 import validator from "validator";
 import { newInvoice } from "../lib/controller";
 import CodiceFiscale from "codice-fiscale-js";
+import MarginTextField from "./MarginTextField";
+import FormPaper from "./FormPaper";
 
 export default function NewPatientView() {
   // ---- COMPONENT STATE --- //
@@ -195,192 +197,179 @@ export default function NewPatientView() {
   }
 
   return (
-    <Box
-      component="form"
-      onSubmit={submit}
-      noValidate
-      sx={{
-        p: 3,
-        mt: 12,
-        maxWidth: "500px",
-        mr: "auto",
-        ml: "auto",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <>
       <Typography component="h1" variant="h5">
         Nuovo paziente
       </Typography>
-      <Paper
+      <Box
+        component="form"
+        onSubmit={submit}
+        noValidate
         sx={{
+          p: 3,
+          mt: 3,
+          mr: "auto",
+          ml: "auto",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          flexDirection: "row",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
         }}
       >
-        <Typography component="h3" variant="h5">
-          Informazioni personali
-        </Typography>
-        <TextField
-          variant="standard"
-          label="Nome"
-          name="name"
-          onChange={handleName}
-          error={nameError}
-          helperText={nameError ? "Nome obbligatorio" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Cognome"
-          name="surname"
-          onChange={handleSurname}
-          error={surnameError}
-          helperText={surnameError ? "Cognome obbligatorio" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Codice fiscale"
-          name="codFisc"
-          onChange={handleCodFisc}
-          error={codFiscError}
-          helperText={codFiscError ? "Codice fiscale non corretto" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Partita IVA"
-          name="pIva"
-          onChange={handlePIva}
-          error={pIvaError}
-          helperText={pIvaError ? "P.Iva non corretta" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Telefono"
-          name="telefono"
-          onChange={handleTelefono}
-          error={telefonoError}
-          helperText={telefonoError ? "Telefono non corretto" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Email"
-          name="email"
-          onChange={handleEmail}
-          error={emailError}
-          helperText={emailError ? "Email non corretta" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Prezzo"
-          name="prezzo"
-          onChange={handlePrezzo}
-          error={prezzoError}
-          helperText={prezzoError ? "Prezzo non corretto" : null}
-        />
-      </Paper>
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h3" variant="h5">
-          Residenza
-        </Typography>
-        <TextField
-          variant="standard"
-          label="Comune"
-          name="paeseResidenza"
-          onChange={(ev) => {
-            setPaeseResidenza(ev.target.value);
-          }}
-        />
-        {
-          // TODO: solo maiuscolo!
-        }
-        <TextField
-          variant="standard"
-          label="Provincia"
-          name="provinciaResidenza"
-          onChange={handleProvinciaResidenza}
-          error={provinciaResidenzaError}
-          helperText={provinciaResidenzaError ? "Provincia non corretta" : null}
-        />
-        <TextField
-          variant="standard"
-          label="CAP"
-          name="capResidenza"
-          onChange={handleCapResidenza}
-          error={capResidenzaError}
-          helperText={capResidenzaError ? "CAP non corretto" : null}
-        />
-        <TextField
-          variant="standard"
-          label="Via"
-          name="viaResidenza"
-          onChange={(ev) => {
-            setViaResidenza(ev.target.value);
-          }}
-        />
-        <TextField
-          variant="standard"
-          label="Civico"
-          name="civicoResidenza"
-          onChange={(ev) => {
-            setCivicoResidenza(ev.target.value);
-          }}
-        />
-      </Paper>
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h3" variant="h5">
-          Nascita
-        </Typography>
-        <LocalizationProvider
-          dateAdapter={AdapterLuxon}
-          adapterLocale={"eu-IT"}
-        >
-          <DatePicker
-            label="Data di nascita"
-            onChange={handleDataNascita}
-            value={dataNascita}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                InputLabelProps={{ shrink: true }}
-                variant="standard"
-              />
-            )}
+        <FormPaper>
+          <Typography component="h3" variant="h5">
+            Informazioni personali
+          </Typography>
+          <MarginTextField
+            variant="standard"
+            label="Nome"
+            name="name"
+            onChange={handleName}
+            error={nameError}
+            helperText={nameError ? "Nome obbligatorio" : null}
           />
-        </LocalizationProvider>
-        <TextField
-          variant="standard"
-          label="Comune"
-          name="paeseNascita"
-          onChange={(ev) => {
-            setPaeseNascita(ev.target.value);
-          }}
-        />
-        <TextField
-          variant="standard"
-          label="Provincia"
-          name="provinciaNascita"
-          onChange={handleProvinciaNascita}
-          error={provinciaNascitaError}
-          helperText={provinciaNascitaError ? "Provincia non corretta" : null}
-        />
-      </Paper>
-      <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
-        Inserisci
-      </Button>
-    </Box>
+          <MarginTextField
+            variant="standard"
+            label="Cognome"
+            name="surname"
+            onChange={handleSurname}
+            error={surnameError}
+            helperText={surnameError ? "Cognome obbligatorio" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Codice fiscale"
+            name="codFisc"
+            onChange={handleCodFisc}
+            error={codFiscError}
+            helperText={codFiscError ? "Codice fiscale non corretto" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Partita IVA"
+            name="pIva"
+            onChange={handlePIva}
+            error={pIvaError}
+            helperText={pIvaError ? "P.Iva non corretta" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Telefono"
+            name="telefono"
+            onChange={handleTelefono}
+            error={telefonoError}
+            helperText={telefonoError ? "Telefono non corretto" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Email"
+            name="email"
+            onChange={handleEmail}
+            error={emailError}
+            helperText={emailError ? "Email non corretta" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Prezzo"
+            name="prezzo"
+            onChange={handlePrezzo}
+            error={prezzoError}
+            helperText={prezzoError ? "Prezzo non corretto" : null}
+          />
+        </FormPaper>
+        <FormPaper>
+          <Typography component="h3" variant="h5">
+            Residenza
+          </Typography>
+          <MarginTextField
+            variant="standard"
+            label="Comune"
+            name="paeseResidenza"
+            onChange={(ev) => {
+              setPaeseResidenza(ev.target.value);
+            }}
+          />
+          {
+            // TODO: solo maiuscolo!
+          }
+          <MarginTextField
+            variant="standard"
+            label="Provincia"
+            name="provinciaResidenza"
+            onChange={handleProvinciaResidenza}
+            error={provinciaResidenzaError}
+            helperText={
+              provinciaResidenzaError ? "Provincia non corretta" : null
+            }
+          />
+          <MarginTextField
+            variant="standard"
+            label="CAP"
+            name="capResidenza"
+            onChange={handleCapResidenza}
+            error={capResidenzaError}
+            helperText={capResidenzaError ? "CAP non corretto" : null}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Via"
+            name="viaResidenza"
+            onChange={(ev) => {
+              setViaResidenza(ev.target.value);
+            }}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Civico"
+            name="civicoResidenza"
+            onChange={(ev) => {
+              setCivicoResidenza(ev.target.value);
+            }}
+          />
+        </FormPaper>
+        <FormPaper>
+          <Typography component="h3" variant="h5">
+            Nascita
+          </Typography>
+          <LocalizationProvider
+            dateAdapter={AdapterLuxon}
+            adapterLocale={"eu-IT"}
+          >
+            <DatePicker
+              label="Data di nascita"
+              onChange={handleDataNascita}
+              value={dataNascita}
+              renderInput={(params) => (
+                <MarginTextField
+                  {...params}
+                  InputLabelProps={{ shrink: true }}
+                  variant="standard"
+                />
+              )}
+            />
+          </LocalizationProvider>
+          <MarginTextField
+            variant="standard"
+            label="Comune"
+            name="paeseNascita"
+            onChange={(ev) => {
+              setPaeseNascita(ev.target.value);
+            }}
+          />
+          <MarginTextField
+            variant="standard"
+            label="Provincia"
+            name="provinciaNascita"
+            onChange={handleProvinciaNascita}
+            error={provinciaNascitaError}
+            helperText={provinciaNascitaError ? "Provincia non corretta" : null}
+          />
+        </FormPaper>
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
+          Inserisci
+        </Button>
+      </Box>
+    </>
   );
 }
