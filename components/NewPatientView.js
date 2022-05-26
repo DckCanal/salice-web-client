@@ -13,7 +13,7 @@ import {
 
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import validator from "validator";
 import { newInvoice } from "../lib/controller";
@@ -30,8 +30,8 @@ export default function NewPatientView() {
   const [capResidenza, setCapResidenza] = React.useState("");
   const [viaResidenza, setViaResidenza] = React.useState(undefined);
   const [civicoResidenza, setCivicoResidenza] = React.useState(undefined);
-  const [telefono, setTelefono] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
+  const [telefono, setTelefono] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [dataNascita, setDataNascita] = React.useState(DateTime.now());
   const [paeseNascita, setPaeseNascita] = React.useState(undefined);
   const [provinciaNascita, setProvinciaNascita] = React.useState("");
@@ -42,6 +42,14 @@ export default function NewPatientView() {
   const [surnameError, setSurnameError] = React.useState(false);
   const [codFiscError, setCodFiscError] = React.useState(false);
   const [pIvaError, setPIvaError] = React.useState(false);
+  const [provinciaResidenzaError, setProvinciaResidenzaError] =
+    React.useState(false);
+  const [capResidenzaError, setCapResidenzaError] = React.useState(false);
+  const [emailError, setEmailError] = React.useState(false);
+  const [telefonoError, setTelefonoError] = React.useState(false);
+  const [provinciaNascitaError, setProvinciaNascitaError] =
+    React.useState(false);
+  const [prezzoError, setPrezzoError] = React.useState(false);
   // RegExp for validators
   const capRegEx = /\d{5}/;
   const provRegEx = /\D{2}/;
@@ -94,8 +102,8 @@ export default function NewPatientView() {
     vEmail();
   }
 
-  function handleDataNascita(event) {
-    setDataNascita(event.target.value);
+  function handleDataNascita(newVal) {
+    setDataNascita(newVal);
     vDataNascita();
   }
 
@@ -123,23 +131,29 @@ export default function NewPatientView() {
     setSurnameError(surname === "");
     return surname !== "";
   }
+  // ERROR SETTER!!
   function vCodFisc() {
     try {
       CodiceFiscale(codFisc);
+      setCodFiscError(false);
       return true;
     } catch (err) {
+      setCodFiscError(true);
       return false;
     }
   }
   function vPiva() {
+    setPIvaError(!(pIva === "" || pIvaRegEx.test(pIva)));
     return pIva === "" || pIvaRegEx.test(pIva);
   }
 
   function vProvinciaResidenza() {
+    setProvinciaResidenzaError(!provRegEx.test(provinciaResidenza));
     return provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {
+    setCapResidenzaError(!capRegEx.test(capResidenza));
     return capRegEx.test(capResidenza);
   }
 
@@ -206,6 +220,9 @@ export default function NewPatientView() {
           alignItems: "center",
         }}
       >
+        <Typography component="h3" variant="h5">
+          Informazioni personali
+        </Typography>
         <TextField
           variant="standard"
           label="Nome"
@@ -228,7 +245,7 @@ export default function NewPatientView() {
           name="codFisc"
           onChange={handleCodFisc}
           error={codFiscError}
-          helperText={codFiscError ? "Cognome obbligatorio" : null}
+          helperText={codFiscError ? "Codice fiscale non corretto" : null}
         />
         <TextField
           variant="standard"
@@ -236,9 +253,134 @@ export default function NewPatientView() {
           name="pIva"
           onChange={handlePIva}
           error={pIvaError}
-          helperText={pIvaError ? "Cognome obbligatorio" : null}
+          helperText={pIvaError ? "P.Iva non corretta" : null}
+        />
+        <TextField
+          variant="standard"
+          label="Telefono"
+          name="telefono"
+          onChange={handleTelefono}
+          error={telefonoError}
+          helperText={telefonoError ? "Telefono non corretto" : null}
+        />
+        <TextField
+          variant="standard"
+          label="Email"
+          name="email"
+          onChange={handleEmail}
+          error={emailError}
+          helperText={emailError ? "Email non corretta" : null}
+        />
+        <TextField
+          variant="standard"
+          label="Prezzo"
+          name="prezzo"
+          onChange={handlePrezzo}
+          error={prezzoError}
+          helperText={prezzoError ? "Prezzo non corretto" : null}
         />
       </Paper>
+      <Paper
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h3" variant="h5">
+          Residenza
+        </Typography>
+        <TextField
+          variant="standard"
+          label="Comune"
+          name="paeseResidenza"
+          onChange={(ev) => {
+            setPaeseResidenza(ev.target.value);
+          }}
+        />
+        {
+          // TODO: solo maiuscolo!
+        }
+        <TextField
+          variant="standard"
+          label="Provincia"
+          name="provinciaResidenza"
+          onChange={handleProvinciaResidenza}
+          error={provinciaResidenzaError}
+          helperText={provinciaResidenzaError ? "Provincia non corretta" : null}
+        />
+        <TextField
+          variant="standard"
+          label="CAP"
+          name="capResidenza"
+          onChange={handleCapResidenza}
+          error={capResidenzaError}
+          helperText={capResidenzaError ? "CAP non corretto" : null}
+        />
+        <TextField
+          variant="standard"
+          label="Via"
+          name="viaResidenza"
+          onChange={(ev) => {
+            setViaResidenza(ev.target.value);
+          }}
+        />
+        <TextField
+          variant="standard"
+          label="Civico"
+          name="civicoResidenza"
+          onChange={(ev) => {
+            setCivicoResidenza(ev.target.value);
+          }}
+        />
+      </Paper>
+      <Paper
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h3" variant="h5">
+          Nascita
+        </Typography>
+        <LocalizationProvider
+          dateAdapter={AdapterLuxon}
+          adapterLocale={"eu-IT"}
+        >
+          <DatePicker
+            label="Data di nascita"
+            onChange={handleDataNascita}
+            value={dataNascita}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputLabelProps={{ shrink: true }}
+                variant="standard"
+              />
+            )}
+          />
+        </LocalizationProvider>
+        <TextField
+          variant="standard"
+          label="Comune"
+          name="paeseNascita"
+          onChange={(ev) => {
+            setPaeseNascita(ev.target.value);
+          }}
+        />
+        <TextField
+          variant="standard"
+          label="Provincia"
+          name="provinciaNascita"
+          onChange={handleProvinciaNascita}
+          error={provinciaNascitaError}
+          helperText={provinciaNascitaError ? "Provincia non corretta" : null}
+        />
+      </Paper>
+      <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
+        Inserisci
+      </Button>
     </Box>
   );
 }
