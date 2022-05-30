@@ -1,3 +1,5 @@
+// TODO: PROVINCIA VALIDATOR BUG, CAP VALIDATOR BUG, CODFISC VALIDATOR BUG
+
 import * as React from "react";
 import {
   Autocomplete,
@@ -40,8 +42,8 @@ export default function NewPatientView() {
   const [capNascita, setCapNascita] = React.useState("");
   const [prezzo, setPrezzo] = React.useState(0);
 
-  const [nameError, setNameError] = React.useState(false);
-  const [surnameError, setSurnameError] = React.useState(false);
+  //const [nameError, setNameError] = React.useState(false);
+  //const [surnameError, setSurnameError] = React.useState(false);
   const [codFiscError, setCodFiscError] = React.useState(false);
   const [pIvaError, setPIvaError] = React.useState(false);
   const [provinciaResidenzaError, setProvinciaResidenzaError] =
@@ -66,96 +68,100 @@ export default function NewPatientView() {
   // HANDLER for field change events
   function handleName(event) {
     setName(event.target.value);
-    vName();
+    // console.log(
+    //   `event.target.value: ${event.target.value}`,
+    //   `state[name]: ${name}`
+    // );
+    // console.log(`Name validator: OK=${vName()}`);
   }
 
   function handleSurname(event) {
     setSurname(event.target.value);
-    vSurname();
+    // vSurname();
   }
 
   function handleCodFisc(event) {
     setCodFisc(event.target.value);
-    vCodFisc();
+    // vCodFisc();
   }
 
   function handlePIva(event) {
     setPIva(event.target.value);
-    vPiva();
+    // vPiva();
   }
 
   function handleProvinciaResidenza(event) {
     setProvinciaResidenza(event.target.value);
-    vProvinciaResidenza();
+    // vProvinciaResidenza();
   }
 
   function handleCapResidenza(event) {
     setCapResidenza(event);
-    vCapResidenza();
+    // vCapResidenza();
   }
 
   function handleTelefono(event) {
     setTelefono(event.target.value);
-    vTelefono();
+    // vTelefono();
   }
 
   function handleEmail(event) {
     setEmail(event.target.value);
-    vEmail();
+    // vEmail();
   }
 
   function handleDataNascita(newVal) {
     setDataNascita(newVal);
-    vDataNascita();
+    // vDataNascita();
   }
 
   function handleProvinciaNascita(event) {
     setProvinciaNascita(event.target.value);
-    vProvinciaNascita();
+    // vProvinciaNascita();
   }
 
   function handleCapNascita(event) {
     setCapNascita(event.target.value);
-    vCapNascita();
+    // vCapNascita();
   }
 
   function handlePrezzo(event) {
     setPrezzo(event.target.value);
-    vPrezzo();
+    // vPrezzo();
   }
 
   // VALIDATORS
   function vName() {
-    setNameError(name === "");
+    //setNameError(name === "");
     return name !== "";
   }
   function vSurname() {
-    setSurnameError(surname === "");
+    //setSurnameError(surname === "");
     return surname !== "";
   }
   // ERROR SETTER!!
   function vCodFisc() {
     try {
       CodiceFiscale(codFisc);
-      setCodFiscError(false);
+      //setCodFiscError(false);
       return true;
     } catch (err) {
-      setCodFiscError(true);
+      //setCodFiscError(true);
       return false;
     }
   }
   function vPiva() {
-    setPIvaError(!(pIva === "" || pIvaRegEx.test(pIva)));
+    //setPIvaError(!(pIva === "" || pIvaRegEx.test(pIva)));
     return pIva === "" || pIvaRegEx.test(pIva);
   }
 
   function vProvinciaResidenza() {
-    setProvinciaResidenzaError(!provRegEx.test(provinciaResidenza));
+    //setProvinciaResidenzaError(!provRegEx.test(provinciaResidenza));
     return provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {
-    setCapResidenzaError(!capRegEx.test(capResidenza));
+    //setCapResidenzaError(!capRegEx.test(capResidenza));
     return capRegEx.test(capResidenza);
   }
 
@@ -226,56 +232,56 @@ export default function NewPatientView() {
             label="Nome"
             name="name"
             onChange={handleName}
-            error={nameError}
-            helperText={nameError ? "Nome obbligatorio" : null}
+            error={!vName()}
+            helperText={!vName() ? "Nome obbligatorio" : null}
           />
           <MarginTextField
             variant="standard"
             label="Cognome"
             name="surname"
             onChange={handleSurname}
-            error={surnameError}
-            helperText={surnameError ? "Cognome obbligatorio" : null}
+            error={!vSurname()}
+            helperText={!vSurname() ? "Cognome obbligatorio" : null}
           />
           <MarginTextField
             variant="standard"
             label="Codice fiscale"
             name="codFisc"
             onChange={handleCodFisc}
-            error={codFiscError}
-            helperText={codFiscError ? "Codice fiscale non corretto" : null}
+            error={!vCodFisc()}
+            helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
           />
           <MarginTextField
             variant="standard"
             label="Partita IVA"
             name="pIva"
             onChange={handlePIva}
-            error={pIvaError}
-            helperText={pIvaError ? "P.Iva non corretta" : null}
+            error={!vPiva()}
+            helperText={!vPiva() ? "P.Iva non corretta" : null}
           />
           <MarginTextField
             variant="standard"
             label="Telefono"
             name="telefono"
             onChange={handleTelefono}
-            error={telefonoError}
-            helperText={telefonoError ? "Telefono non corretto" : null}
+            error={!vTelefono()}
+            helperText={!vTelefono() ? "Telefono non corretto" : null}
           />
           <MarginTextField
             variant="standard"
             label="Email"
             name="email"
             onChange={handleEmail}
-            error={emailError}
-            helperText={emailError ? "Email non corretta" : null}
+            error={!vEmail()}
+            helperText={!vEmail() ? "Email non corretta" : null}
           />
           <MarginTextField
             variant="standard"
             label="Prezzo"
             name="prezzo"
             onChange={handlePrezzo}
-            error={prezzoError}
-            helperText={prezzoError ? "Prezzo non corretto" : null}
+            error={!vPrezzo()}
+            helperText={!vPrezzo() ? "Prezzo non corretto" : null}
           />
         </FormPaper>
         <FormPaper>
@@ -290,26 +296,25 @@ export default function NewPatientView() {
               setPaeseResidenza(ev.target.value);
             }}
           />
-          {
-            // TODO: solo maiuscolo!
-          }
+
           <MarginTextField
             variant="standard"
             label="Provincia"
             name="provinciaResidenza"
             onChange={handleProvinciaResidenza}
-            error={provinciaResidenzaError}
+            error={!vProvinciaResidenza()}
             helperText={
-              provinciaResidenzaError ? "Provincia non corretta" : null
+              !vProvinciaResidenza() ? "Provincia non corretta" : null
             }
+            inputProps={{ style: { textTransform: "uppercase" } }}
           />
           <MarginTextField
             variant="standard"
             label="CAP"
             name="capResidenza"
             onChange={handleCapResidenza}
-            error={capResidenzaError}
-            helperText={capResidenzaError ? "CAP non corretto" : null}
+            error={!vCapResidenza()}
+            helperText={!vCapResidenza() ? "CAP non corretto" : null}
           />
           <MarginTextField
             variant="standard"
@@ -362,8 +367,9 @@ export default function NewPatientView() {
             label="Provincia"
             name="provinciaNascita"
             onChange={handleProvinciaNascita}
-            error={provinciaNascitaError}
-            helperText={provinciaNascitaError ? "Provincia non corretta" : null}
+            error={!vProvinciaNascita()}
+            helperText={!vProvinciaNascita() ? "Provincia non corretta" : null}
+            inputProps={{ style: { textTransform: "uppercase" } }}
           />
         </FormPaper>
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
