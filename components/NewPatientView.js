@@ -111,170 +111,190 @@ export default function NewPatientView() {
       <Typography component="h1" variant="h5">
         Nuovo paziente
       </Typography>
-      <Box
-        component="form"
-        onSubmit={submit}
-        noValidate
-        sx={{
-          p: 3,
-          mt: 3,
-          mr: "auto",
-          ml: "auto",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-        }}
-      >
-        <FormPaper>
-          <Typography component="h3" variant="h5">
-            Informazioni personali
-          </Typography>
-          <MarginTextField
-            variant="standard"
-            label="Nome"
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-            error={!vName()}
-            helperText={!vName() ? "Nome obbligatorio" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Cognome"
-            name="surname"
-            onChange={(e) => setSurname(e.target.value)}
-            error={!vSurname()}
-            helperText={!vSurname() ? "Cognome obbligatorio" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Codice fiscale"
-            name="codFisc"
-            onChange={(e) => setCodFisc(e.target.value)}
-            error={!vCodFisc()}
-            helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
-            inputProps={{ style: { textTransform: "uppercase" } }}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Partita IVA"
-            name="pIva"
-            onChange={(e) => setPIva(e.target.value)}
-            error={!vPiva()}
-            helperText={!vPiva() ? "P.Iva non corretta" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Telefono"
-            name="telefono"
-            onChange={(e) => setTelefono(e.target.value)}
-            error={!vTelefono()}
-            helperText={!vTelefono() ? "Telefono non corretto" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Email"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-            error={!vEmail()}
-            helperText={!vEmail() ? "Email non corretta" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Prezzo"
-            name="prezzo"
-            onChange={(e) => setPrezzo(e.target.value)}
-            error={!vPrezzo()}
-            helperText={!vPrezzo() ? "Prezzo non corretto" : null}
-          />
-        </FormPaper>
-        <FormPaper>
-          <Typography component="h3" variant="h5">
-            Residenza
-          </Typography>
-          <MarginTextField
-            variant="standard"
-            label="Comune"
-            name="paeseResidenza"
-            onChange={(e) => {
-              setPaeseResidenza(e.target.value);
-            }}
-          />
-
-          <MarginTextField
-            variant="standard"
-            label="Provincia"
-            name="provinciaResidenza"
-            onChange={(e) => setProvinciaResidenza(e.target.value)}
-            error={!vProvinciaResidenza()}
-            helperText={
-              !vProvinciaResidenza() ? "Provincia non corretta" : null
-            }
-            inputProps={{ style: { textTransform: "uppercase" } }}
-          />
-          <MarginTextField
-            variant="standard"
-            label="CAP"
-            name="capResidenza"
-            onChange={(e) => setCapResidenza(e.target.value)}
-            error={!vCapResidenza()}
-            helperText={!vCapResidenza() ? "CAP non corretto" : null}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Via"
-            name="viaResidenza"
-            onChange={(e) => setViaResidenza(e.target.value)}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Civico"
-            name="civicoResidenza"
-            onChange={(e) => setCivicoResidenza(e.target.value)}
-          />
-        </FormPaper>
-        <FormPaper>
-          <Typography component="h3" variant="h5">
-            Nascita
-          </Typography>
-          <LocalizationProvider
-            dateAdapter={AdapterLuxon}
-            adapterLocale={"eu-IT"}
-          >
-            <DatePicker
-              label="Data di nascita"
-              onChange={(date) => setDataNascita(date)}
-              value={dataNascita}
-              renderInput={(params) => (
-                <MarginTextField
-                  {...params}
-                  InputLabelProps={{ shrink: true }}
-                  variant="standard"
-                />
-              )}
+      <Box component="form" onSubmit={submit} noValidate>
+        <Box
+          sx={{
+            p: 3,
+            mt: 3,
+            mr: "auto",
+            ml: "auto",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          <FormPaper>
+            <Typography component="h3" variant="h5">
+              Informazioni personali
+            </Typography>
+            <MarginTextField
+              variant="standard"
+              label="Nome"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              error={!vName()}
+              helperText={!vName() ? "Nome obbligatorio" : null}
             />
-          </LocalizationProvider>
-          <MarginTextField
-            variant="standard"
-            label="Comune"
-            name="paeseNascita"
-            onChange={(e) => setPaeseNascita(e.target.value)}
-          />
-          <MarginTextField
-            variant="standard"
-            label="Provincia"
-            name="provinciaNascita"
-            onChange={(e) => setProvinciaNascita(e.target.value)}
-            error={!vProvinciaNascita()}
-            helperText={!vProvinciaNascita() ? "Provincia non corretta" : null}
-            inputProps={{ style: { textTransform: "uppercase" } }}
-          />
-        </FormPaper>
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
-          Inserisci
-        </Button>
+            <MarginTextField
+              variant="standard"
+              label="Cognome"
+              name="surname"
+              onChange={(e) => setSurname(e.target.value)}
+              error={!vSurname()}
+              helperText={!vSurname() ? "Cognome obbligatorio" : null}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Codice fiscale"
+              name="codFisc"
+              onChange={(e) => setCodFisc(e.target.value)}
+              error={!vCodFisc()}
+              helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
+              inputProps={{ style: { textTransform: "uppercase" } }}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Partita IVA"
+              name="pIva"
+              onChange={(e) => setPIva(e.target.value)}
+              error={!vPiva()}
+              helperText={!vPiva() ? "P.Iva non corretta" : null}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Telefono"
+              name="telefono"
+              onChange={(e) => setTelefono(e.target.value)}
+              error={!vTelefono()}
+              helperText={!vTelefono() ? "Telefono non corretto" : null}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Email"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              error={!vEmail()}
+              helperText={!vEmail() ? "Email non corretta" : null}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Prezzo"
+              name="prezzo"
+              onChange={(e) => setPrezzo(e.target.value)}
+              error={!vPrezzo()}
+              helperText={!vPrezzo() ? "Prezzo non corretto" : null}
+            />
+          </FormPaper>
+          <FormPaper>
+            <Typography component="h3" variant="h5">
+              Residenza
+            </Typography>
+            <MarginTextField
+              variant="standard"
+              label="Comune"
+              name="paeseResidenza"
+              onChange={(e) => {
+                setPaeseResidenza(e.target.value);
+              }}
+            />
+
+            <MarginTextField
+              variant="standard"
+              label="Provincia"
+              name="provinciaResidenza"
+              onChange={(e) => setProvinciaResidenza(e.target.value)}
+              error={!vProvinciaResidenza()}
+              helperText={
+                !vProvinciaResidenza() ? "Provincia non corretta" : null
+              }
+              inputProps={{ style: { textTransform: "uppercase" } }}
+            />
+            <MarginTextField
+              variant="standard"
+              label="CAP"
+              name="capResidenza"
+              onChange={(e) => setCapResidenza(e.target.value)}
+              error={!vCapResidenza()}
+              helperText={!vCapResidenza() ? "CAP non corretto" : null}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Via"
+              name="viaResidenza"
+              onChange={(e) => setViaResidenza(e.target.value)}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Civico"
+              name="civicoResidenza"
+              onChange={(e) => setCivicoResidenza(e.target.value)}
+            />
+          </FormPaper>
+          <FormPaper>
+            <Typography component="h3" variant="h5">
+              Nascita
+            </Typography>
+            <LocalizationProvider
+              dateAdapter={AdapterLuxon}
+              adapterLocale={"eu-IT"}
+            >
+              <DatePicker
+                label="Data di nascita"
+                onChange={(date) => setDataNascita(date)}
+                value={dataNascita}
+                renderInput={(params) => (
+                  <MarginTextField
+                    {...params}
+                    InputLabelProps={{ shrink: true }}
+                    variant="standard"
+                  />
+                )}
+              />
+            </LocalizationProvider>
+            <MarginTextField
+              variant="standard"
+              label="Comune"
+              name="paeseNascita"
+              onChange={(e) => setPaeseNascita(e.target.value)}
+            />
+            <MarginTextField
+              variant="standard"
+              label="Provincia"
+              name="provinciaNascita"
+              onChange={(e) => setProvinciaNascita(e.target.value)}
+              error={!vProvinciaNascita()}
+              helperText={
+                !vProvinciaNascita() ? "Provincia non corretta" : null
+              }
+              inputProps={{ style: { textTransform: "uppercase" } }}
+            />
+          </FormPaper>
+        </Box>
+        <Box
+          sx={{
+            maxWidth: 600,
+            mr: "auto",
+            ml: "auto",
+          }}
+        >
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 3, mb: 3 }}
+          >
+            Inserisci
+          </Button>
+        </Box>
       </Box>
+      {/* <Box sx={{ "& > :not(style)": { m: 1 } }}>
+        <Fab type="submit" variant="extended">
+          <AddIcon sx={{ mr: 1 }} />
+          Inserisci
+        </Fab>
+      </Box> */}
     </>
   );
 }
