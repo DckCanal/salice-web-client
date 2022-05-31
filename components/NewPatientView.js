@@ -1,24 +1,13 @@
-// TODO: PROVINCIA VALIDATOR BUG, CAP VALIDATOR BUG, CODFISC VALIDATOR BUG
+// TODO: PROVINCIA VALIDATOR BUG: ok if length > 2
 
 import * as React from "react";
-import {
-  Autocomplete,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  InputAdornment,
-  Button,
-  Box,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import validator from "validator";
-import { newInvoice } from "../lib/controller";
 import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
@@ -42,18 +31,6 @@ export default function NewPatientView() {
   const [capNascita, setCapNascita] = React.useState("");
   const [prezzo, setPrezzo] = React.useState(0);
 
-  //const [nameError, setNameError] = React.useState(false);
-  //const [surnameError, setSurnameError] = React.useState(false);
-  const [codFiscError, setCodFiscError] = React.useState(false);
-  const [pIvaError, setPIvaError] = React.useState(false);
-  const [provinciaResidenzaError, setProvinciaResidenzaError] =
-    React.useState(false);
-  const [capResidenzaError, setCapResidenzaError] = React.useState(false);
-  const [emailError, setEmailError] = React.useState(false);
-  const [telefonoError, setTelefonoError] = React.useState(false);
-  const [provinciaNascitaError, setProvinciaNascitaError] =
-    React.useState(false);
-  const [prezzoError, setPrezzoError] = React.useState(false);
   // RegExp for validators
   const capRegEx = /\d{5}/;
   const provRegEx = /\D{2}/;
@@ -65,103 +42,30 @@ export default function NewPatientView() {
     if (!validateForm()) return;
   }
 
-  // HANDLER for field change events
-  function handleName(event) {
-    setName(event.target.value);
-    // console.log(
-    //   `event.target.value: ${event.target.value}`,
-    //   `state[name]: ${name}`
-    // );
-    // console.log(`Name validator: OK=${vName()}`);
-  }
-
-  function handleSurname(event) {
-    setSurname(event.target.value);
-    // vSurname();
-  }
-
-  function handleCodFisc(event) {
-    setCodFisc(event.target.value);
-    // vCodFisc();
-  }
-
-  function handlePIva(event) {
-    setPIva(event.target.value);
-    // vPiva();
-  }
-
-  function handleProvinciaResidenza(event) {
-    setProvinciaResidenza(event.target.value);
-    // vProvinciaResidenza();
-  }
-
-  function handleCapResidenza(event) {
-    setCapResidenza(event);
-    // vCapResidenza();
-  }
-
-  function handleTelefono(event) {
-    setTelefono(event.target.value);
-    // vTelefono();
-  }
-
-  function handleEmail(event) {
-    setEmail(event.target.value);
-    // vEmail();
-  }
-
-  function handleDataNascita(newVal) {
-    setDataNascita(newVal);
-    // vDataNascita();
-  }
-
-  function handleProvinciaNascita(event) {
-    setProvinciaNascita(event.target.value);
-    // vProvinciaNascita();
-  }
-
-  function handleCapNascita(event) {
-    setCapNascita(event.target.value);
-    // vCapNascita();
-  }
-
-  function handlePrezzo(event) {
-    setPrezzo(event.target.value);
-    // vPrezzo();
-  }
-
   // VALIDATORS
   function vName() {
-    //setNameError(name === "");
     return name !== "";
   }
   function vSurname() {
-    //setSurnameError(surname === "");
     return surname !== "";
   }
-  // ERROR SETTER!!
   function vCodFisc() {
     try {
-      CodiceFiscale(codFisc);
-      //setCodFiscError(false);
+      new CodiceFiscale(codFisc);
       return true;
     } catch (err) {
-      //setCodFiscError(true);
       return false;
     }
   }
   function vPiva() {
-    //setPIvaError(!(pIva === "" || pIvaRegEx.test(pIva)));
     return pIva === "" || pIvaRegEx.test(pIva);
   }
 
   function vProvinciaResidenza() {
-    //setProvinciaResidenzaError(!provRegEx.test(provinciaResidenza));
     return provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {
-    //setCapResidenzaError(!capRegEx.test(capResidenza));
     return capRegEx.test(capResidenza);
   }
 
@@ -231,7 +135,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Nome"
             name="name"
-            onChange={handleName}
+            onChange={(e) => setName(e.target.value)}
             error={!vName()}
             helperText={!vName() ? "Nome obbligatorio" : null}
           />
@@ -239,7 +143,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Cognome"
             name="surname"
-            onChange={handleSurname}
+            onChange={(e) => setSurname(e.target.value)}
             error={!vSurname()}
             helperText={!vSurname() ? "Cognome obbligatorio" : null}
           />
@@ -247,15 +151,16 @@ export default function NewPatientView() {
             variant="standard"
             label="Codice fiscale"
             name="codFisc"
-            onChange={handleCodFisc}
+            onChange={(e) => setCodFisc(e.target.value)}
             error={!vCodFisc()}
             helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
+            inputProps={{ style: { textTransform: "uppercase" } }}
           />
           <MarginTextField
             variant="standard"
             label="Partita IVA"
             name="pIva"
-            onChange={handlePIva}
+            onChange={(e) => setPIva(e.target.value)}
             error={!vPiva()}
             helperText={!vPiva() ? "P.Iva non corretta" : null}
           />
@@ -263,7 +168,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Telefono"
             name="telefono"
-            onChange={handleTelefono}
+            onChange={(e) => setTelefono(e.target.value)}
             error={!vTelefono()}
             helperText={!vTelefono() ? "Telefono non corretto" : null}
           />
@@ -271,7 +176,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Email"
             name="email"
-            onChange={handleEmail}
+            onChange={(e) => setEmail(e.target.value)}
             error={!vEmail()}
             helperText={!vEmail() ? "Email non corretta" : null}
           />
@@ -279,7 +184,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Prezzo"
             name="prezzo"
-            onChange={handlePrezzo}
+            onChange={(e) => setPrezzo(e.target.value)}
             error={!vPrezzo()}
             helperText={!vPrezzo() ? "Prezzo non corretto" : null}
           />
@@ -292,8 +197,8 @@ export default function NewPatientView() {
             variant="standard"
             label="Comune"
             name="paeseResidenza"
-            onChange={(ev) => {
-              setPaeseResidenza(ev.target.value);
+            onChange={(e) => {
+              setPaeseResidenza(e.target.value);
             }}
           />
 
@@ -301,7 +206,7 @@ export default function NewPatientView() {
             variant="standard"
             label="Provincia"
             name="provinciaResidenza"
-            onChange={handleProvinciaResidenza}
+            onChange={(e) => setProvinciaResidenza(e.target.value)}
             error={!vProvinciaResidenza()}
             helperText={
               !vProvinciaResidenza() ? "Provincia non corretta" : null
@@ -312,7 +217,7 @@ export default function NewPatientView() {
             variant="standard"
             label="CAP"
             name="capResidenza"
-            onChange={handleCapResidenza}
+            onChange={(e) => setCapResidenza(e.target.value)}
             error={!vCapResidenza()}
             helperText={!vCapResidenza() ? "CAP non corretto" : null}
           />
@@ -320,17 +225,13 @@ export default function NewPatientView() {
             variant="standard"
             label="Via"
             name="viaResidenza"
-            onChange={(ev) => {
-              setViaResidenza(ev.target.value);
-            }}
+            onChange={(e) => setViaResidenza(e.target.value)}
           />
           <MarginTextField
             variant="standard"
             label="Civico"
             name="civicoResidenza"
-            onChange={(ev) => {
-              setCivicoResidenza(ev.target.value);
-            }}
+            onChange={(e) => setCivicoResidenza(e.target.value)}
           />
         </FormPaper>
         <FormPaper>
@@ -343,7 +244,7 @@ export default function NewPatientView() {
           >
             <DatePicker
               label="Data di nascita"
-              onChange={handleDataNascita}
+              onChange={(date) => setDataNascita(date)}
               value={dataNascita}
               renderInput={(params) => (
                 <MarginTextField
@@ -358,15 +259,13 @@ export default function NewPatientView() {
             variant="standard"
             label="Comune"
             name="paeseNascita"
-            onChange={(ev) => {
-              setPaeseNascita(ev.target.value);
-            }}
+            onChange={(e) => setPaeseNascita(e.target.value)}
           />
           <MarginTextField
             variant="standard"
             label="Provincia"
             name="provinciaNascita"
-            onChange={handleProvinciaNascita}
+            onChange={(e) => setProvinciaNascita(e.target.value)}
             error={!vProvinciaNascita()}
             helperText={!vProvinciaNascita() ? "Provincia non corretta" : null}
             inputProps={{ style: { textTransform: "uppercase" } }}
