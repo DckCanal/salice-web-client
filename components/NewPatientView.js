@@ -1,5 +1,3 @@
-// TODO: PROVINCIA VALIDATOR BUG: ok if length > 2
-
 import * as React from "react";
 import { Button, Box, Typography } from "@mui/material";
 
@@ -33,7 +31,7 @@ export default function NewPatientView() {
 
   // RegExp for validators
   const capRegEx = /\d{5}/;
-  const provRegEx = /\D{2}/;
+  const provRegEx = /[A-Z]{2}/i;
   const pIvaRegEx = /\d{11}/;
 
   // HANDLER for Form submit event
@@ -107,8 +105,15 @@ export default function NewPatientView() {
   }
 
   return (
-    <>
-      <Typography component="h1" variant="h5">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        m: 4,
+      }}
+    >
+      <Typography component="h1" variant="h4" textAlign="center">
         Nuovo paziente
       </Typography>
       <Box component="form" onSubmit={submit} noValidate>
@@ -152,7 +157,10 @@ export default function NewPatientView() {
               onChange={(e) => setCodFisc(e.target.value)}
               error={!vCodFisc()}
               helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
-              inputProps={{ style: { textTransform: "uppercase" } }}
+              inputProps={{
+                style: { textTransform: "uppercase" },
+                maxLength: 16,
+              }}
             />
             <MarginTextField
               variant="standard"
@@ -161,6 +169,9 @@ export default function NewPatientView() {
               onChange={(e) => setPIva(e.target.value)}
               error={!vPiva()}
               helperText={!vPiva() ? "P.Iva non corretta" : null}
+              inputProps={{
+                maxLength: 11,
+              }}
             />
             <MarginTextField
               variant="standard"
@@ -209,7 +220,10 @@ export default function NewPatientView() {
               helperText={
                 !vProvinciaResidenza() ? "Provincia non corretta" : null
               }
-              inputProps={{ style: { textTransform: "uppercase" } }}
+              inputProps={{
+                style: { textTransform: "uppercase" },
+                maxLength: 2,
+              }}
             />
             <MarginTextField
               variant="standard"
@@ -218,6 +232,9 @@ export default function NewPatientView() {
               onChange={(e) => setCapResidenza(e.target.value)}
               error={!vCapResidenza()}
               helperText={!vCapResidenza() ? "CAP non corretto" : null}
+              inputProps={{
+                maxLength: 5,
+              }}
             />
             <MarginTextField
               variant="standard"
@@ -268,7 +285,10 @@ export default function NewPatientView() {
               helperText={
                 !vProvinciaNascita() ? "Provincia non corretta" : null
               }
-              inputProps={{ style: { textTransform: "uppercase" } }}
+              inputProps={{
+                style: { textTransform: "uppercase" },
+                maxLength: 2,
+              }}
             />
           </FormPaper>
         </Box>
@@ -289,12 +309,6 @@ export default function NewPatientView() {
           </Button>
         </Box>
       </Box>
-      {/* <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Fab type="submit" variant="extended">
-          <AddIcon sx={{ mr: 1 }} />
-          Inserisci
-        </Fab>
-      </Box> */}
-    </>
+    </Box>
   );
 }
