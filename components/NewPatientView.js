@@ -9,6 +9,7 @@ import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
+import { newPatient } from "../lib/controller";
 
 export default function NewPatientView() {
   // ---- COMPONENT STATE --- //
@@ -38,6 +39,27 @@ export default function NewPatientView() {
   async function submit(event) {
     event.preventDefault();
     if (!validateForm()) return;
+
+    const newPat = await newPatient(
+      name,
+      surname,
+      codFisc,
+      pIva,
+      paeseResidenza,
+      provinciaResidenza,
+      capResidenza,
+      viaResidenza,
+      civicoResidenza,
+      telefono,
+      email,
+      dataNascita,
+      paeseNascita,
+      provinciaNascita,
+      capNascita,
+      prezzo
+    );
+    // TODO: add new Patient to patient array
+    console.log(newPat);
   }
 
   // VALIDATORS
