@@ -44,7 +44,7 @@ export default function NewInvoiceView({ patients }) {
       issueDateTime
     );
     //invoices.push(newInv); BUG: INVOICES NOT DEFINED!
-    console.log(newInv);
+    //console.log(newInv);
   }
 
   // HANDLER for Autocomplete change event
