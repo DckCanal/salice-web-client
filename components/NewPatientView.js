@@ -176,7 +176,7 @@ export default function NewPatientView() {
               variant="standard"
               label="Codice fiscale"
               name="codFisc"
-              onChange={(e) => setCodFisc(e.target.value)}
+              onChange={(e) => setCodFisc(e.target.value.toUpperCase())}
               error={!vCodFisc()}
               helperText={!vCodFisc() ? "Codice fiscale non corretto" : null}
               inputProps={{
@@ -237,7 +237,9 @@ export default function NewPatientView() {
               variant="standard"
               label="Provincia"
               name="provinciaResidenza"
-              onChange={(e) => setProvinciaResidenza(e.target.value)}
+              onChange={(e) =>
+                setProvinciaResidenza(e.target.value.toUpperCase())
+              }
               error={!vProvinciaResidenza()}
               helperText={
                 !vProvinciaResidenza() ? "Provincia non corretta" : null
@@ -302,7 +304,9 @@ export default function NewPatientView() {
               variant="standard"
               label="Provincia"
               name="provinciaNascita"
-              onChange={(e) => setProvinciaNascita(e.target.value)}
+              onChange={(e) =>
+                setProvinciaNascita(e.target.value.toUpperCase())
+              }
               error={!vProvinciaNascita()}
               helperText={
                 !vProvinciaNascita() ? "Provincia non corretta" : null
