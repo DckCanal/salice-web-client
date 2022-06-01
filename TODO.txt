@@ -4,3 +4,4 @@ Added rapid action buttons in 'Ultime fatture' table
 Change browser's back button behavior
 Add a "reload data" button
 BUG: when not logged in but opening /dashboard, tries to load patients and throws and exception because it's undefined
+BUG: totale mensile anno precedente sbagliato
