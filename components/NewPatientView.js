@@ -74,7 +74,7 @@ export default function NewPatientView() {
       new CodiceFiscale(codFisc);
       return true;
     } catch (err) {
-      return false;
+      return codFisc === '';
     }
   }
   function vPiva() {
