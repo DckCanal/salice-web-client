@@ -86,6 +86,7 @@ const darkTheme = createTheme({
 });
 
 function DashboardContent({ invoices, patients, dataManager }) {
+  //console.log(invoices);
   const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
@@ -95,7 +96,13 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <Home lightTheme={lightTheme} invoices={invoices} patients={patients} />
       );
     if (view === "InvoiceList")
-      return <InvoiceList invoices={invoices} patients={patients} />;
+      return (
+        <InvoiceList
+          invoices={invoices}
+          patients={patients}
+          dataManager={dataManager}
+        />
+      );
     if (view === "PatientList")
       return <PatientList invoices={invoices} patients={patients} />;
     if (view === "Graph")

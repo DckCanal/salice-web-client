@@ -37,7 +37,8 @@ export default function DashboardPage() {
       setPatients([...patients, newPat]);
     },
     removeInvoice: (inv) => {
-      return;
+      //invoices.splice(invoices.indexOf(inv),1);
+      setInvoices([...invoices.filter((i) => i._id !== inv._id)]);
     },
   };
 

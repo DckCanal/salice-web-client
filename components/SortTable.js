@@ -21,6 +21,7 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { deleteInvoice } from "../lib/controller";
 
 function createData(id, ordinal, patient, value, issueDate, collectDate) {
   return {
@@ -170,7 +171,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, handleDeleteInvoices } = props;
 
   return (
     <Toolbar
@@ -208,7 +209,7 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDeleteInvoices}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -227,7 +228,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function SortTable({ invoices, patients }) {
+export default function SortTable({ invoices, patients, dataManager }) {
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("ordinal");
   const [selected, setSelected] = React.useState([]);
@@ -312,6 +313,18 @@ export default function SortTable({ invoices, patients }) {
     setDense(event.target.checked);
   };
 
+  const handleDeleteInvoices = async () => {
+    console.log(`To be deleted: ${selected.length}`, selected);
+    selected.forEach(async (id) => {
+      const isDeletedFromServer = await deleteInvoice(id);
+      if (isDeletedFromServer) {
+        dataManager.removeInvnoice(
+          invoices.find((inv) => String(inv._id) === String(id))
+        );
+      }
+    });
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -321,7 +334,10 @@ export default function SortTable({ invoices, patients }) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ m: 2, p: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          handleDeleteInvoices={handleDeleteInvoices}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
