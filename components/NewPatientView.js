@@ -11,7 +11,7 @@ import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
 import { newPatient } from "../lib/controller";
 
-export default function NewPatientView() {
+export default function NewPatientView({ addPatient }) {
   // ---- COMPONENT STATE --- //
   const [name, setName] = React.useState("");
   const [surname, setSurname] = React.useState("");
@@ -40,7 +40,7 @@ export default function NewPatientView() {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const newPat = await newPatient(
+    const response = await newPatient(
       name,
       surname,
       codFisc,
@@ -58,8 +58,8 @@ export default function NewPatientView() {
       capNascita,
       prezzo
     );
-    // TODO: add new Patient to patient array
-    console.log(newPat);
+    console.log(response);
+    addPatient(response.newPatient);
   }
 
   // VALIDATORS
@@ -74,7 +74,7 @@ export default function NewPatientView() {
       new CodiceFiscale(codFisc);
       return true;
     } catch (err) {
-      return codFisc === '';
+      return codFisc === "";
     }
   }
   function vPiva() {
@@ -82,11 +82,11 @@ export default function NewPatientView() {
   }
 
   function vProvinciaResidenza() {
-    return provRegEx.test(provinciaResidenza);
+    return provinciaNascita === "" || provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {
-    return capRegEx.test(capResidenza);
+    return capResidenza === "" || capRegEx.test(capResidenza);
   }
 
   function vTelefono() {

@@ -29,6 +29,18 @@ export default function DashboardPage() {
   const [invoices, setInvoices] = React.useState(undefined);
   const [patients, setPatients] = React.useState(undefined);
 
+  const dataManager = {
+    addInvoice: (newInv) => {
+      setInvoices([...invoices, newInv]);
+    },
+    addPatient: (newPat) => {
+      setPatients([...patients, newPat]);
+    },
+    removeInvoice: (inv) => {
+      return;
+    },
+  };
+
   if (!invoicesLoaded) {
     getAllInvoices()
       .then((res) => {
@@ -64,7 +76,11 @@ export default function DashboardPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {invoicesLoaded && patientsLoaded ? (
-        <Dashboard invoices={invoices} patients={patients}></Dashboard>
+        <Dashboard
+          invoices={invoices}
+          patients={patients}
+          dataManager={dataManager}
+        ></Dashboard>
       ) : (
         <p>Loading...</p>
       )}

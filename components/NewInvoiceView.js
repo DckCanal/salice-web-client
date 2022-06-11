@@ -19,7 +19,7 @@ import { newInvoice } from "../lib/controller";
 
 // TODO: manage response errors
 
-export default function NewInvoiceView({ patients }) {
+export default function NewInvoiceView({ patients, addInvoice }) {
   // --- COMPONENT STATE --- //
   const [selectedPatientId, setSelectedPatientId] = React.useState("");
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(0);
@@ -36,15 +36,14 @@ export default function NewInvoiceView({ patients }) {
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
 
-    const newInv = await newInvoice(
+    const response = await newInvoice(
       selectedPatientId,
       cashed,
       Number(invoiceAmountTextField),
       invoiceText,
       issueDateTime
     );
-    //invoices.push(newInv); BUG: INVOICES NOT DEFINED!
-    //console.log(newInv);
+    addInvoice(response.newInvoice);
   }
 
   // HANDLER for Autocomplete change event

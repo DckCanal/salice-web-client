@@ -85,7 +85,7 @@ const darkTheme = createTheme({
   },
 });
 
-function DashboardContent({ invoices, patients }) {
+function DashboardContent({ invoices, patients, dataManager }) {
   const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);
@@ -100,8 +100,15 @@ function DashboardContent({ invoices, patients }) {
       return <PatientList invoices={invoices} patients={patients} />;
     if (view === "Graph")
       return <Graph invoices={invoices} patients={patients} />;
-    if (view === "NewInvoice") return <NewInvoiceView patients={patients} />;
-    if (view === "NewPatient") return <NewPatientView />;
+    if (view === "NewInvoice")
+      return (
+        <NewInvoiceView
+          patients={patients}
+          addInvoice={dataManager.addInvoice}
+        />
+      );
+    if (view === "NewPatient")
+      return <NewPatientView addPatient={dataManager.addPatient} />;
   };
   // const listItemMap = {
   //   1: "Home",
@@ -215,6 +222,12 @@ function DashboardContent({ invoices, patients }) {
   );
 }
 
-export default function Dashboard({ invoices, patients }) {
-  return <DashboardContent invoices={invoices} patients={patients} />;
+export default function Dashboard({ invoices, patients, dataManager }) {
+  return (
+    <DashboardContent
+      invoices={invoices}
+      patients={patients}
+      dataManager={dataManager}
+    />
+  );
 }
