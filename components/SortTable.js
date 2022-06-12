@@ -314,11 +314,10 @@ export default function SortTable({ invoices, patients, dataManager }) {
   };
 
   const handleDeleteInvoices = async () => {
-    console.log(`To be deleted: ${selected.length}`, selected);
     selected.forEach(async (id) => {
       const isDeletedFromServer = await deleteInvoice(id);
       if (isDeletedFromServer) {
-        dataManager.removeInvnoice(
+        dataManager.removeInvoice(
           invoices.find((inv) => String(inv._id) === String(id))
         );
       }
