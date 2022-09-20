@@ -19,9 +19,11 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { deleteInvoice } from "../lib/controller";
+import excelInvoice from "../lib/excelLib";
 
 function createData(id, ordinal, patient, value, issueDate, collectDate) {
   return {
@@ -156,6 +158,9 @@ function EnhancedTableHead(props) {
             </TableCell>
           ) : null
         )}
+        <TableCell>
+          <TableSortLabel>Download</TableSortLabel>
+        </TableCell>
       </TableRow>
     </TableHead>
   );
@@ -395,6 +400,15 @@ export default function SortTable({ invoices, patients, dataManager }) {
                       </TableCell>
                       <TableCell align="right">
                         {row.collectDate.showed}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => {
+                            excelInvoice("Luca Grossi", 40, "12/08/1992");
+                          }}
+                        >
+                          <InsertDriveFileIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
