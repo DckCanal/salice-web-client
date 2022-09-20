@@ -25,7 +25,16 @@ import { visuallyHidden } from "@mui/utils";
 import { deleteInvoice } from "../lib/controller";
 import excelInvoice from "../lib/excelLib";
 
-function createData(id, ordinal, patient, value, issueDate, collectDate) {
+function createData(
+  id,
+  ordinal,
+  patient,
+  value,
+  issueDate,
+  collectDate,
+  invoiceObj,
+  patientObj
+) {
   return {
     id,
     ordinal,
@@ -33,6 +42,8 @@ function createData(id, ordinal, patient, value, issueDate, collectDate) {
     value,
     issueDate,
     collectDate,
+    invoiceObj,
+    patientObj,
   };
 }
 
@@ -266,7 +277,9 @@ export default function SortTable({ invoices, patients, dataManager }) {
       {
         showed: new Date(i.dataIncasso).toLocaleDateString(),
         val: Date.parse(i.dataIncasso),
-      }
+      },
+      i,
+      patient
     );
   });
 
@@ -404,7 +417,7 @@ export default function SortTable({ invoices, patients, dataManager }) {
                       <TableCell>
                         <IconButton
                           onClick={() => {
-                            excelInvoice("Luca Grossi", 40, "12/08/1992");
+                            excelInvoice(row.patientObj, row.invoiceObj);
                           }}
                         >
                           <InsertDriveFileIcon />
