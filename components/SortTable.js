@@ -148,7 +148,7 @@ function EnhancedTableHead(props) {
           !headCell.hidden ? (
             <TableCell
               key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
+              align={"left" /*headCell.numeric ? "right" : "left"*/}
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
@@ -169,8 +169,8 @@ function EnhancedTableHead(props) {
             </TableCell>
           ) : null
         )}
-        <TableCell>
-          <TableSortLabel>Download</TableSortLabel>
+        <TableCell align="center">
+          <TableSortLabel IconComponent={null}>Download</TableSortLabel>
         </TableCell>
       </TableRow>
     </TableHead>
@@ -249,7 +249,7 @@ export default function SortTable({ invoices, patients, dataManager }) {
   const [orderBy, setOrderBy] = React.useState("ordinal");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const rows = invoices.map((i) => {
@@ -408,20 +408,19 @@ export default function SortTable({ invoices, patients, dataManager }) {
                       >
                         {row.id}
                       </TableCell> */}
-                      <TableCell align="right">{row.ordinal.showed}</TableCell>
-                      <TableCell align="right">{row.patient.showed}</TableCell>
-                      <TableCell align="right">{row.value.showed}</TableCell>
-                      <TableCell align="right">
-                        {row.issueDate.showed}
-                      </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="left">{row.ordinal.showed}</TableCell>
+                      <TableCell align="left">{row.patient.showed}</TableCell>
+                      <TableCell align="left">{row.value.showed}</TableCell>
+                      <TableCell align="left">{row.issueDate.showed}</TableCell>
+                      <TableCell align="left">
                         {row.collectDate.showed}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         <IconButton
                           onClick={() => {
                             excelInvoice(row.patientObj, row.invoiceObj);
                           }}
+                          sx={{ p: 0 }}
                         >
                           <InsertDriveFileIcon />
                         </IconButton>
