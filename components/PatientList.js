@@ -351,7 +351,7 @@ export default function PatientList({ invoices, patients, dataManager }) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ m: 2, p: 2 }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
           handleDeletePatients={handleDeletePatients}
@@ -405,14 +405,26 @@ export default function PatientList({ invoices, patients, dataManager }) {
                       {
                         // TODO: add buttons to download docx
                       }
-                      <TableCell align="left">{row.cognome}</TableCell>
-                      <TableCell align="left">{row.nome}</TableCell>
                       <TableCell align="left">
-                        {new Date(row.ultimaModifica).toLocaleString()}
+                        {row.cognome ? row.cognome : "---"}
                       </TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.telefono}</TableCell>
-                      <TableCell align="left">{row.prezzo}</TableCell>
+                      <TableCell align="left">
+                        {row.nome ? row.nome : "---"}
+                      </TableCell>
+                      <TableCell align="left">
+                        {new Date(
+                          row.ultimaModifica ? row.ultimaModifica : "---"
+                        ).toLocaleString()}
+                      </TableCell>
+                      <TableCell align="left">
+                        {row.email ? row.email : "---"}
+                      </TableCell>
+                      <TableCell align="left">
+                        {row.telefono ? row.telefono : "---"}
+                      </TableCell>
+                      <TableCell align="left">
+                        {row.prezzo ? row.prezzo : "---"}
+                      </TableCell>
                       <TableCell align="left">
                         {row.fatturatoUltimoAnno}
                       </TableCell>
@@ -432,7 +444,7 @@ export default function PatientList({ invoices, patients, dataManager }) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
