@@ -84,7 +84,7 @@ export default function Home({ lightTheme, patients, invoices }) {
             display: "flex",
             flexDirection: "column",
             height: 240 + 80,
-            margin: 3,
+            margin: 2,
           }}
         >
           <Chart
@@ -104,7 +104,7 @@ export default function Home({ lightTheme, patients, invoices }) {
             display: "flex",
             flexDirection: "column",
             height: 240 + 80,
-            margin: 3,
+            margin: 2,
           }}
         >
           <IncomePaper
@@ -123,9 +123,7 @@ export default function Home({ lightTheme, patients, invoices }) {
       </Grid>
       {/* Last invoices */}
       <Grid item xs={12}>
-        <Paper
-          sx={{ p: 2, display: "flex", flexDirection: "column", margin: 3 }}
-        >
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column", m: 2 }}>
           <LastInvoices invoices={invoices} patients={patients} />
         </Paper>
       </Grid>
