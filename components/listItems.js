@@ -4,32 +4,32 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Divider from "@mui/material/Divider";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import italianMonth from "../lib/dateTranslator";
+import HomeIcon from "@mui/icons-material/Home";
+import DescriptionIcon from "@mui/icons-material/Description";
+import PersonIcon from "@mui/icons-material/Person";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export default function ListItems({ sel, clickHandler }) {
   return (
     <React.Fragment>
       <ListItemButton selected={sel == 1} onClick={clickHandler("Home")}>
         <ListItemIcon>
-          <DashboardIcon />
+          <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
       <ListItemButton selected={sel == 2} onClick={clickHandler("InvoiceList")}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <DescriptionIcon />
         </ListItemIcon>
         <ListItemText primary="Fatture" />
       </ListItemButton>
       <ListItemButton selected={sel == 3} onClick={clickHandler("PatientList")}>
         <ListItemIcon>
-          <PeopleIcon />
+          <PersonIcon />
         </ListItemIcon>
         <ListItemText primary="Pazienti" />
       </ListItemButton>
@@ -41,11 +41,11 @@ export default function ListItems({ sel, clickHandler }) {
       </ListItemButton>
       <Divider sx={{ my: 1 }} />
       <ListSubheader component="div" inset>
-        Saved reports
+        Azioni
       </ListSubheader>
       <ListItemButton selected={sel == 5} onClick={clickHandler("NewInvoice")}>
         <ListItemIcon>
-          <AssignmentIcon />
+          <PostAddIcon />
         </ListItemIcon>
         <ListItemText
           primary={/*italianMonth(new Date().getMonth())*/ "Nuova fattura"}
@@ -53,7 +53,7 @@ export default function ListItems({ sel, clickHandler }) {
       </ListItemButton>
       <ListItemButton selected={sel == 6} onClick={clickHandler("NewPatient")}>
         <ListItemIcon>
-          <AssignmentIcon />
+          <PersonAddIcon />
         </ListItemIcon>
         <ListItemText primary="Nuovo paziente" />
       </ListItemButton>
