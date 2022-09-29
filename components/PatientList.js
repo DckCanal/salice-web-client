@@ -38,35 +38,28 @@ import { visuallyHidden } from "@mui/utils";
     - prezzo
 */
 
-// TODO: change this
-function createData(name, calories, fat, carbs, protein) {
+function createData(
+  id,
+  nome,
+  cognome,
+  ultimaModifica,
+  email,
+  telefono,
+  prezzo,
+  fatturatoUltimoAnno
+) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    id,
+    nome,
+    cognome,
+    ultimaModifica,
+    email,
+    telefono,
+    prezzo,
+    fatturatoUltimoAnno,
   };
 }
 
-// TODO: remove this
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Honeycomb", 408, 3.2, 87, 6.5),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  createData("KitKat", 518, 26.0, 65, 7.0),
-  createData("Lollipop", 392, 0.2, 98, 0.0),
-  createData("Marshmallow", 318, 0, 81, 2.0),
-  createData("Nougat", 360, 19.0, 9, 37.0),
-  createData("Oreo", 437, 18.0, 63, 4.0),
-];
-
-// TODO: choose if use .val property
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -97,41 +90,58 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-// TODO: modify this
 const headCells = [
   {
-    id: "name",
+    id: "id",
     numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
+    disablePadding: false,
+    label: "id",
+    hidden: true,
   },
   {
-    id: "calories",
-    numeric: true,
+    id: "cognome",
+    numeric: false,
     disablePadding: false,
-    label: "Calories",
+    label: "Cognome",
   },
   {
-    id: "fat",
-    numeric: true,
+    id: "nome",
+    numeric: false,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Nome",
   },
   {
-    id: "carbs",
-    numeric: true,
+    id: "ultimaModifica",
+    numeric: false,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "Ultima modifica",
   },
   {
-    id: "protein",
+    id: "email",
+    numeric: false,
+    disablePadding: false,
+    label: "e-mail",
+  },
+  {
+    id: "telefono",
+    numeric: false,
+    disablePadding: false,
+    label: "Telefono",
+  },
+  {
+    id: "prezzo",
     numeric: true,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "Prezzo standard",
+  },
+  {
+    id: "fatturatoUltimoAnno",
+    numeric: true,
+    disablePadding: false,
+    label: "Fatturato",
   },
 ];
 
-// OK
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -159,33 +169,36 @@ function EnhancedTableHead(props) {
             }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+        {headCells.map((headCell) =>
+          !headCell.hidden ? (
+            <TableCell
+              key={headCell.id}
+              align={"left" /*headCell.numeric ? "right" : "left"*/}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
             >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ) : null
+        )}
       </TableRow>
     </TableHead>
   );
 }
 
-// OK
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -195,9 +208,8 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-// TODO: manage delete button
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, handleDeletePatients } = props;
 
   return (
     <Toolbar
@@ -241,10 +253,7 @@ const EnhancedTableToolbar = (props) => {
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          {
-            // TODO: put here onClick={...}
-          }
-          <IconButton>
+          <IconButton onClick={handleDeletePatients}>
             <FilterListIcon />
           </IconButton>
         </Tooltip>
@@ -257,21 +266,30 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-// TODO: change orderBy: React.useState("ultimaModifica")
-// TODO: create rows here
-// TODO: in handleSelectAllClick, change map from n.name to n.id
-// TODO: in handleClick change name to id
-// TODO: in isSelected change name to id
+// (Partially)TODO: create rows here
 // TODO: add handleDeletePatients = async () => {...}
-export default function EnhancedTable() {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+export default function PatientList({ invoices, patients, dataManager }) {
+  const [order, setOrder] = React.useState("desc");
+  const [orderBy, setOrderBy] = React.useState("ultimaModifica");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-  // TODO: here put rows = patients.map() ...
+  const rows = patients.map((p) => {
+    // TODO: calculate last year amount, maybe in main app!
+
+    return createData(
+      p._id,
+      p.nome,
+      p.cognome,
+      p.ultimaModifica,
+      p.email,
+      p.telefono,
+      p.prezzo,
+      100
+    );
+  });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -280,21 +298,19 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      // TODO: here change n.name with n.id
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  // TODO: change name with id
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -323,9 +339,11 @@ export default function EnhancedTable() {
   };
 
   // TODO: add handleDeletePatients = async () => {...}
+  const handleDeletePatients = async () => {
+    console.log("Work in progress...");
+  };
 
-  // TODO: change name to id
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -334,10 +352,10 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {
-          // TODO: add handleSelectedPatients={handleSelectedPatients} as property
-        }
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          handleDeletePatients={handleDeletePatients}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -358,7 +376,7 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name); //TODO: change name to id
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -368,13 +386,13 @@ export default function EnhancedTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name} // TODO: change name to id
+                      key={row.id}
                       selected={isItemSelected}
                     >
-                      {
-                        // TODO: add onClick={(event) => handleClick(event, row.id)} as TableCell property
-                      }
-                      <TableCell padding="checkbox">
+                      <TableCell
+                        padding="checkbox"
+                        onClick={(event) => handleClick(event, row.id)}
+                      >
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -383,21 +401,21 @@ export default function EnhancedTable() {
                           }}
                         />
                       </TableCell>
-                      {/* <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell> */}
+
                       {
-                        // TODO: use correct data and add buttons to download docx
+                        // TODO: add buttons to download docx
                       }
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="left">{row.cognome}</TableCell>
+                      <TableCell align="left">{row.nome}</TableCell>
+                      <TableCell align="left">
+                        {new Date(row.ultimaModifica).toLocaleString()}
+                      </TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left">{row.telefono}</TableCell>
+                      <TableCell align="left">{row.prezzo}</TableCell>
+                      <TableCell align="left">
+                        {row.fatturatoUltimoAnno}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
