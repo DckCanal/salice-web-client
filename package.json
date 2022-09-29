@@ -18,6 +18,8 @@
     "@mui/x-date-pickers": "^5.0.0-alpha.4",
     "axios": "^0.27.2",
     "codice-fiscale-js": "^2.3.18",
+    "downloadjs": "^1.4.7",
+    "exceljs": "^4.3.0",
     "luxon": "^2.4.0",
     "next": "12.1.5",
     "react": "18.0.0",

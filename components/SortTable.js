@@ -19,11 +19,22 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { deleteInvoice } from "../lib/controller";
+import excelInvoice from "../lib/excelLib";
 
-function createData(id, ordinal, patient, value, issueDate, collectDate) {
+function createData(
+  id,
+  ordinal,
+  patient,
+  value,
+  issueDate,
+  collectDate,
+  invoiceObj,
+  patientObj
+) {
   return {
     id,
     ordinal,
@@ -31,6 +42,8 @@ function createData(id, ordinal, patient, value, issueDate, collectDate) {
     value,
     issueDate,
     collectDate,
+    invoiceObj,
+    patientObj,
   };
 }
 
@@ -156,6 +169,9 @@ function EnhancedTableHead(props) {
             </TableCell>
           ) : null
         )}
+        <TableCell>
+          <TableSortLabel>Download</TableSortLabel>
+        </TableCell>
       </TableRow>
     </TableHead>
   );
@@ -261,7 +277,9 @@ export default function SortTable({ invoices, patients, dataManager }) {
       {
         showed: new Date(i.dataIncasso).toLocaleDateString(),
         val: Date.parse(i.dataIncasso),
-      }
+      },
+      i,
+      patient
     );
   });
 
@@ -363,14 +381,17 @@ export default function SortTable({ invoices, patients, dataManager }) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      // onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell
+                        padding="checkbox"
+                        onClick={(event) => handleClick(event, row.id)}
+                      >
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -395,6 +416,15 @@ export default function SortTable({ invoices, patients, dataManager }) {
                       </TableCell>
                       <TableCell align="right">
                         {row.collectDate.showed}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => {
+                            excelInvoice(row.patientObj, row.invoiceObj);
+                          }}
+                        >
+                          <InsertDriveFileIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
