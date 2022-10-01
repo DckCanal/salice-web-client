@@ -38,6 +38,9 @@ import { visuallyHidden } from "@mui/utils";
     - prezzo
 */
 
+// TODO: style links
+// TODO: correct whatsapp link
+
 function createData(
   id,
   nome,
@@ -432,10 +435,20 @@ export default function PatientList({ invoices, patients, dataManager }) {
                         ).toLocaleString()}
                       </TableCell>
                       <TableCell align="left">
-                        {row.email ? row.email : "---"}
+                        {row.email ? (
+                          <a href={`mailto:${row.email}`}>{row.email}</a>
+                        ) : (
+                          "---"
+                        )}
                       </TableCell>
                       <TableCell align="left">
-                        {row.telefono ? row.telefono : "---"}
+                        {row.telefono ? (
+                          <a href={`https://wa.me/${row.telefono}`}>
+                            {row.telefono}
+                          </a>
+                        ) : (
+                          "---"
+                        )}
                       </TableCell>
                       <TableCell align="left">
                         {row.prezzo ? row.prezzo : "---"}
