@@ -1,7 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Layout from "../components/Layout";
 import React from "react";
 import Dashboard from "../components/Dashboard";
 import SignIn from "../components/SignIn";
@@ -12,20 +9,12 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-// --- LOADING AS STATIC PROPS, NEED TO BE CHANGED ---
-// import { patients } from "../lib/data/patients";
-
-// export const getStaticProps = async () => {
-//   return {
-//     props: {
-//       patients,
-//     },
-//   };
-// };
-
 export default function DashboardPage() {
   const [invoicesLoaded, setInvoicesLoaded] = React.useState(false);
+  const [invoicesLoading, setInvoicesLoading] = React.useState(false);
   const [patientsLoaded, setPatientsLoaded] = React.useState(false);
+  const [patientsLoading, setPatientsLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [invoices, setInvoices] = React.useState(undefined);
   const [patients, setPatients] = React.useState(undefined);
 
@@ -42,31 +31,47 @@ export default function DashboardPage() {
       ]);
     },
   };
+  // FIXME: too many re-render
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const invResponse = await getAllInvoices();
+      console.log(invResponse);
+      const inv = invResponse.invoices;
+      setInvoices(inv);
+      setInvoicesLoaded(true);
+      const patResponse = await getAllPatients();
+      const pat = patResponse.patients;
 
-  if (!invoicesLoaded) {
-    getAllInvoices()
-      .then((res) => {
-        setInvoices(res.invoices);
-      })
-      .finally(() => setInvoicesLoaded(true))
-      .catch((err) => {
-        // TODO: manage err!
-        setInvoices(invoices);
-        console.error(err);
+      const now = new Date();
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+      const patientsWithAmount = pat.map((p) => {
+        let amount = 0;
+        invoices
+          .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
+          .forEach((i) => {
+            if (i.paziente === p._id) {
+              amount += Number.parseFloat(i.valore);
+            }
+          });
+        return {
+          ...p,
+          fatturatoUltimoAnno: amount,
+        };
       });
+      setPatients(patientsWithAmount);
+      setPatientsLoaded(true);
+      console.log(patientsWithAmount);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  if (!patientsLoaded || !invoicesLoaded) {
+    loadData();
   }
-  if (!patientsLoaded) {
-    getAllPatients()
-      .then((res) => {
-        setPatients(res.patients);
-      })
-      .finally(() => setPatientsLoaded(true))
-      .catch((err) => {
-        // TODO: manage err!
-        setPatients(patients);
-        console.error(err);
-      });
-  }
+
   return (
     <div>
       <Head>
