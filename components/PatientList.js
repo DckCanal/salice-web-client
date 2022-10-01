@@ -13,7 +13,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
+// import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -144,11 +144,11 @@ const headCells = [
 
 function EnhancedTableHead(props) {
   const {
-    onSelectAllClick,
+    //onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
+    //numSelected,
+    //rowCount,
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
@@ -158,7 +158,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -168,7 +168,7 @@ function EnhancedTableHead(props) {
               "aria-label": "select all desserts",
             }}
           />
-        </TableCell>
+        </TableCell> */}
         {headCells.map((headCell) =>
           !headCell.hidden ? (
             <TableCell
@@ -200,32 +200,32 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  //numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  //onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
+  //rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, handleDeletePatients } = props;
+  //const { numSelected, handleDeletePatients } = props;
 
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
+        // ...(numSelected > 0 && {
+        //   bgcolor: (theme) =>
+        //     alpha(
+        //       theme.palette.primary.main,
+        //       theme.palette.action.activatedOpacity
+        //     ),
+        // }),
       }}
     >
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -243,27 +243,40 @@ const EnhancedTableToolbar = (props) => {
         >
           Pazienti
         </Typography>
-      )}
+      )} */}
+      <Typography
+        sx={{ flex: "1 1 100%" }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Pazienti
+      </Typography>
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDeletePatients}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton onClick={handleDeletePatients}>
+          <IconButton>
             <FilterListIcon />
           </IconButton>
         </Tooltip>
-      )}
+      )} */}
+      <Tooltip title="Filter list">
+        <IconButton>
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  //numSelected: PropTypes.number.isRequired,
 };
 
 // (Partially)TODO: create rows here
@@ -271,7 +284,7 @@ EnhancedTableToolbar.propTypes = {
 export default function PatientList({ invoices, patients, dataManager }) {
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("ultimaModifica");
-  const [selected, setSelected] = React.useState([]);
+  //const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
@@ -297,32 +310,34 @@ export default function PatientList({ invoices, patients, dataManager }) {
   };
 
   const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
+    // if (event.target.checked) {
+    //   const newSelecteds = rows.map((n) => n.id);
+    //   setSelected(newSelecteds);
+    //   return;
+    // }
+    // setSelected([]);
   };
 
   const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+    // const selectedIndex = selected.indexOf(id);
+    // let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
+    // if (selectedIndex === -1) {
+    //   newSelected = newSelected.concat(selected, id);
+    // } else if (selectedIndex === 0) {
+    //   newSelected = newSelected.concat(selected.slice(1));
+    // } else if (selectedIndex === selected.length - 1) {
+    //   newSelected = newSelected.concat(selected.slice(0, -1));
+    // } else if (selectedIndex > 0) {
+    //   newSelected = newSelected.concat(
+    //     selected.slice(0, selectedIndex),
+    //     selected.slice(selectedIndex + 1)
+    //   );
+    // }
 
-    setSelected(newSelected);
+    // setSelected(newSelected);
+    const row = rows.find((r) => r.id == id);
+    console.log(`Selected: ${row.nome} ${row.cognome}`);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -343,7 +358,7 @@ export default function PatientList({ invoices, patients, dataManager }) {
     console.log("Work in progress...");
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  // const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -353,8 +368,8 @@ export default function PatientList({ invoices, patients, dataManager }) {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ m: 2, p: 2 }}>
         <EnhancedTableToolbar
-          numSelected={selected.length}
-          handleDeletePatients={handleDeletePatients}
+        //numSelected={selected.length}
+        //handleDeletePatients={handleDeletePatients}
         />
         <TableContainer>
           <Table
@@ -363,12 +378,12 @@ export default function PatientList({ invoices, patients, dataManager }) {
             size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
+              //numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              //onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              //rowCount={rows.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -376,20 +391,20 @@ export default function PatientList({ invoices, patients, dataManager }) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  //const isItemSelected = isSelected(row.id);
+                  //const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
+                      onClick={(event) => handleClick(event, row.id)}
+                      //role="checkbox"
+                      //aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.id}
-                      selected={isItemSelected}
+                      //selected={isItemSelected}
                     >
-                      <TableCell
+                      {/* <TableCell
                         padding="checkbox"
                         onClick={(event) => handleClick(event, row.id)}
                       >
@@ -400,7 +415,7 @@ export default function PatientList({ invoices, patients, dataManager }) {
                             "aria-labelledby": labelId,
                           }}
                         />
-                      </TableCell>
+                      </TableCell> */}
 
                       {
                         // TODO: add buttons to download docx
