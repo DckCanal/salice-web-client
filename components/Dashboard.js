@@ -9,24 +9,13 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
 import Home from "./Home";
 import PatientList from "./PatientList";
 import InvoiceList from "./InvoiceList";
 import Graph from "./Graph";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItems from "./listItems";
-// import Chart from "./Chart";
-import IncomePaper from "./IncomePaper";
-import LastInvoices from "./LastInvoices";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import TextField from "@mui/material/TextField";
-import { Autocomplete, Input, InputAdornment } from "@mui/material";
 import SearchField from "./SearchField";
 import DarkThemeToggler from "./DarkThemeToggler";
 import NewInvoiceView from "./NewInvoiceView";
@@ -86,7 +75,6 @@ const darkTheme = createTheme({
 });
 
 function DashboardContent({ invoices, patients, dataManager }) {
-  //console.log(invoices);
   const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState("Home");
   const [lightTheme, setLightTheme] = React.useState(false);

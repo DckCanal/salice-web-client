@@ -12,16 +12,10 @@ export default function SearchField({ optionList }) {
       options={optionList}
       sx={{ width: 300 }}
       onChange={(ev, val) => {
-        //val && console.log(val.label, val._id);
         return;
       }}
       renderInput={(params) => (
-        <TextField
-          //   type="search"
-          variant="standard"
-          label="Paziente"
-          {...params}
-        />
+        <TextField variant="standard" label="Paziente" {...params} />
       )}
     />
   );

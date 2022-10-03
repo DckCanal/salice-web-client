@@ -148,7 +148,7 @@ function EnhancedTableHead(props) {
           !headCell.hidden ? (
             <TableCell
               key={headCell.id}
-              align={"left" /*headCell.numeric ? "right" : "left"*/}
+              align={"left"}
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
@@ -400,14 +400,7 @@ export default function SortTable({ invoices, patients, dataManager }) {
                           }}
                         />
                       </TableCell>
-                      {/* <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </TableCell> */}
+                     
                       <TableCell align="left">{row.ordinal.showed}</TableCell>
                       <TableCell align="left">{row.patient.showed}</TableCell>
                       <TableCell align="left">{row.value.showed}</TableCell>

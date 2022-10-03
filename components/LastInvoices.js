@@ -71,9 +71,6 @@ export default function LastInvoices({ invoices, patients }) {
           ))}
         </TableBody>
       </Table>
-      {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more orders
-      </Link> */}
     </React.Fragment>
   );
 }

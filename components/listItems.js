@@ -47,9 +47,7 @@ export default function ListItems({ sel, clickHandler }) {
         <ListItemIcon>
           <PostAddIcon />
         </ListItemIcon>
-        <ListItemText
-          primary={/*italianMonth(new Date().getMonth())*/ "Nuova fattura"}
-        />
+        <ListItemText primary={"Nuova fattura"} />
       </ListItemButton>
       <ListItemButton selected={sel == 6} onClick={clickHandler("NewPatient")}>
         <ListItemIcon>

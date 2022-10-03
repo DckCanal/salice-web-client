@@ -94,12 +94,6 @@ export default function IncomePaper({
       >
         al {`${day} ${month}`}
       </Typography>
-
-      {/* <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div> */}
     </React.Fragment>
   );
 }
