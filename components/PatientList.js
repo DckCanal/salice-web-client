@@ -303,7 +303,7 @@ export default function PatientList({ invoices, patients, dataManager }) {
       p.email,
       p.telefono,
       p.prezzo,
-      100
+      p.fatturatoUltimoAnno
     );
   });
   const handleRequestSort = (event, property) => {
