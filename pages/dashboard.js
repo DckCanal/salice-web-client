@@ -1,7 +1,6 @@
 import Head from "next/head";
 import React from "react";
 import Dashboard from "../components/Dashboard";
-import SignIn from "../components/SignIn";
 
 import { getAllInvoices, getAllPatients } from "../lib/controller";
 import "@fontsource/roboto/300.css";
@@ -10,36 +9,36 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 export default function DashboardPage() {
-  const [invoicesLoaded, setInvoicesLoaded] = React.useState(false);
-  const [invoicesLoading, setInvoicesLoading] = React.useState(false);
-  const [patientsLoaded, setPatientsLoaded] = React.useState(false);
-  const [patientsLoading, setPatientsLoading] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [invoices, setInvoices] = React.useState(undefined);
-  const [patients, setPatients] = React.useState(undefined);
+  const [appData, setAppData] = React.useState({
+    invoices: undefined,
+    patients: undefined,
+  });
+  const dataLoaded =
+    appData.invoices == undefined || appData.patients == undefined
+      ? false
+      : true;
 
   const dataManager = {
     addInvoice: (newInv) => {
-      setInvoices([...invoices, newInv]);
+      setAppData({ ...appData, invoices: [...appData.invoices, newInv] });
     },
     addPatient: (newPat) => {
-      setPatients([...patients, newPat]);
+      setAppData({ ...appData, patients: [...appData.patients, newPat] });
     },
     removeInvoice: (inv) => {
-      setInvoices([
-        ...invoices.filter((i) => String(i._id) !== String(inv._id)),
-      ]);
+      setAppData({
+        ...appData,
+        invoices: [
+          ...appData.invoices.filter((i) => String(i._id) !== String(inv._id)),
+        ],
+      });
     },
   };
-  // FIXME: too many re-render
+
   const loadData = async () => {
     try {
-      setLoading(true);
       const invResponse = await getAllInvoices();
-      console.log(invResponse);
       const inv = invResponse.invoices;
-      setInvoices(inv);
-      setInvoicesLoaded(true);
       const patResponse = await getAllPatients();
       const pat = patResponse.patients;
 
@@ -49,7 +48,7 @@ export default function DashboardPage() {
 
       const patientsWithAmount = pat.map((p) => {
         let amount = 0;
-        invoices
+        inv
           .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
           .forEach((i) => {
             if (i.paziente === p._id) {
@@ -61,14 +60,12 @@ export default function DashboardPage() {
           fatturatoUltimoAnno: amount,
         };
       });
-      setPatients(patientsWithAmount);
-      setPatientsLoaded(true);
-      console.log(patientsWithAmount);
+      setAppData({ ...appData, invoices: inv, patients: patientsWithAmount });
     } catch (err) {
       console.error(err);
     }
   };
-  if (!patientsLoaded || !invoicesLoaded) {
+  if (!dataLoaded) {
     loadData();
   }
 
@@ -82,10 +79,10 @@ export default function DashboardPage() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {invoicesLoaded && patientsLoaded ? (
+      {dataLoaded ? (
         <Dashboard
-          invoices={invoices}
-          patients={patients}
+          invoices={appData.invoices}
+          patients={appData.patients}
           dataManager={dataManager}
         ></Dashboard>
       ) : (
