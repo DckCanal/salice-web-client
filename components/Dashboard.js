@@ -84,6 +84,20 @@ function DashboardContent({ invoices, patients, dataManager }) {
     selectedInvoice: undefined,
   });
   const [lightTheme, setLightTheme] = React.useState(false);
+  const openPatientDetail = (id) => {
+    setView({
+      page: "PatientDetail",
+      selectedPatient: patients.find((p) => String(p._id) === String(id)),
+      selectedInvoice: undefined,
+    });
+  };
+  const openInvoiceDetail = (id) => {
+    setView({
+      page: "InvoiceDetail",
+      selectedInvoice: invoices.find((i) => String(i._id) === String(id)),
+      selectedPatient: undefined,
+    });
+  };
   const switchContent = () => {
     if (view.page === "Home")
       return (
@@ -95,15 +109,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           invoices={invoices}
           patients={patients}
           dataManager={dataManager}
-          openInvoiceDetail={(id) => {
-            setView({
-              page: "InvoiceDetail",
-              selectedInvoice: invoices.find(
-                (i) => String(i._id) === String(id)
-              ),
-              selectedPatient: undefined,
-            });
-          }}
+          openInvoiceDetail={openInvoiceDetail}
         />
       );
     if (view.page === "PatientList")
@@ -111,15 +117,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <PatientList
           invoices={invoices}
           patients={patients}
-          openPatientDetail={(id) => {
-            setView({
-              page: "PatientDetail",
-              selectedPatient: patients.find(
-                (p) => String(p._id) === String(id)
-              ),
-              selectedInvoice: undefined,
-            });
-          }}
+          openPatientDetail={openPatientDetail}
         />
       );
     if (view.page === "Graph")
@@ -140,6 +138,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           invoices={invoices.filter(
             (i) => String(i.paziente) === String(view.selectedPatient._id)
           )}
+          openInvoiceDetail={openInvoiceDetail}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -149,6 +148,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           patient={patients.find(
             (p) => String(p._id) === String(view.selectedInvoice.paziente)
           )}
+          openPatientDetail={openPatientDetail}
         />
       );
   };

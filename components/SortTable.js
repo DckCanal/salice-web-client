@@ -304,6 +304,7 @@ export default function SortTable({
   };
 
   const handleClick = (event, id) => {
+    event.stopPropagation();
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -415,7 +416,8 @@ export default function SortTable({
                       </TableCell>
                       <TableCell align="center">
                         <IconButton
-                          onClick={() => {
+                          onClick={(ev) => {
+                            ev.stopPropagation();
                             excelInvoice(row.patientObj, row.invoiceObj);
                           }}
                           sx={{ p: 0 }}

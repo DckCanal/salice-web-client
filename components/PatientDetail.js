@@ -1,7 +1,11 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-export default function PatientDetail({ patient, invoices }) {
+export default function PatientDetail({
+  patient,
+  invoices,
+  openInvoiceDetail,
+}) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
   return (
     <Paper sx={{ m: 2 }}>
