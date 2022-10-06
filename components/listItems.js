@@ -55,12 +55,12 @@ export default function ListItems({ sel, clickHandler }) {
         </ListItemIcon>
         <ListItemText primary="Nuovo paziente" />
       </ListItemButton>
-      <ListItemButton selected={sel == 7}>
+      {/* <ListItemButton selected={sel == 7}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary={new Date().getFullYear()} />
-      </ListItemButton>
+      </ListItemButton> */}
     </React.Fragment>
   );
 }

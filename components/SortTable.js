@@ -244,7 +244,12 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function SortTable({ invoices, patients, dataManager }) {
+export default function SortTable({
+  invoices,
+  patients,
+  dataManager,
+  openInvoiceDetail,
+}) {
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("ordinal");
   const [selected, setSelected] = React.useState([]);
@@ -381,7 +386,7 @@ export default function SortTable({ invoices, patients, dataManager }) {
                   return (
                     <TableRow
                       hover
-                      // onClick={(event) => handleClick(event, row.id)}
+                      onClick={() => openInvoiceDetail(row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -400,7 +405,7 @@ export default function SortTable({ invoices, patients, dataManager }) {
                           }}
                         />
                       </TableCell>
-                     
+
                       <TableCell align="left">{row.ordinal.showed}</TableCell>
                       <TableCell align="left">{row.patient.showed}</TableCell>
                       <TableCell align="left">{row.value.showed}</TableCell>

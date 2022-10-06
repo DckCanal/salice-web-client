@@ -18,6 +18,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import visuallyHidden from "@mui/utils/visuallyHidden";
+import PatientDetail from "./PatientDetail";
 
 /*
   EnhancedTable. Field to show:
@@ -216,7 +217,12 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {};
 
 // TODO: add handleDeletePatients = async () => {...}
-export default function PatientList({ invoices, patients, dataManager }) {
+export default function PatientList({
+  invoices,
+  patients,
+  dataManager,
+  openPatientDetail,
+}) {
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("ultimaModifica");
   const [page, setPage] = React.useState(0);
@@ -243,7 +249,8 @@ export default function PatientList({ invoices, patients, dataManager }) {
 
   const handleClick = (event, id) => {
     const row = rows.find((r) => r.id == id);
-    console.log(`Selected: ${row.nome} ${row.cognome}`);
+    // console.log(`Selected: ${row.nome} ${row.cognome}`);
+    openPatientDetail(id);
   };
 
   const handleChangePage = (event, newPage) => {

@@ -20,6 +20,8 @@ import SearchField from "./SearchField";
 import DarkThemeToggler from "./DarkThemeToggler";
 import NewInvoiceView from "./NewInvoiceView";
 import NewPatientView from "./NewPatientView";
+import PatientDetail from "./PatientDetail";
+import InvoiceDetail from "./InvoiceDetail";
 
 const drawerWidth = 240;
 
@@ -76,56 +78,95 @@ const darkTheme = createTheme({
 
 function DashboardContent({ invoices, patients, dataManager }) {
   const [open, setOpen] = React.useState(false);
-  const [view, setView] = React.useState("Home");
+  const [view, setView] = React.useState({
+    page: "Home",
+    selectedPatient: undefined,
+    selectedInvoice: undefined,
+  });
   const [lightTheme, setLightTheme] = React.useState(false);
   const switchContent = () => {
-    if (view === "Home")
+    if (view.page === "Home")
       return (
         <Home lightTheme={lightTheme} invoices={invoices} patients={patients} />
       );
-    if (view === "InvoiceList")
+    if (view.page === "InvoiceList")
       return (
         <InvoiceList
           invoices={invoices}
           patients={patients}
           dataManager={dataManager}
+          openInvoiceDetail={(id) => {
+            setView({
+              page: "InvoiceDetail",
+              selectedInvoice: invoices.find(
+                (i) => String(i._id) === String(id)
+              ),
+              selectedPatient: undefined,
+            });
+          }}
         />
       );
-    if (view === "PatientList")
-      return <PatientList invoices={invoices} patients={patients} />;
-    if (view === "Graph")
+    if (view.page === "PatientList")
+      return (
+        <PatientList
+          invoices={invoices}
+          patients={patients}
+          openPatientDetail={(id) => {
+            setView({
+              page: "PatientDetail",
+              selectedPatient: patients.find(
+                (p) => String(p._id) === String(id)
+              ),
+              selectedInvoice: undefined,
+            });
+          }}
+        />
+      );
+    if (view.page === "Graph")
       return <Graph invoices={invoices} patients={patients} />;
-    if (view === "NewInvoice")
+    if (view.page === "NewInvoice")
       return (
         <NewInvoiceView
           patients={patients}
           addInvoice={dataManager.addInvoice}
         />
       );
-    if (view === "NewPatient")
+    if (view.page === "NewPatient")
       return <NewPatientView addPatient={dataManager.addPatient} />;
+    if (view.page === "PatientDetail")
+      return (
+        <PatientDetail
+          patient={view.selectedPatient}
+          invoices={invoices.filter(
+            (i) => String(i.paziente) === String(view.selectedPatient._id)
+          )}
+        />
+      );
+    if (view.page === "InvoiceDetail")
+      return (
+        <InvoiceDetail
+          invoice={view.selectedInvoice}
+          patient={patients.find(
+            (p) => String(p._id) === String(view.selectedInvoice.paziente)
+          )}
+        />
+      );
   };
-  // const listItemMap = {
-  //   1: "Home",
-  //   2: "InvoiceList",
-  //   3: "PatientList",
-  //   4: "Graph",
-  //   5: "AggregateMonth",
-  //   6: "Aggregate4Months",
-  //   7: "AggregateYear",
-  // };
+
   const getListItemKey = (view) => {
-    if (view === "Home") return 1;
-    if (view === "InvoiceList") return 2;
-    if (view === "PatientList") return 3;
-    if (view === "Graph") return 4;
-    if (view === "NewInvoice") return 5;
-    if (view === "NewPatient") return 6;
+    if (view.page === "Home") return 1;
+    if (view.page === "InvoiceList") return 2;
+    if (view.page === "PatientList") return 3;
+    if (view.page === "Graph") return 4;
+    if (view.page === "NewInvoice") return 5;
+    if (view.page === "NewPatient") return 6;
+    if (view.page === "PatientDetail") return 7;
+    if (view.page === "InvoiceDetail") return 8;
   };
-  const listItemClickHandler = (view) => {
+  const listItemClickHandler = (viewPage) => {
     return function (event) {
       event.preventDefault();
-      setView(view);
+      setView({ ...view, page: viewPage });
     };
   };
   const toggleDrawer = () => {
