@@ -15,6 +15,9 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 export default function ListItems({ sel, clickHandler }) {
   return (
     <React.Fragment>
+      {
+        // TODO: use <Link /> components
+      }
       <ListItemButton selected={sel == 1} onClick={clickHandler("Home")}>
         <ListItemIcon>
           <HomeIcon />

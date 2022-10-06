@@ -74,6 +74,8 @@ const darkTheme = createTheme({
   },
 });
 
+// TODO: become DashboardContainer
+// TODO: pass a 'children' prop
 function DashboardContent({ invoices, patients, dataManager }) {
   const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState("Home");
@@ -209,6 +211,9 @@ function DashboardContent({ invoices, patients, dataManager }) {
           }}
         >
           <Toolbar />
+          {
+            // TODO: render the 'children' component
+          }
           {/* --- MAIN CONTENT ---  */}
           {switchContent()}
         </Box>
@@ -219,6 +224,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
 
 export default function Dashboard({ invoices, patients, dataManager }) {
   return (
+    // TODO: pass the Home component as first children
     <DashboardContent
       invoices={invoices}
       patients={patients}

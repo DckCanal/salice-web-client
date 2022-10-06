@@ -75,6 +75,8 @@ export default function Home({ lightTheme, patients, invoices }) {
       return monthlyIncome;
     }, new Array().fill(undefined, 0, 12));
   return (
+    // TODO: on each page, wrap content in DashboardContainer
+    // TODO: on each page, define a page-level layout, see https://github.com/vercel/next.js/tree/canary/examples/layout-component
     <Grid container spacing={3}>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
