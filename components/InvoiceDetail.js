@@ -13,11 +13,14 @@ import Chip from "@mui/material/Chip";
 import italianMonth from "../lib/dateTranslator";
 import excelInvoice from "../lib/excelLib";
 
-const TextLine = ({ children }) => (
-  <Box sx={{ m: 1 }}>
-    <Typography variant="body1">{children}</Typography>
-  </Box>
-);
+const TextLine = ({ children, width }) => {
+  const w = width ? width : "auto";
+  return (
+    <Box sx={{ m: 1, w }}>
+      <Typography variant="body1">{children}</Typography>
+    </Box>
+  );
+};
 
 export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
   const date = new Date(invoice.dataEmissione);
@@ -44,20 +47,17 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
         sx={{
           m: 2,
           display: "flex",
-          //border: "1px solid red",
           justifyContent: "flex-start",
         }}
       >
         <Box
           sx={{
-            //border: "1px solid black",
-
             mt: 1,
             width: "33%",
           }}
         >
           <Typography variant="button" sx={{ m: 2 }}>
-            Intestatario:
+            Intestatario
           </Typography>
         </Box>
         <Box sx={{ width: "66%" }}>
@@ -75,28 +75,65 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
             {patient.indirizzoResidenza.cap}, {patient.indirizzoResidenza.via}{" "}
             {patient.indirizzoResidenza.civico}
           </TextLine>
-          {patient.telefono && (
-            <TextLine>Telefono: {patient.telefono}</TextLine>
-          )}
-          {patient.email && <TextLine>email: {patient.email}</TextLine>}
+          {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
+          {patient.email && <TextLine>{patient.email}</TextLine>}
         </Box>
       </Box>
       <Divider />
-      <TextLine>
-        {invoice.testo} - {invoice.valore}€
-      </TextLine>
-      {cashed ? (
-        new Date(invoice.dataIncasso).getTime() == date.getTime() ? (
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box
+        sx={{
+          m: 2,
+          display: "flex",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box
+          sx={{
+            mt: 1,
+            width: "33%",
+            p: 2,
+            pt: 1,
+          }}
+        >
+          <Typography variant="button">Prestazione eseguita</Typography>
+        </Box>
+        <Box sx={{ width: "66%", p: 2, pt: 1, mt: 1 }}>
+          <Typography>{invoice.testo}</Typography>
+        </Box>
+      </Box>
+      <Divider />
+      <Box
+        sx={{
+          m: 2,
+          display: "flex",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box
+          sx={{
+            mt: 1,
+            width: "33%",
+            p: 2,
+            pt: 1,
+          }}
+        >
+          <Typography variant="button">Valore</Typography>
+        </Box>
+        <Box sx={{ width: "66%", p: 2, pt: 1, mt: 1 }}>
+          <Typography>{invoice.valore}€</Typography>
+        </Box>
+      </Box>
+      <Divider />
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+        {cashed ? (
+          new Date(invoice.dataIncasso).getTime() == date.getTime() ? (
             <Chip
               variant="outlined"
               color="success"
               icon={<DoneIcon fontSize="small" />}
               label="INCASSATA"
             />
-          </Box>
-        ) : (
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          ) : (
             <Chip
               variant="outlined"
               color="success"
@@ -105,16 +142,16 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
                 invoice.dataIncasso
               ).toLocaleDateString()}`}
             />
-          </Box>
-        )
-      ) : (
-        <Chip
-          variant="outlined"
-          color="error"
-          icon={<ErrorOutlineIcon fontSize="small" />}
-          label="NON INCASSATA"
-        />
-      )}
+          )
+        ) : (
+          <Chip
+            variant="outlined"
+            color="error"
+            icon={<ErrorOutlineIcon fontSize="small" />}
+            label="NON INCASSATA"
+          />
+        )}
+      </Box>
     </Paper>
   );
 }
