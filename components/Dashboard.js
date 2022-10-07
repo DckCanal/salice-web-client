@@ -127,6 +127,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <NewInvoiceView
           patients={patients}
           addInvoice={dataManager.addInvoice}
+          selectedPatient={view.selectedPatient}
         />
       );
     if (view.page === "NewPatient")
@@ -139,6 +140,14 @@ function DashboardContent({ invoices, patients, dataManager }) {
             (i) => String(i.paziente) === String(view.selectedPatient._id)
           )}
           openInvoiceDetail={openInvoiceDetail}
+          createNewInvoice={(patientId) => {
+            setView({
+              ...view,
+              page: "NewInvoice",
+              selectedPatient: patientId,
+              selectedInvoice: undefined,
+            });
+          }}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -166,7 +175,12 @@ function DashboardContent({ invoices, patients, dataManager }) {
   const listItemClickHandler = (viewPage) => {
     return function (event) {
       event.preventDefault();
-      setView({ ...view, page: viewPage });
+      setView({
+        ...view,
+        page: viewPage,
+        selectedInvoice: undefined,
+        selectedPatient: undefined,
+      });
     };
   };
   const toggleDrawer = () => {

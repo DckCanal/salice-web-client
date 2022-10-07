@@ -2,37 +2,48 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import IconButton from "@mui/material/IconButton";
 
 export default function PatientDetail({
   patient,
   invoices,
   openInvoiceDetail,
+  createNewInvoice,
 }) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
   const res = patient.indirizzoResidenza;
   return (
     <Paper sx={{ mt: 2, p: 4, maxWidth: "900px", mr: "auto", ml: "auto" }}>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h5">
           {patient.cognome.toUpperCase()} {patient.nome}
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "flex-end",
-            flexDirection: "column",
+        <IconButton
+          onClick={() => {
+            createNewInvoice(patient._id);
           }}
         >
-          {patient.ultimaModifica && (
-            <Typography variant="overline">
-              Ultima fattura{" "}
-              {new Date(patient.ultimaModifica).toLocaleDateString()}
-            </Typography>
-          )}
-          <Typography variant="overline">Prezzo {patient.prezzo}€</Typography>
-        </Box>
+          <PostAddIcon />
+        </IconButton>
       </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "flex-end",
+          flexDirection: "column",
+        }}
+      >
+        {patient.ultimaModifica && (
+          <Typography variant="overline">
+            Ultima fattura{" "}
+            {new Date(patient.ultimaModifica).toLocaleDateString()}
+          </Typography>
+        )}
+        <Typography variant="overline">Prezzo {patient.prezzo}€</Typography>
+      </Box>
+
       <Divider />
       <Box sx={{ m: 2, ml: 2 }}>
         <Typography variant="h6">Residenza</Typography>

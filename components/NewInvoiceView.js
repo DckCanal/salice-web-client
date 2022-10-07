@@ -19,13 +19,31 @@ import { newInvoice } from "../lib/controller";
 
 // TODO: manage response errors
 
-export default function NewInvoiceView({ patients, addInvoice }) {
+export default function NewInvoiceView({
+  patients,
+  addInvoice,
+  selectedPatient,
+}) {
   // --- COMPONENT STATE --- //
-  const [selectedPatientId, setSelectedPatientId] = React.useState("");
-  const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(0);
+  const initialPatient = selectedPatient
+    ? patients.find((p) => String(p._id) === String(selectedPatient))
+    : undefined;
+  const [selectedPatientId, setSelectedPatientId] = React.useState(
+    selectedPatient ? selectedPatient : ""
+  );
+  const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
+    initialPatient ? initialPatient.prezzo : 0
+  );
   const [issueDateTime, setIssueDateTime] = React.useState(DateTime.now());
   const [invoiceAmountError, setInvoiceAmountError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(false);
+  const autocompleteDefaultValue = initialPatient
+    ? {
+        label: `${initialPatient.cognome} ${initialPatient.nome}`,
+        _id: initialPatient._id,
+        price: initialPatient.prezzo,
+      }
+    : undefined;
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -114,6 +132,10 @@ export default function NewInvoiceView({ patients, addInvoice }) {
               minWidth: 300,
               mt: 3,
             }}
+            value={
+              autocompleteDefaultValue ? autocompleteDefaultValue : undefined
+            }
+            autoHighlight="true"
             renderInput={(params) => (
               <TextField
                 variant="standard"
