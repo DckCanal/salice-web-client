@@ -135,7 +135,6 @@ export default function NewInvoiceView({
             value={
               autocompleteDefaultValue ? autocompleteDefaultValue : undefined
             }
-            autoHighlight="true"
             renderInput={(params) => (
               <TextField
                 variant="standard"

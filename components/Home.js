@@ -5,7 +5,12 @@ import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
 import italianMonth from "../lib/dateTranslator";
 
-export default function Home({ lightTheme, patients, invoices }) {
+export default function Home({
+  lightTheme,
+  patients,
+  invoices,
+  openPatientDetail,
+}) {
   const now = new Date();
   const currentMonthlyIncome = () =>
     invoices.reduce((sum, inv) => {
@@ -124,7 +129,11 @@ export default function Home({ lightTheme, patients, invoices }) {
       {/* Last invoices */}
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column", m: 2 }}>
-          <LastInvoices invoices={invoices} patients={patients} />
+          <LastInvoices
+            invoices={invoices}
+            patients={patients}
+            openPatientDetail={openPatientDetail}
+          />
         </Paper>
       </Grid>
     </Grid>

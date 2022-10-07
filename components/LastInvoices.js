@@ -11,7 +11,11 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function LastInvoices({ invoices, patients }) {
+export default function LastInvoices({
+  invoices,
+  patients,
+  openPatientDetail,
+}) {
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
@@ -42,6 +46,7 @@ export default function LastInvoices({ invoices, patients }) {
     });
     return {
       id: i,
+      patientId: p._id,
       name: `${p.nome} ${p.cognome}`,
       date: new Date(p.ultimaModifica).toLocaleString(),
       codFisc: p.codiceFiscale,
@@ -62,7 +67,13 @@ export default function LastInvoices({ invoices, patients }) {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.id} hover>
+            <TableRow
+              key={row.id}
+              hover
+              onClick={() => {
+                openPatientDetail(row.patientId);
+              }}
+            >
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.codFisc}</TableCell>

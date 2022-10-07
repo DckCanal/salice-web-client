@@ -248,7 +248,7 @@ export default function PatientList({
   };
 
   const handleClick = (event, id) => {
-    const row = rows.find((r) => r.id == id);
+    // const row = rows.find((r) => r.id == id);
     // console.log(`Selected: ${row.nome} ${row.cognome}`);
     openPatientDetail(id);
   };
