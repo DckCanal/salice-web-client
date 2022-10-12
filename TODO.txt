@@ -5,3 +5,17 @@ Change browser's back button behavior
 Add a "reload data" button
 BUG: when not logged in but opening /dashboard, tries to load patients and throws and exception because it's undefined
 BUG: totale mensile anno precedente sbagliato
+
+Change search text field aspect and behavior (hide in certain views)
+Implemente search text field functionality
+Change LastInvoices with x-data-grid
+Change PatientListView with x-data-grid
+Choose dark/light theme based on system theme
+Correct bug in Anno Precedente, monthly income
+Generate print documents
+Modify patient view
+Modify invoice view
+AppBar adaptive behaviour
+
+PatientDetailView: amounts, by months and years
+Implement d functionalities
