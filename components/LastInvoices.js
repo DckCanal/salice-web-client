@@ -1,17 +1,6 @@
 import * as React from "react";
-import Link from "@mui/material/Link";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box } from "@mui/system";
-
-function preventDefault(event) {
-  event.preventDefault();
-}
 
 export default function LastInvoices({
   invoices,
@@ -65,7 +54,6 @@ export default function LastInvoices({
       field: "date",
       headerName: "Data",
       flex: 1,
-      //type: "date-time",
       sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
     },
     {
@@ -86,47 +74,18 @@ export default function LastInvoices({
   return (
     <React.Fragment>
       <Title>Ultime fatture</Title>
-      {/* <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Nome</TableCell>
-            <TableCell>Data</TableCell>
-            <TableCell>Codice fiscale</TableCell>
-            <TableCell align="right">Valore (ultimi 12 mesi)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              hover
-              onClick={() => {
-                openPatientDetail(row.patientId);
-              }}
-            >
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.codFisc}</TableCell>
-              <TableCell align="right">{`${row.value}`}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table> */}
-      {/* <Box sx={{ height: "300px" }}> */}
-      <Box>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          autoHeight={true}
-          density="compact"
-          disableExtendRowFullWidth={false}
-          disableSelectionOnClick={true}
-          hideFooter={true}
-          onRowClick={(params) => {
-            openPatientDetail(params.row.patientId);
-          }}
-        />
-      </Box>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoHeight={true}
+        density="compact"
+        disableExtendRowFullWidth={false}
+        disableSelectionOnClick={true}
+        hideFooter={true}
+        onRowClick={(params) => {
+          openPatientDetail(params.row.patientId);
+        }}
+      />
     </React.Fragment>
   );
 }
