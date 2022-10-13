@@ -19,3 +19,5 @@ AppBar adaptive behaviour
 
 PatientDetailView: amounts, by months and years
 Implement d functionalities
+Download .zip invoices, choose month or year
+Bottom bar, expandable, showing data loading status and which data is loaded, action to load year
