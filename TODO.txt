@@ -8,8 +8,8 @@ BUG: totale mensile anno precedente sbagliato
 
 Change search text field aspect and behavior (hide in certain views)
 Implemente search text field functionality
-Change LastInvoices with x-data-grid
-Change PatientListView with x-data-grid
+Change LastInvoices with x-data-grid OK
+Change PatientListView with x-data-grid OK
 Choose dark/light theme based on system theme
 Correct bug in Anno Precedente, monthly income
 Generate print documents
@@ -21,3 +21,7 @@ PatientDetailView: amounts, by months and years
 Implement d functionalities
 Download .zip invoices, choose month or year
 Bottom bar, expandable, showing data loading status and which data is loaded, action to load year
+
+InvoiceListView: simplify InvoiceObj and PatientObj, using renderCell instead of hiding columns
+InvoiceListView: deleteInvoice
+InvoiceListView: make 'ordinal' column not visualizable
