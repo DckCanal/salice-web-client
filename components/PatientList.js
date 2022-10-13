@@ -41,6 +41,12 @@ export default function PatientList({ patients, openPatientDetail }) {
       ),
     },
     {
+      field: "codFisc",
+      headerName: "Codice fiscale",
+      width: 170,
+      sortable: false,
+    },
+    {
       field: "ultimaModifica",
       headerName: "Ultima fattura",
       flex: 0.75,
@@ -83,6 +89,7 @@ export default function PatientList({ patients, openPatientDetail }) {
   const rows = patients.map((p) => ({
     id: p._id,
     paziente: `${p.cognome} ${p.nome}`,
+    codFisc: p.codiceFiscale,
     ultimaModifica: new Date(p.ultimaModifica).toLocaleDateString(),
     email: p.email,
     telefono: p.telefono,
@@ -99,7 +106,6 @@ export default function PatientList({ patients, openPatientDetail }) {
         rows={rows}
         columns={columns}
         autoHeight={true}
-        density="compact"
         disableSelectionOnClick={true}
         // onRowClick={(params) => {
         //   openPatientDetail(params.row.id);
