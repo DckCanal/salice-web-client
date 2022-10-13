@@ -53,7 +53,7 @@ export default function PatientDetail({
               {res.paese} ({res.provincia}), {res.cap}
             </Typography>
           )}
-          {res.via && res.civico && (
+          {res && res.via && res.civico && (
             <Typography variant="body1">
               {res.via} {res.civico}
             </Typography>

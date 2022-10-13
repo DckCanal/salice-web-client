@@ -101,7 +101,12 @@ function DashboardContent({ invoices, patients, dataManager }) {
   const switchContent = () => {
     if (view.page === "Home")
       return (
-        <Home lightTheme={lightTheme} invoices={invoices} patients={patients} openPatientDetail={openPatientDetail} />
+        <Home
+          lightTheme={lightTheme}
+          invoices={invoices}
+          patients={patients}
+          openPatientDetail={openPatientDetail}
+        />
       );
     if (view.page === "InvoiceList")
       return (
@@ -115,7 +120,6 @@ function DashboardContent({ invoices, patients, dataManager }) {
     if (view.page === "PatientList")
       return (
         <PatientList
-          invoices={invoices}
           patients={patients}
           openPatientDetail={openPatientDetail}
         />
