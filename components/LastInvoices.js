@@ -1,5 +1,6 @@
 import * as React from "react";
 import Title from "./Title";
+import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 
 export default function LastInvoices({
@@ -40,7 +41,7 @@ export default function LastInvoices({
       patientId: p._id,
       name: `${p.cognome} ${p.nome}`,
       date: new Date(p.ultimaModifica).toLocaleString(),
-      codFisc: p.codiceFiscale,
+      email: p.email,
       value: `${lastInvoiceFound}€ (${amount}€)`,
     };
   });
@@ -57,10 +58,20 @@ export default function LastInvoices({
       sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
     },
     {
-      field: "codFisc",
-      headerName: "Codice fiscale",
-      flex: 1,
+      field: "email",
+      headerName: "email",
+      flex: 1.5,
       sortable: false,
+      renderCell: (params) =>
+        params.row.email && (
+          <Chip
+            component="a"
+            variant="filled"
+            label={`${params.row.email}`}
+            href={`mailto:${params.row.email}`}
+            clickable
+          />
+        ),
     },
     {
       field: "value",
