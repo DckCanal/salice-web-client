@@ -6,6 +6,8 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
+import { DataGrid } from "@mui/x-data-grid";
+import { Box } from "@mui/system";
 
 function preventDefault(event) {
   event.preventDefault();
@@ -47,16 +49,44 @@ export default function LastInvoices({
     return {
       id: i,
       patientId: p._id,
-      name: `${p.nome} ${p.cognome}`,
+      name: `${p.cognome} ${p.nome}`,
       date: new Date(p.ultimaModifica).toLocaleString(),
       codFisc: p.codiceFiscale,
       value: `${lastInvoiceFound}€ (${amount}€)`,
     };
   });
+  const columns = [
+    {
+      field: "name",
+      headerName: "Paziente",
+      flex: 1,
+    },
+    {
+      field: "date",
+      headerName: "Data",
+      flex: 1,
+      //type: "date-time",
+      sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
+    },
+    {
+      field: "codFisc",
+      headerName: "Codice fiscale",
+      flex: 1,
+      sortable: false,
+    },
+    {
+      field: "value",
+      headerName: "Valore (ultimi 12 mesi)",
+      flex: 1,
+      sortComparator: (a, b) =>
+        Number.parseFloat(a.substring(a.indexOf("(") + 1, a.indexOf("€)"))) -
+        Number.parseFloat(b.substring(b.indexOf("(") + 1, b.indexOf("€)"))),
+    },
+  ];
   return (
     <React.Fragment>
       <Title>Ultime fatture</Title>
-      <Table size="small">
+      {/* <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Nome</TableCell>
@@ -81,7 +111,22 @@ export default function LastInvoices({
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table> */}
+      {/* <Box sx={{ height: "300px" }}> */}
+      <Box>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          autoHeight={true}
+          density="compact"
+          disableExtendRowFullWidth={false}
+          disableSelectionOnClick={true}
+          hideFooter={true}
+          onRowClick={(params) => {
+            openPatientDetail(params.row.patientId);
+          }}
+        />
+      </Box>
     </React.Fragment>
   );
 }

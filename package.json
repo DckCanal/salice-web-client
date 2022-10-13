@@ -15,6 +15,7 @@
     "@fontsource/roboto": "^4.5.5",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.2",
+    "@mui/x-data-grid": "^5.17.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.4",
     "axios": "^0.27.2",
     "codice-fiscale-js": "^2.3.18",
