@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import ListTableToolbar from "./ListTableToolbar";
+import { sortDate, italianShortDate } from "../lib/dateUtils";
 
 /*
   EnhancedTable. Field to show:
@@ -49,8 +50,9 @@ export default function PatientList({ patients, openPatientDetail }) {
     {
       field: "ultimaModifica",
       headerName: "Ultima fattura",
+      renderCell: (params) => italianShortDate(params.row.ultimaModifica),
       flex: 0.75,
-      sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
+      sortComparator: sortDate,
     },
     {
       field: "email",
@@ -90,7 +92,7 @@ export default function PatientList({ patients, openPatientDetail }) {
     id: p._id,
     paziente: `${p.cognome} ${p.nome}`,
     codFisc: p.codiceFiscale,
-    ultimaModifica: new Date(p.ultimaModifica).toLocaleDateString(),
+    ultimaModifica: new Date(p.ultimaModifica),
     email: p.email,
     telefono: p.telefono,
     prezzo: p.prezzo,

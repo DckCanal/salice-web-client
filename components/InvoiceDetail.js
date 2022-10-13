@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 import Chip from "@mui/material/Chip";
-import italianMonth from "../lib/dateTranslator";
+import { italianMonth } from "../lib/dateUtils";
 import excelInvoice from "../lib/excelLib";
 
 const TextLine = ({ children, width }) => {

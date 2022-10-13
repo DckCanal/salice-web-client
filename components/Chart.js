@@ -11,7 +11,7 @@ import {
   Legend,
 } from "recharts";
 import Title from "./Title";
-import { getShortMonths } from "../lib/dateTranslator";
+import { getShortMonths } from "../lib/dateUtils";
 
 export default function Chart({
   lightTheme,

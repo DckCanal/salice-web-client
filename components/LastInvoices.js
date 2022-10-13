@@ -1,7 +1,9 @@
 import * as React from "react";
 import Title from "./Title";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
+import { italianShortDate } from "../lib/dateUtils";
 
 export default function LastInvoices({
   invoices,
@@ -40,7 +42,7 @@ export default function LastInvoices({
       id: i,
       patientId: p._id,
       name: `${p.cognome} ${p.nome}`,
-      date: new Date(p.ultimaModifica).toLocaleString(),
+      date: new Date(p.ultimaModifica),
       email: p.email,
       value: `${lastInvoiceFound}€ (${amount}€)`,
     };
@@ -49,12 +51,22 @@ export default function LastInvoices({
     {
       field: "name",
       headerName: "Paziente",
+      renderCell: (params) => (
+        <Button
+          variant="text"
+          size="small"
+          onClick={() => openPatientDetail(params.row.patientId)}
+        >
+          {`${params.row.name}`}
+        </Button>
+      ),
       flex: 1,
     },
     {
       field: "date",
       headerName: "Data",
       flex: 1,
+      renderCell: (params) => italianShortDate(params.row.date),
       sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
     },
     {

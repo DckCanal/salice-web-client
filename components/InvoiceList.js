@@ -4,6 +4,7 @@ export default function InvoiceList({
   patients,
   dataManager,
   openInvoiceDetail,
+  openPatientDetail,
 }) {
   return (
     <div>
@@ -12,6 +13,7 @@ export default function InvoiceList({
         patients={patients}
         dataManager={dataManager}
         openInvoiceDetail={openInvoiceDetail}
+        openPatientDetail={openPatientDetail}
       />
     </div>
   );

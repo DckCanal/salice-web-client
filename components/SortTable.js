@@ -22,8 +22,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { DataGrid } from "@mui/x-data-grid";
+import ListTableToolbar from "./ListTableToolbar";
+import Button from "@mui/material/Button";
 import { deleteInvoice } from "../lib/controller";
 import excelInvoice from "../lib/excelLib";
+import { sortDate, italianShortDate } from "../lib/dateUtils";
+import DownloadIcon from "@mui/icons-material/Download";
 
 function createData(
   id,
@@ -249,6 +254,7 @@ export default function SortTable({
   patients,
   dataManager,
   openInvoiceDetail,
+  openPatientDetail,
 }) {
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("ordinal");
@@ -259,33 +265,47 @@ export default function SortTable({
 
   const rows = invoices.map((i) => {
     const patient = patients.find((p) => p._id == i.paziente);
-    return createData(
-      i._id,
-      {
-        val: `${new Date(i.dataEmissione).getFullYear()}-${String(
-          i.numeroOrdine
-        ).padStart(10, "0")}`,
-        showed: `${i.numeroOrdine}/${new Date(i.dataEmissione).getFullYear()}`,
-      },
-      {
-        showed: patient ? `${patient.nome} ${patient.cognome}` : "ERROR",
-        val: patient ? `${patient.cognome} ${patient.nome}` : "ERROR",
-      },
-      {
-        val: i.valore,
-        showed: `€ ${i.valore}`,
-      },
-      {
-        showed: new Date(i.dataEmissione).toLocaleDateString(),
-        val: Date.parse(i.dataEmissione),
-      },
-      {
-        showed: new Date(i.dataIncasso).toLocaleDateString(),
-        val: Date.parse(i.dataIncasso),
-      },
-      i,
-      patient
-    );
+    return {
+      id: i._id,
+      ordinal: i.numeroOrdine,
+      patient: `${patient.cognome} ${patient.nome}`,
+      patientId: patient._id,
+      value: i.valore,
+      issueDate: new Date(i.dataEmissione),
+      collectDate: new Date(i.dataIncasso),
+      patientObj: patient,
+      invoiceObj: i,
+      ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
+        i.numeroOrdine
+      ).padStart(10, "0")}`,
+    };
+    // return createData(
+    //   i._id,
+    //   {
+    //     val: `${new Date(i.dataEmissione).getFullYear()}-${String(
+    //       i.numeroOrdine
+    //     ).padStart(10, "0")}`,
+    //     showed: `${i.numeroOrdine}/${new Date(i.dataEmissione).getFullYear()}`,
+    //   },
+    //   {
+    //     showed: patient ? `${patient.nome} ${patient.cognome}` : "ERROR",
+    //     val: patient ? `${patient.cognome} ${patient.nome}` : "ERROR",
+    //   },
+    //   {
+    //     val: i.valore,
+    //     showed: `€ ${i.valore}`,
+    //   },
+    //   {
+    //     showed: new Date(i.dataEmissione).toLocaleDateString(),
+    //     val: Date.parse(i.dataEmissione),
+    //   },
+    //   {
+    //     showed: new Date(i.dataIncasso).toLocaleDateString(),
+    //     val: Date.parse(i.dataIncasso),
+    //   },
+    //   i,
+    //   patient
+    // );
   });
 
   const handleRequestSort = (event, property) => {
@@ -354,10 +374,116 @@ export default function SortTable({
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      hide: true,
+      width: 220,
+    },
+    {
+      field: "patientObj",
+      hide: true,
+    },
+    {
+      field: "invoiceObj",
+      hide: true,
+    },
+    {
+      field: "ordinalWithYear",
+      headerName: "Numero d'ordine",
+      align: "center",
+      headerAlign: "center",
+      flex: 0.7,
+      renderCell: (params) =>
+        `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
+    },
+    {
+      field: "ordinal",
+      hide: true,
+      //sortComparator: (a, b) => (a > b ? -1 : 1),
+    },
+    {
+      field: "patient",
+      headerName: "Paziente",
+      flex: 1,
+      renderCell: (params) => (
+        <Button
+          variant="text"
+          size="small"
+          onClick={() => openPatientDetail(params.row.patientId)}
+        >
+          {`${params.row.patient}`}
+        </Button>
+      ),
+    },
+    {
+      field: "value",
+      headerName: "Valore",
+      align: "center",
+      headerAlign: "center",
+      flex: 0.3,
+    },
+    {
+      field: "issueDate",
+      headerName: "Data emissione",
+      renderCell: (params) => italianShortDate(params.row.issueDate),
+      flex: 0.7,
+      sortComparator: sortDate,
+    },
+    {
+      field: "collectDate",
+      headerName: "Data incasso",
+      renderCell: (params) => italianShortDate(params.row.collectDate),
+      flex: 0.7,
+      sortComparator: sortDate,
+    },
+    {
+      field: "detailView",
+      headerName: "Visualizza",
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <IconButton onClick={() => openInvoiceDetail(params.row.id)}>
+          <InsertDriveFileIcon />
+        </IconButton>
+      ),
+      flex: 0.5,
+    },
+    {
+      field: "download",
+      headerName: "Scarica",
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => {
+            excelInvoice(params.row.patientObj, params.row.invoiceObj);
+          }}
+        >
+          <DownloadIcon />
+        </IconButton>
+      ),
+      flex: 0.5,
+    },
+  ];
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ m: 2, p: 2 }}>
-        <EnhancedTableToolbar
+        <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+          Fatture
+        </Typography>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          autoHeight={true}
+          disableSelectionOnClick={true}
+          components={{
+            Toolbar: ListTableToolbar,
+          }}
+          checkboxSelection={true}
+        />
+        {/* <EnhancedTableToolbar
           numSelected={selected.length}
           handleDeleteInvoices={handleDeleteInvoices}
         />
@@ -376,8 +502,6 @@ export default function SortTable({
               rowCount={rows.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
@@ -449,11 +573,11 @@ export default function SortTable({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
+        /> */}
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }

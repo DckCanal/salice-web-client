@@ -115,6 +115,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           patients={patients}
           dataManager={dataManager}
           openInvoiceDetail={openInvoiceDetail}
+          openPatientDetail={openPatientDetail}
         />
       );
     if (view.page === "PatientList")

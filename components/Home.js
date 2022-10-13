@@ -3,7 +3,7 @@ import Paper from "@mui/material/Paper";
 import IncomePaper from "./IncomePaper";
 import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
-import italianMonth from "../lib/dateTranslator";
+import { italianMonth } from "../lib/dateUtils";
 
 export default function Home({
   lightTheme,
