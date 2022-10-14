@@ -25,3 +25,5 @@ Bottom bar, expandable, showing data loading status and which data is loaded, ac
 InvoiceListView: simplify InvoiceObj and PatientObj, using renderCell instead of hiding columns
 InvoiceListView: deleteInvoice
 InvoiceListView: make 'ordinal' column not visualizable
+
+PatientDetailView: xdatagrid with patient's invoices
