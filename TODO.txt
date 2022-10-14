@@ -27,3 +27,4 @@ InvoiceListView: deleteInvoice
 InvoiceListView: make 'ordinal' column not visualizable
 
 PatientDetailView: xdatagrid with patient's invoices
+PatientListView: add new invoice button OK

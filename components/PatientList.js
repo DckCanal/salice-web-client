@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import ListTableToolbar from "./ListTableToolbar";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import IconButton from "@mui/material/IconButton";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 
 /*
@@ -23,12 +25,29 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
     - prezzo
 */
 
-// TODO: style links
 // TODO: correct whatsapp link
 
-export default function PatientList({ patients, openPatientDetail }) {
+export default function PatientList({
+  patients,
+  openPatientDetail,
+  createNewInvoice,
+}) {
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
+    {
+      field: "newInvoice",
+      headerName: "",
+      width: 50,
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => {
+            createNewInvoice(params.row.id);
+          }}
+        >
+          <PostAddIcon />
+        </IconButton>
+      ),
+    },
     {
       field: "paziente",
       headerName: "Paziente",

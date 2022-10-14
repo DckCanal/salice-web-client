@@ -98,6 +98,14 @@ function DashboardContent({ invoices, patients, dataManager }) {
       selectedPatient: undefined,
     });
   };
+  const createNewInvoice = (patientId) => {
+    setView({
+      ...view,
+      page: "NewInvoice",
+      selectedPatient: patientId,
+      selectedInvoice: undefined,
+    });
+  };
   const switchContent = () => {
     if (view.page === "Home")
       return (
@@ -123,6 +131,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <PatientList
           patients={patients}
           openPatientDetail={openPatientDetail}
+          createNewInvoice={createNewInvoice}
         />
       );
     if (view.page === "Graph")
@@ -145,14 +154,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
             (i) => String(i.paziente) === String(view.selectedPatient._id)
           )}
           openInvoiceDetail={openInvoiceDetail}
-          createNewInvoice={(patientId) => {
-            setView({
-              ...view,
-              page: "NewInvoice",
-              selectedPatient: patientId,
-              selectedInvoice: undefined,
-            });
-          }}
+          createNewInvoice={createNewInvoice}
         />
       );
     if (view.page === "InvoiceDetail")
