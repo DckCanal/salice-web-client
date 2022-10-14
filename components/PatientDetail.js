@@ -206,7 +206,9 @@ export default function PatientDetail({
           </>
         )}
       </Paper>
-      <Paper sx={{ mt: 2, ml: 2, mr: 2, p: 4, maxWidth: "900px" }}>
+      <Paper
+        sx={{ mt: 2, ml: 2, mr: 2, p: 4, minWidth: "700px", maxWidth: "900px" }}
+      >
         <Typography variant="h6" sx={{ mb: 1 }}>
           Fatture
         </Typography>
