@@ -18,6 +18,7 @@ export default function DashboardPage() {
       ? false
       : true;
 
+  //FIXME: not adding new invoice... maybe neither do with patient and remove invoice?
   const dataManager = {
     addInvoice: (newInv) => {
       setAppData({ ...appData, invoices: [...appData.invoices, newInv] });
