@@ -101,7 +101,12 @@ function DashboardContent({ invoices, patients, dataManager }) {
   const switchContent = () => {
     if (view.page === "Home")
       return (
-        <Home lightTheme={lightTheme} invoices={invoices} patients={patients} openPatientDetail={openPatientDetail} />
+        <Home
+          lightTheme={lightTheme}
+          invoices={invoices}
+          patients={patients}
+          openPatientDetail={openPatientDetail}
+        />
       );
     if (view.page === "InvoiceList")
       return (
@@ -226,6 +231,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
                 label: `${p.nome} ${p.cognome}`,
                 _id: p._id,
               }))}
+              openPatientDetail={openPatientDetail}
             />
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
           </Toolbar>
