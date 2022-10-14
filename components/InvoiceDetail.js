@@ -26,7 +26,16 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
   const date = new Date(invoice.dataEmissione);
   const cashed = invoice.dataIncasso !== undefined;
   return (
-    <Paper sx={{ mt: 2, p: 4, maxWidth: "700px", mr: "auto", ml: "auto" }}>
+    <Paper
+      sx={{
+        mt: 2,
+        p: 4,
+        maxWidth: "700px",
+        minWidth: "500px",
+        mr: "auto",
+        ml: "auto",
+      }}
+    >
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Typography variant="h5">
           Fattura N. {invoice.numeroOrdine} del{" "}

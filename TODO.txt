@@ -26,5 +26,6 @@ InvoiceListView: simplify InvoiceObj and PatientObj, using renderCell instead of
 InvoiceListView: deleteInvoice
 InvoiceListView: make 'ordinal' column not visualizable
 
-PatientDetailView: xdatagrid with patient's invoices
+PatientDetailView: xdatagrid with patient's invoices OK
+PatientDetailView: xdatagrid set right width
 PatientListView: add new invoice button OK
