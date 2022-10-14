@@ -7,7 +7,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import IconButton from "@mui/material/IconButton";
 
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import DownloadIcon from "@mui/icons-material/Download";
 
 import Chip from "@mui/material/Chip";
 import { italianMonth } from "../lib/dateUtils";
@@ -39,7 +39,7 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
             excelInvoice(patient, invoice);
           }}
         >
-          <InsertDriveFileIcon />
+          <DownloadIcon />
         </IconButton>
       </Box>
       <Divider />
