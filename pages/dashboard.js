@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import Dashboard from "../components/Dashboard";
+import { sortDate } from "../lib/dateUtils";
 
 import { getAllInvoices, getAllPatients } from "../lib/controller";
 import "@fontsource/roboto/300.css";
@@ -21,10 +22,15 @@ export default function DashboardPage() {
   //FIXME: not adding new invoice... maybe neither do with patient and remove invoice?
   const dataManager = {
     addInvoice: (newInv) => {
-      setAppData({ ...appData, invoices: [...appData.invoices, newInv] });
+      setAppData({
+        ...appData,
+        invoices: [...appData.invoices, newInv].sort((invA, invB) =>
+          sortDate(invA.dataEmissione, invB.dataEmissione)
+        ),
+      });
     },
     addPatient: (newPat) => {
-      setAppData({ ...appData, patients: [...appData.patients, newPat] });
+      setAppData({ ...appData, patients: [newPat, ...appData.patients] });
     },
     removeInvoice: (inv) => {
       setAppData({
