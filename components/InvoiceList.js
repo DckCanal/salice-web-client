@@ -21,14 +21,8 @@ export default function InvoiceList({
     const patient = patients.find((p) => p._id == i.paziente);
     return {
       id: i._id,
-      ordinal: i.numeroOrdine,
-      patient: `${patient.cognome} ${patient.nome}`,
-      patientId: patient._id,
-      value: i.valore,
-      issueDate: new Date(i.dataEmissione),
-      collectDate: new Date(i.dataIncasso),
-      patientObj: patient,
-      invoiceObj: i,
+      patient,
+      invoice: i,
       ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
         i.numeroOrdine
       ).padStart(10, "0")}`,
@@ -43,25 +37,15 @@ export default function InvoiceList({
       width: 220,
     },
     {
-      field: "patientObj",
-      hide: true,
-    },
-    {
-      field: "invoiceObj",
-      hide: true,
-    },
-    {
       field: "ordinalWithYear",
       headerName: "Numero d'ordine",
       align: "center",
       headerAlign: "center",
       flex: 0.7,
       renderCell: (params) =>
-        `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
-    },
-    {
-      field: "ordinal",
-      hide: true,
+        `${params.row.invoice.numeroOrdine}/${new Date(
+          params.row.invoice.dataEmissione
+        ).getFullYear()}`,
     },
     {
       field: "patient",
@@ -71,9 +55,9 @@ export default function InvoiceList({
         <Button
           variant="text"
           size="small"
-          onClick={() => openPatientDetail(params.row.patientId)}
+          onClick={() => openPatientDetail(params.row.patient._id)}
         >
-          {`${params.row.patient}`}
+          {`${params.row.patient.cognome} ${params.row.patient.nome}`}
         </Button>
       ),
     },
@@ -83,18 +67,21 @@ export default function InvoiceList({
       align: "center",
       headerAlign: "center",
       flex: 0.3,
+      renderCell: (params) => params.row.invoice.valore,
     },
     {
       field: "issueDate",
       headerName: "Data emissione",
-      renderCell: (params) => italianShortDate(params.row.issueDate),
+      renderCell: (params) =>
+        italianShortDate(new Date(params.row.invoice.dataEmissione)),
       flex: 0.7,
       sortComparator: sortDate,
     },
     {
       field: "collectDate",
       headerName: "Data incasso",
-      renderCell: (params) => italianShortDate(params.row.collectDate),
+      renderCell: (params) =>
+        italianShortDate(new Date(params.row.invoice.dataIncasso)),
       flex: 0.7,
       sortComparator: sortDate,
     },
@@ -104,7 +91,7 @@ export default function InvoiceList({
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
-        <IconButton onClick={() => openInvoiceDetail(params.row.id)}>
+        <IconButton onClick={() => openInvoiceDetail(params.row.invoice._id)}>
           <InsertDriveFileIcon />
         </IconButton>
       ),
@@ -118,7 +105,7 @@ export default function InvoiceList({
       renderCell: (params) => (
         <IconButton
           onClick={() => {
-            excelInvoice(params.row.patientObj, params.row.invoiceObj);
+            excelInvoice(params.row.patient, params.row.invoice);
           }}
         >
           <DownloadIcon />

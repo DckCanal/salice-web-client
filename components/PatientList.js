@@ -10,8 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 
 /*
-  EnhancedTable. Field to show:
+  PatientList. Field to show:
     - nome cognome
+    - codiceFiscale
     - ultimaModifica
     - lastYear invoice amount
     - email (mailto link)
@@ -23,6 +24,11 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
     - ultimaModifica
     - lastYear invoice amount
     - prezzo
+
+  Actions: 
+    - create new Invoice
+    - TODO: modify patient
+    - send email
 */
 
 // TODO: correct whatsapp link
@@ -57,7 +63,7 @@ export default function PatientList({
           variant="text"
           size="small"
           onClick={() => openPatientDetail(params.row.id)}
-        >{`${params.row.paziente}`}</Button>
+        >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
       ),
     },
     {
@@ -65,11 +71,13 @@ export default function PatientList({
       headerName: "Codice fiscale",
       width: 170,
       sortable: false,
+      renderCell: (params) => params.row.patient.codiceFiscale,
     },
     {
       field: "ultimaModifica",
       headerName: "Ultima fattura",
-      renderCell: (params) => italianShortDate(params.row.ultimaModifica),
+      renderCell: (params) =>
+        italianShortDate(new Date(params.row.patient.ultimaModifica)),
       flex: 0.75,
       sortComparator: sortDate,
     },
@@ -79,12 +87,12 @@ export default function PatientList({
       sortable: false,
       flex: 1.5,
       renderCell: (params) =>
-        params.row.email && (
+        params.row.patient.email && (
           <Chip
             component="a"
             variant="filled"
-            label={`${params.row.email}`}
-            href={`mailto:${params.row.email}`}
+            label={`${params.row.patient.email}`}
+            href={`mailto:${params.row.patient.email}`}
             clickable
           />
         ),
@@ -95,27 +103,24 @@ export default function PatientList({
       sortable: false,
       flex: 1,
       hide: true,
+      renderCell: (params) => params.row.patient.telefono,
     },
     {
       field: "prezzo",
       headerName: "Prezzo",
       flex: 0.5,
+      renderCell: (params) => params.row.patient.prezzo,
     },
     {
       field: "fatturatoUltimoAnno",
       headerName: "Fatturato ultimo anno",
       flex: 1,
+      renderCell: (params) => params.row.patient.fatturatoUltimoAnno,
     },
   ];
   const rows = patients.map((p) => ({
     id: p._id,
-    paziente: `${p.cognome} ${p.nome}`,
-    codFisc: p.codiceFiscale,
-    ultimaModifica: new Date(p.ultimaModifica),
-    email: p.email,
-    telefono: p.telefono,
-    prezzo: p.prezzo,
-    fatturatoUltimoAnno: p.fatturatoUltimoAnno,
+    patient: p,
   }));
 
   return (
@@ -128,9 +133,6 @@ export default function PatientList({
         columns={columns}
         autoHeight={true}
         disableSelectionOnClick={true}
-        // onRowClick={(params) => {
-        //   openPatientDetail(params.row.id);
-        // }}
         components={{
           Toolbar: ListTableToolbar,
         }}

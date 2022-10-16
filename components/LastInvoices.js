@@ -1,6 +1,5 @@
 import * as React from "react";
 import Title from "./Title";
-import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import { italianShortDate } from "../lib/dateUtils";
@@ -40,33 +39,24 @@ export default function LastInvoices({
     });
     return {
       id: i,
-      patientId: p._id,
-      name: `${p.cognome} ${p.nome}`,
-      date: new Date(p.ultimaModifica),
-      email: p.email,
       value: `${lastInvoiceFound}€ (${amount}€)`,
+      p,
     };
   });
   const columns = [
     {
       field: "name",
       headerName: "Paziente",
-      renderCell: (params) => (
-        <Button
-          variant="text"
-          size="small"
-          onClick={() => openPatientDetail(params.row.patientId)}
-        >
-          {`${params.row.name}`}
-        </Button>
-      ),
+      renderCell: (params) =>
+        `${params.row.p.cognome.toUpperCase()} ${params.row.p.nome}`,
       flex: 1,
     },
     {
       field: "date",
       headerName: "Data",
       flex: 1,
-      renderCell: (params) => italianShortDate(params.row.date),
+      renderCell: (params) =>
+        italianShortDate(new Date(params.row.p.ultimaModifica)),
       sortComparator: (a, b) => (Date.parse(a) > Date.parse(b) ? -1 : 1),
     },
     {
@@ -75,12 +65,12 @@ export default function LastInvoices({
       flex: 1.5,
       sortable: false,
       renderCell: (params) =>
-        params.row.email && (
+        params.row.p.email && (
           <Chip
             component="a"
             variant="filled"
-            label={`${params.row.email}`}
-            href={`mailto:${params.row.email}`}
+            label={`${params.row.p.email}`}
+            href={`mailto:${params.row.p.email}`}
             clickable
           />
         ),
@@ -106,7 +96,7 @@ export default function LastInvoices({
         disableSelectionOnClick={true}
         hideFooter={true}
         onRowClick={(params) => {
-          openPatientDetail(params.row.patientId);
+          openPatientDetail(params.row.p._id);
         }}
       />
     </React.Fragment>
