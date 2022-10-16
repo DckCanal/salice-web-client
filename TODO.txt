@@ -27,8 +27,10 @@ InvoiceListView: deleteInvoice
 InvoiceListView: make 'ordinal' column not visualizable
 
 PatientDetailView: xdatagrid with patient's invoices OK
-PatientDetailView: xdatagrid set right width
+PatientDetailView: xdatagrid set right width OK
 PatientListView: add new invoice button OK
+PatientDetailView: responsive header info
+PatientDetailView: responsive show/hide table columns
 
 On new patient and invoice insertion: loading (disable button), receive response, and open detail view, or show error message.
 
