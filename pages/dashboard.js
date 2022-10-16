@@ -2,6 +2,14 @@ import Head from "next/head";
 import React from "react";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
+import {
+  newInvoice,
+  newPatient,
+  updateInvoice,
+  updatePatient,
+  deleteInvoice,
+  deletePatient,
+} from "../lib/controller";
 
 import { getAllInvoices, getAllPatients } from "../lib/controller";
 import "@fontsource/roboto/300.css";
@@ -19,15 +27,34 @@ export default function DashboardPage() {
       ? false
       : true;
 
-  //FIXME: not adding new invoice... maybe neither do with patient and remove invoice?
   const dataManager = {
-    addInvoice: (newInv) => {
-      setAppData({
-        ...appData,
-        invoices: [...appData.invoices, newInv].sort((invA, invB) =>
-          sortDate(invA.dataEmissione, invB.dataEmissione)
-        ),
-      });
+    addInvoice: async (
+      /*newInv*/ patientId,
+      cashed,
+      amount,
+      text,
+      issueDateTime
+    ) => {
+      const response = await newInvoice(
+        patientId,
+        cashed,
+        amount,
+        text,
+        issueDateTime
+      );
+      if (response.newInvoice) {
+        // OK, invoice created
+        setAppData({
+          ...appData,
+          invoices: [...appData.invoices, response.newInvoice].sort(
+            (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
+          ),
+        });
+        return response.newInvoice;
+      } else {
+        // ERROR, TODO: manage error response
+        return response;
+      }
     },
     addPatient: (newPat) => {
       setAppData({ ...appData, patients: [newPat, ...appData.patients] });

@@ -15,7 +15,7 @@ import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-import { newInvoice } from "../lib/controller";
+// import { newInvoice } from "../lib/controller";
 
 // TODO: manage response errors
 
@@ -54,14 +54,14 @@ export default function NewInvoiceView({
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
 
-    const response = await newInvoice(
+    const newInvoice = await addInvoice(
       selectedPatientId,
       cashed,
       Number(invoiceAmountTextField),
       invoiceText,
       issueDateTime
     );
-    addInvoice(response.newInvoice);
+    // addInvoice(response.newInvoice);
   }
 
   // HANDLER for Autocomplete change event
