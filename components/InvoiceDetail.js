@@ -23,7 +23,8 @@ const TextLine = ({ children, width }) => {
 };
 
 export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
-  if (invoice == undefined) return <p>Waiting for invoice...</p>;
+  if (invoice == undefined || patient == undefined)
+    return <p>Invoice not found...</p>;
   const date = new Date(invoice.dataEmissione);
   const cashed = invoice.dataIncasso !== undefined;
   return (

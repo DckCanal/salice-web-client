@@ -28,13 +28,7 @@ export default function DashboardPage() {
       : true;
 
   const dataManager = {
-    addInvoice: async (
-      /*newInv*/ patientId,
-      cashed,
-      amount,
-      text,
-      issueDateTime
-    ) => {
+    addInvoice: async (patientId, cashed, amount, text, issueDateTime) => {
       const response = await newInvoice(
         patientId,
         cashed,
@@ -44,11 +38,29 @@ export default function DashboardPage() {
       );
       if (response.newInvoice) {
         // OK, invoice created
+        const updatedPatient = appData.patients.find(
+          (p) => String(p._id) === String(response.newInvoice.paziente)
+        );
+        updatedPatient.fatturatoUltimoAnno += Number.parseFloat(
+          response.newInvoice.valore
+        );
+        updatePatient.ultimaModifica = new Date();
         setAppData({
           ...appData,
           invoices: [...appData.invoices, response.newInvoice].sort(
             (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
           ),
+          patients: appData.patients.map((p) => {
+            if (String(p._id) === String(response.newInvoice.paziente)) {
+              return {
+                ...p,
+                fatturatoUltimoAnno:
+                  p.fatturatoUltimoAnno +
+                  Number.parseFloat(response.newInvoice.valore),
+                ultimaModifica: new Date(),
+              };
+            } else return p;
+          }),
         });
         return response.newInvoice;
       } else {

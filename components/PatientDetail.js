@@ -19,6 +19,8 @@ export default function PatientDetail({
   createNewInvoice,
 }) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
+  if (patient == undefined || invoices == undefined)
+    return <p>Patient not found...</p>;
   const res = patient.indirizzoResidenza;
   const rows = invoices.map((i) => ({
     id: i._id,

@@ -29,17 +29,15 @@ export default function LastInvoices({
       Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
     );
   const rows = lastPatients.map((p, i) => {
-    let amount = 0;
     let lastInvoiceFound = undefined;
     lastInvoices.forEach((i) => {
       if (i.paziente === p._id) {
-        amount += Number.parseFloat(i.valore);
         if (!lastInvoiceFound) lastInvoiceFound = Number.parseFloat(i.valore);
       }
     });
     return {
       id: i,
-      value: `${lastInvoiceFound}€ (${amount}€)`,
+      value: `${lastInvoiceFound || 0}€ (${p.fatturatoUltimoAnno || 0}€)`,
       p,
     };
   });
