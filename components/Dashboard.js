@@ -142,6 +142,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           patients={patients}
           addInvoice={dataManager.addInvoice}
           selectedPatient={view.selectedPatient}
+          openNextView={() => setView({ ...view, page: "InvoiceList" })}
         />
       );
     if (view.page === "NewPatient")
@@ -162,7 +163,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <InvoiceDetail
           invoice={view.selectedInvoice}
           patient={patients.find(
-            (p) => String(p._id) === String(view.selectedInvoice.paziente)
+            (p) => String(p._id) === String(view.selectedInvoice?.paziente)
           )}
           openPatientDetail={openPatientDetail}
         />

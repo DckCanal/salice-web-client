@@ -10,12 +10,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
-// import { newInvoice } from "../lib/controller";
 
 // TODO: manage response errors
 
@@ -23,6 +24,7 @@ export default function NewInvoiceView({
   patients,
   addInvoice,
   selectedPatient,
+  openNextView,
 }) {
   // --- COMPONENT STATE --- //
   const initialPatient = selectedPatient
@@ -36,7 +38,10 @@ export default function NewInvoiceView({
   );
   const [issueDateTime, setIssueDateTime] = React.useState(DateTime.now());
   const [invoiceAmountError, setInvoiceAmountError] = React.useState(false);
-  const [autocompleteError, setAutocompleteError] = React.useState(false);
+  const [autocompleteError, setAutocompleteError] = React.useState(
+    selectedPatient === undefined
+  );
+  const [waiting, setWaiting] = React.useState(false);
   const autocompleteDefaultValue = initialPatient
     ? {
         label: `${initialPatient.cognome} ${initialPatient.nome}`,
@@ -48,7 +53,12 @@ export default function NewInvoiceView({
   // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      // should never happens, because if !validateForm(), submit button is disabled
+      return;
+    }
+
+    setWaiting(true);
 
     const data = new FormData(event.currentTarget);
     const invoiceText = data.get("text").trim();
@@ -61,7 +71,15 @@ export default function NewInvoiceView({
       invoiceText,
       issueDateTime
     );
-    // addInvoice(response.newInvoice);
+
+    // if it's all OK, go to invoiceList
+
+    if (newInvoice._id) {
+      setWaiting(false);
+      openNextView();
+    }
+
+    // else show error message modal window, reset fields and enable submit
   }
 
   // HANDLER for Autocomplete change event
@@ -95,6 +113,7 @@ export default function NewInvoiceView({
       issueDateTime.isValid
     );
   }
+  const enableSubmit = validateForm();
 
   return (
     <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
@@ -197,9 +216,18 @@ export default function NewInvoiceView({
               )}
             />
           </LocalizationProvider>
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
+
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 3 }}
+            disabled={!enableSubmit}
+            loading={waiting}
+            loadingPosition="start"
+            startIcon={<SaveIcon />}
+          >
             Inserisci
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Paper>
