@@ -71,6 +71,50 @@ export default function DashboardPage() {
     addPatient: (newPat) => {
       setAppData({ ...appData, patients: [newPat, ...appData.patients] });
     },
+    addPatientXX: async (
+      nome,
+      cognome,
+      codiceFiscale,
+      partitaIva,
+      paeseResidenza,
+      provinciaResidenza,
+      capResidenza,
+      viaResidenza,
+      civicoResidenza,
+      telefono,
+      email,
+      dataNascita,
+      paeseNascita,
+      provinciaNascita,
+      capNascita,
+      prezzo
+    ) => {
+      const response = await newPatient(
+        nome,
+        cognome,
+        codiceFiscale,
+        partitaIva,
+        paeseResidenza,
+        provinciaResidenza,
+        capResidenza,
+        viaResidenza,
+        civicoResidenza,
+        telefono,
+        email,
+        dataNascita,
+        paeseNascita,
+        provinciaNascita,
+        capNascita,
+        prezzo
+      );
+      if (response.newPatient) {
+        setAppData({
+          ...appData,
+          patients: [response.newPatient, ...appData.patients],
+        });
+        return response.newPatient;
+      } else return response;
+    },
     removeInvoice: (inv) => {
       setAppData({
         ...appData,
