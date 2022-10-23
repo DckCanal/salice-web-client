@@ -70,25 +70,15 @@ export default function PatientDetail({
       sortComparator: sortDate,
     },
     {
-      field: "detailView",
-      headerName: "Visualizza",
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <IconButton onClick={() => openInvoiceDetail(params.row.id)}>
-          <InsertDriveFileIcon />
-        </IconButton>
-      ),
-      flex: 0.5,
-    },
-    {
       field: "download",
       headerName: "Scarica",
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
         <IconButton
-          onClick={() => {
+          onClick={(ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
             excelInvoice(
               patient,
               invoices.find((i) => String(i._id) === String(params.row.id))
@@ -223,6 +213,9 @@ export default function PatientDetail({
             Toolbar: ListTableToolbar,
           }}
           checkboxSelection={true}
+          onRowClick={(params) => {
+            openInvoiceDetail(params.row.id);
+          }}
         />
       </Paper>
     </Box>

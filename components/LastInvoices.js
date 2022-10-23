@@ -70,6 +70,9 @@ export default function LastInvoices({
             label={`${params.row.p.email}`}
             href={`mailto:${params.row.p.email}`}
             clickable
+            onClick={(ev) => {
+              ev.stopPropagation();
+            }}
           />
         ),
     },

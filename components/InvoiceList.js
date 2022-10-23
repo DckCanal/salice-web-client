@@ -55,7 +55,11 @@ export default function InvoiceList({
         <Button
           variant="text"
           size="small"
-          onClick={() => openPatientDetail(params.row.patient._id)}
+          onClick={(ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            openPatientDetail(params.row.patient._id);
+          }}
         >
           {`${params.row.patient.cognome} ${params.row.patient.nome}`}
         </Button>
@@ -86,25 +90,15 @@ export default function InvoiceList({
       sortComparator: sortDate,
     },
     {
-      field: "detailView",
-      headerName: "Visualizza",
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <IconButton onClick={() => openInvoiceDetail(params.row.invoice._id)}>
-          <InsertDriveFileIcon />
-        </IconButton>
-      ),
-      flex: 0.5,
-    },
-    {
       field: "download",
       headerName: "Scarica",
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
         <IconButton
-          onClick={() => {
+          onClick={(ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
             excelInvoice(params.row.patient, params.row.invoice);
           }}
         >
@@ -129,6 +123,7 @@ export default function InvoiceList({
             Toolbar: ListTableToolbar,
           }}
           checkboxSelection={true}
+          onRowClick={(params) => openInvoiceDetail(params.row.invoice._id)}
         />
       </Paper>
     </Box>
