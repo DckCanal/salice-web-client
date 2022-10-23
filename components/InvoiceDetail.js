@@ -8,6 +8,8 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import IconButton from "@mui/material/IconButton";
 
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 import Chip from "@mui/material/Chip";
 import { italianMonth } from "../lib/dateUtils";
@@ -45,13 +47,21 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
             date.getMonth()
           ).toLowerCase()} ${date.getFullYear()}`}
         </Typography>
-        <IconButton
-          onClick={() => {
-            excelInvoice(patient, invoice);
-          }}
-        >
-          <DownloadIcon />
-        </IconButton>
+        <Box>
+          <IconButton
+            onClick={() => {
+              excelInvoice(patient, invoice);
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
+          <IconButton>
+            <EditIcon />
+          </IconButton>
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
       </Box>
       <Divider />
       <Box

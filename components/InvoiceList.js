@@ -7,6 +7,8 @@ import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 
@@ -91,19 +93,37 @@ export default function InvoiceList({
     },
     {
       field: "download",
-      headerName: "Scarica",
+      headerName: "Azioni",
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
-        <IconButton
-          onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
-            excelInvoice(params.row.patient, params.row.invoice);
-          }}
-        >
-          <DownloadIcon />
-        </IconButton>
+        <>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              excelInvoice(params.row.patient, params.row.invoice);
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
       ),
       flex: 0.5,
     },

@@ -3,9 +3,10 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import PostAddIcon from "@mui/icons-material/PostAdd";
 import IconButton from "@mui/material/IconButton";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -113,13 +114,21 @@ export default function PatientDetail({
           <Typography variant="h5">
             {patient.cognome.toUpperCase()} {patient.nome}
           </Typography>
-          <IconButton
-            onClick={() => {
-              createNewInvoice(patient._id);
-            }}
-          >
-            <PostAddIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              onClick={() => {
+                createNewInvoice(patient._id);
+              }}
+            >
+              <PostAddIcon />
+            </IconButton>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
         </Box>
         <Box
           sx={{
