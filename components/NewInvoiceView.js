@@ -138,34 +138,41 @@ export default function NewInvoiceView({
             alignItems: "left",
           }}
         >
-          <Autocomplete
-            id="patient-id"
-            name="patient-id"
-            isOptionEqualToValue={(option, value) => option._id === value._id}
-            options={patients.map((p) => ({
-              label: `${p.cognome} ${p.nome}`,
-              _id: p._id,
-              price: p.prezzo,
-            }))}
-            sx={{
-              minWidth: 300,
-              mt: 3,
-            }}
-            value={
-              autocompleteDefaultValue ? autocompleteDefaultValue : undefined
-            }
-            renderInput={(params) => (
-              <TextField
-                variant="standard"
-                label="Paziente"
-                name="pat-id"
-                error={autocompleteError}
-                helperText={autocompleteError ? "Seleziona un paziente" : null}
-                {...params}
-              />
-            )}
-            onChange={handlePatientSelectionChange}
-          />
+          {initialPatient == undefined ? (
+            <Autocomplete
+              id="patient-id"
+              name="patient-id"
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+              options={patients.map((p) => ({
+                label: `${p.cognome} ${p.nome}`,
+                _id: p._id,
+                price: p.prezzo,
+              }))}
+              sx={{
+                minWidth: 300,
+                mt: 3,
+              }}
+              renderInput={(params) => (
+                <TextField
+                  variant="standard"
+                  label="Paziente"
+                  name="pat-id"
+                  error={autocompleteError}
+                  helperText={
+                    autocompleteError ? "Seleziona un paziente" : null
+                  }
+                  {...params}
+                />
+              )}
+              onChange={handlePatientSelectionChange}
+            />
+          ) : (
+            <TextField
+              variant="standard"
+              disabled
+              defaultValue={`${initialPatient.cognome} ${initialPatient.nome}`}
+            />
+          )}
           <FormControlLabel
             control={<Checkbox defaultChecked id="cashed" name="cashed" />}
             label="Incassa ora"
