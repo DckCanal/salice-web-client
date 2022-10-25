@@ -110,7 +110,7 @@ export default function NewInvoiceView({
       selectedPatientId !== "" &&
       !isNaN(invoiceAmountTextField) &&
       Number(invoiceAmountTextField) >= 0 &&
-      issueDateTime.isValid
+      !isNaN(Date.parse(issueDateTime))
     );
   }
   const enableSubmit = validateForm();

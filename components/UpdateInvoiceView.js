@@ -100,8 +100,8 @@ export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
     return (
       !isNaN(invoiceAmountTextField) &&
       Number(invoiceAmountTextField) >= 0 &&
-      issueDateTime.isValid &&
-      (cashed ? cashedDateTime.isValid : true)
+      !isNaN(Date.parse(issueDateTime)) &&
+      (cashed ? !isNaN(Date.parse(cashedDateTime)) : true)
     );
   }
   const enableSubmit = validateForm();

@@ -95,7 +95,7 @@ export default function NewPatientView({ addPatient }) {
     return email === "" || validator.isEmail(email);
   }
   function vDataNascita() {
-    return dataNascita === "" || dataNascita == null || dataNascita.isValid;
+    return dataNascita === "" || dataNascita == null || !isNaN(Date.parse(dataNascita));
   }
   function vProvinciaNascita() {
     return provinciaNascita === "" || provRegEx.test(provinciaNascita);
