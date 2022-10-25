@@ -7,6 +7,8 @@ import IconButton from "@mui/material/IconButton";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import Chip from "@mui/material/Chip";
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -19,6 +21,7 @@ export default function PatientDetail({
   openInvoiceDetail,
   createNewInvoice,
   openUpdateInvoice,
+  openUpdatePatient,
 }) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
   if (patient == undefined || invoices == undefined)
@@ -145,8 +148,22 @@ export default function PatientDetail({
             >
               <PostAddIcon />
             </IconButton>
-            <IconButton>
+            <IconButton
+              onClick={(ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                openUpdatePatient(patient);
+              }}
+            >
               <EditIcon />
+            </IconButton>
+
+            <IconButton
+              onClick={() => {
+                alert("TODO: download documents");
+              }}
+            >
+              <HistoryEduIcon />
             </IconButton>
             <IconButton>
               <DeleteIcon />
@@ -222,7 +239,14 @@ export default function PatientDetail({
                   <Typography variant="body1">{patient.telefono}</Typography>
                 )}
                 {patient.email && (
-                  <Typography variant="body1">{patient.email}</Typography>
+                  <Chip
+                    component="a"
+                    variant="filled"
+                    label={`${patient.email}`}
+                    href={`mailto:${patient.email}`}
+                    clickable
+                  />
+                  /*<Typography variant="body1">{patient.email}</Typography>*/
                 )}
               </Box>
             </Box>

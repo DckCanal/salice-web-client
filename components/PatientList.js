@@ -6,6 +6,8 @@ import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import ListTableToolbar from "./ListTableToolbar";
 import PostAddIcon from "@mui/icons-material/PostAdd";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import IconButton from "@mui/material/IconButton";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 
@@ -37,23 +39,11 @@ export default function PatientList({
   patients,
   openPatientDetail,
   createNewInvoice,
+  openUpdatePatient,
 }) {
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
-    {
-      field: "newInvoice",
-      headerName: "",
-      width: 50,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => {
-            createNewInvoice(params.row.id);
-          }}
-        >
-          <PostAddIcon />
-        </IconButton>
-      ),
-    },
+
     {
       field: "paziente",
       headerName: "Paziente",
@@ -116,6 +106,41 @@ export default function PatientList({
       headerName: "Fatturato ultimo anno",
       flex: 1,
       renderCell: (params) => params.row.patient.fatturatoUltimoAnno,
+    },
+    {
+      field: "actions",
+      headerName: "Azioni",
+      //width: 150,
+      align: "center",
+      headerAlign: "center",
+      sortable: false,
+      renderCell: (params) => (
+        <>
+          <IconButton
+            onClick={() => {
+              createNewInvoice(params.row.id);
+            }}
+          >
+            <PostAddIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              alert("TODO: download documents");
+            }}
+          >
+            <HistoryEduIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              openUpdatePatient(params.row.patient);
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        </>
+      ),
     },
   ];
   const rows = patients.map((p) => ({

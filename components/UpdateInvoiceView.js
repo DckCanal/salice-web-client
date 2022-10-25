@@ -1,11 +1,9 @@
 import * as React from "react";
 import {
-  Autocomplete,
   TextField,
   Checkbox,
   FormControlLabel,
   InputAdornment,
-  Button,
   Box,
   Paper,
   Typography,
@@ -52,6 +50,7 @@ export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
     }
 
     setWaiting(true);
+    openNextView();
 
     // const data = new FormData(event.currentTarget);
     //const cashed = data.get("cashed") === "on" ? true : false;
@@ -117,7 +116,7 @@ export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
         }}
       >
         <Typography component="h1" variant="h5">
-          Nuova fattura
+          Modifica
         </Typography>
         <Box
           component="form"
@@ -220,6 +219,7 @@ export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
               mt: 1,
               display: "flex",
               flexDirection: "row",
+              justifyContent: "space-around",
             }}
           >
             <LoadingButton

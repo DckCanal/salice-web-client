@@ -35,3 +35,5 @@ PatientDetailView: responsive show/hide table columns
 On new patient and invoice insertion: loading (disable button), receive response, and open detail view, or show error message.
 
 Put controller and dataManager together
+
+Missing patient cap nascita

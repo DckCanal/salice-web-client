@@ -149,6 +149,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           patients={patients}
           openPatientDetail={openPatientDetail}
           createNewInvoice={createNewInvoice}
+          openUpdatePatient={openUpdatePatient}
         />
       );
     if (view.page === "Graph")
@@ -174,6 +175,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           openInvoiceDetail={openInvoiceDetail}
           createNewInvoice={createNewInvoice}
           openUpdateInvoice={openUpdateInvoice}
+          openUpdatePatient={openUpdatePatient}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -193,11 +195,29 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <UpdateInvoiceView
           invoice={view.selectedInvoice}
           patient={view.selectedPatient}
-          openNextView={() => setView({ ...view, page: "InvoiceList" })}
+          openNextView={() =>
+            setView({
+              page: "InvoiceList",
+              selectedInvoice: undefined,
+              selectedPatient: undefined,
+            })
+          }
         />
       );
 
-    if (view.page === "UpdatePatient") return <UpdatePatientView />;
+    if (view.page === "UpdatePatient")
+      return (
+        <UpdatePatientView
+          patient={view.selectedPatient}
+          openNextView={() =>
+            setView({
+              page: "PatientList",
+              selectedInvoice: undefined,
+              selectedPatient: undefined,
+            })
+          }
+        />
+      );
   };
 
   const getListItemKey = (view) => {
