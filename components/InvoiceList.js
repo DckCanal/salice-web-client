@@ -18,6 +18,7 @@ export default function InvoiceList({
   dataManager,
   openInvoiceDetail,
   openPatientDetail,
+  openUpdateInvoice,
 }) {
   const rows = invoices.map((i) => {
     const patient = patients.find((p) => p._id == i.paziente);
@@ -111,6 +112,7 @@ export default function InvoiceList({
             onClick={(ev) => {
               ev.preventDefault();
               ev.stopPropagation();
+              openUpdateInvoice(params.row.invoice, params.row.patient);
             }}
           >
             <EditIcon />

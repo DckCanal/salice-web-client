@@ -18,6 +18,7 @@ export default function PatientDetail({
   invoices,
   openInvoiceDetail,
   createNewInvoice,
+  openUpdateInvoice,
 }) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
   if (patient == undefined || invoices == undefined)
@@ -71,23 +72,45 @@ export default function PatientDetail({
       sortComparator: sortDate,
     },
     {
-      field: "download",
-      headerName: "Scarica",
+      field: "actions",
+      headerName: "Azioni",
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
-        <IconButton
-          onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
-            excelInvoice(
-              patient,
-              invoices.find((i) => String(i._id) === String(params.row.id))
-            );
-          }}
-        >
-          <DownloadIcon />
-        </IconButton>
+        <>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              excelInvoice(
+                patient,
+                invoices.find((i) => String(i._id) === String(params.row.id))
+              );
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              openUpdateInvoice(
+                invoices.find((i) => String(i._id) === String(params.row.id)),
+                patient
+              );
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
       ),
       flex: 0.5,
     },

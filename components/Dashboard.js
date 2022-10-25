@@ -22,6 +22,8 @@ import NewInvoiceView from "./NewInvoiceView";
 import NewPatientView from "./NewPatientView";
 import PatientDetail from "./PatientDetail";
 import InvoiceDetail from "./InvoiceDetail";
+import UpdateInvoiceView from "./UpdateInvoiceView";
+import UpdatePatientView from "./UpdatePatientView";
 
 const drawerWidth = 240;
 
@@ -98,6 +100,20 @@ function DashboardContent({ invoices, patients, dataManager }) {
       selectedPatient: undefined,
     });
   };
+  const openUpdateInvoice = (invoice, patient) => {
+    setView({
+      page: "UpdateInvoice",
+      selectedInvoice: invoice,
+      selectedPatient: patient,
+    });
+  };
+  const openUpdatePatient = (patient) => {
+    setView({
+      page: "UpdatePatient",
+      selectedInvoice: undefined,
+      selectedPatient: patient,
+    });
+  };
   const createNewInvoice = (patientId) => {
     setView({
       ...view,
@@ -124,6 +140,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           dataManager={dataManager}
           openInvoiceDetail={openInvoiceDetail}
           openPatientDetail={openPatientDetail}
+          openUpdateInvoice={openUpdateInvoice}
         />
       );
     if (view.page === "PatientList")
@@ -156,6 +173,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           )}
           openInvoiceDetail={openInvoiceDetail}
           createNewInvoice={createNewInvoice}
+          openUpdateInvoice={openUpdateInvoice}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -166,8 +184,20 @@ function DashboardContent({ invoices, patients, dataManager }) {
             (p) => String(p._id) === String(view.selectedInvoice?.paziente)
           )}
           openPatientDetail={openPatientDetail}
+          openUpdateInvoice={openUpdateInvoice}
         />
       );
+
+    if (view.page === "UpdateInvoice")
+      return (
+        <UpdateInvoiceView
+          invoice={view.selectedInvoice}
+          patient={view.selectedPatient}
+          openNextView={() => setView({ ...view, page: "InvoiceList" })}
+        />
+      );
+
+    if (view.page === "UpdatePatient") return <UpdatePatientView />;
   };
 
   const getListItemKey = (view) => {

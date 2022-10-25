@@ -24,7 +24,12 @@ const TextLine = ({ children, width }) => {
   );
 };
 
-export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
+export default function InvoiceDetail({
+  invoice,
+  patient,
+  openPatientDetail,
+  openUpdateInvoice,
+}) {
   if (invoice == undefined || patient == undefined)
     return <p>Invoice not found...</p>;
   const date = new Date(invoice.dataEmissione);
@@ -50,12 +55,16 @@ export default function InvoiceDetail({ invoice, patient, openPatientDetail }) {
         <Box>
           <IconButton
             onClick={() => {
-              excelInvoice(patient, invoice);
+              excelInvoice(invoice, patient);
             }}
           >
             <DownloadIcon />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              openUpdateInvoice(invoice, patient);
+            }}
+          >
             <EditIcon />
           </IconButton>
           <IconButton>
