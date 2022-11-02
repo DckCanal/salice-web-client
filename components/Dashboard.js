@@ -195,6 +195,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
         <UpdateInvoiceView
           invoice={view.selectedInvoice}
           patient={view.selectedPatient}
+          updateInvoice={dataManager.updateInvoice}
           openNextView={() =>
             setView({
               page: "InvoiceList",

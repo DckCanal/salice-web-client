@@ -19,7 +19,12 @@ import { DateTime } from "luxon";
 
 // TODO: manage response errors
 
-export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
+export default function UpdateInvoiceView({
+  invoice,
+  patient,
+  openNextView,
+  updateInvoice,
+}) {
   // --- COMPONENT STATE --- //
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
     invoice.valore ? invoice.valore : 0
@@ -50,27 +55,22 @@ export default function UpdateInvoiceView({ invoice, patient, openNextView }) {
     }
 
     setWaiting(true);
+    const newValues = {};
+    if (Number.parseFloat(invoiceAmountTextField) != invoice.valore)
+      newValues.valore = Number.parseFloat(invoiceAmountTextField);
+    if (Date.parse(issueDateTime) != Date.parse(invoice.dataEmissione))
+      newValues.dataEmissione = new Date(issueDateTime);
+    if (text !== invoice.testo) newValues.testo = text;
+    newValues.cashed = cashed;
+    // NaN != NaN is true
+    if (Date.parse(cashedDateTime) != Date.parse(invoice.dataIncasso))
+      newValues.dataIncasso = new Date(cashedDateTime);
+    try {
+      updateInvoice(invoice._id, newValues);
+    } catch (err) {
+      console.error(err);
+    }
     openNextView();
-
-    // const data = new FormData(event.currentTarget);
-    //const cashed = data.get("cashed") === "on" ? true : false;
-
-    // const newInvoice = await addInvoice(
-    //   selectedPatientId,
-    //   cashed,
-    //   Number(invoiceAmountTextField),
-    //   invoiceText,
-    //   issueDateTime
-    // );
-
-    // if it's all OK, go to invoiceList
-
-    // if (newInvoice._id) {
-    //   setWaiting(false);
-    //   openNextView();
-    // }
-
-    // else show error message modal window, reset fields and enable submit
   }
 
   // HANDLER for invoice value TextField change event

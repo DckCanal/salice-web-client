@@ -115,6 +115,25 @@ export default function DashboardPage() {
         return response.newPatient;
       } else return response;
     },
+    updateInvoice: async (invoiceId, ...newValues) => {
+      const response = await updateInvoice(invoiceId, newValues);
+      if (response.updatedInvoice) {
+        const inv = appData.invoices.find(
+          (i) => String(i._id) === String(invoiceId)
+        );
+        inv = response.updatedInvoice;
+        setAppDate({
+          ...appDate,
+          invoices: [
+            ...invoices.filter((i) => String(i._id) !== String(invoiceId)),
+            response.updatedInvoice,
+          ].sort((invA, invB) =>
+            sortDate(invA.dataEmissione, invB.dataEmissione)
+          ),
+        });
+        return response.updatedInvoice;
+      } else return response;
+    },
     removeInvoice: (inv) => {
       setAppData({
         ...appData,
