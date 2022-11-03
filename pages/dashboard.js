@@ -124,10 +124,12 @@ export default function DashboardPage() {
           (i) => String(i._id) === String(invoiceId)
         );
         inv = response.updatedInvoice;
-        setAppDate({
-          ...appDate,
+        setAppData({
+          ...appData,
           invoices: [
-            ...invoices.filter((i) => String(i._id) !== String(invoiceId)),
+            ...appData.invoices.filter(
+              (i) => String(i._id) !== String(invoiceId)
+            ),
             response.updatedInvoice,
           ].sort((invA, invB) =>
             sortDate(invA.dataEmissione, invB.dataEmissione)
