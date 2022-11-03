@@ -120,10 +120,10 @@ export default function DashboardPage() {
     updateInvoice: async (invoiceId, newValues) => {
       const response = await updateInvoice(invoiceId, newValues);
       if (response.updatedInvoice) {
-        const inv = appData.invoices.find(
-          (i) => String(i._id) === String(invoiceId)
-        );
-        inv = response.updatedInvoice;
+        // const inv = appData.invoices.find(
+        //   (i) => String(i._id) === String(invoiceId)
+        // );
+        // inv = response.updatedInvoice;
         setAppData({
           ...appData,
           invoices: [
@@ -156,7 +156,27 @@ export default function DashboardPage() {
         console.error(err);
       }
     },
-    updatePatient: async () => {},
+    updatePatient: async (patientId, newValues) => {
+      const response = await updatePatient(patientId, newValues);
+      if (response.updatedPatient) {
+        // const pat = appData.patients.find(
+        //   (p) => String(p._id) === String(patientId)
+        // );
+        // pat = response.updatedPatient;
+        setAppData({
+          ...appData,
+          patients: [
+            ...appData.patients.filter(
+              (p) => String(p._id) !== String(patientId)
+            ),
+            response.updatedPatient,
+          ].sort((invA, invB) =>
+            sortDate(invA.ultimaModifica, invB.ultimaModifica)
+          ),
+        });
+        return response.updatedPatient;
+      } else return response;
+    },
     removePatient: async (p) => {
       try {
         const res = await deletePatient(p._id);

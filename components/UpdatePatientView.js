@@ -67,26 +67,40 @@ export default function UpdatePatientView({
     if (!validateForm()) return;
     setWaiting(true);
 
-    // const response = await newPatient(
-    //   name,
-    //   surname,
-    //   codFisc,
-    //   pIva,
-    //   paeseResidenza,
-    //   provinciaResidenza,
-    //   capResidenza,
-    //   viaResidenza,
-    //   civicoResidenza,
-    //   telefono,
-    //   email,
-    //   dataNascita,
-    //   paeseNascita,
-    //   provinciaNascita,
-    //   capNascita,
-    //   prezzo
-    // );
-    // console.log(response);
-    // addPatient(response.newPatient);
+    const newValues = {};
+    if (name !== patient.nome) newValues.nome = name;
+    if (surname !== patient.cognome) newValues.cognome = surname;
+    if (codFisc !== patient.codiceFiscale) newValues.codiceFiscale = codFisc;
+    if (pIva !== patient.partitaIva) newValues.partitaIva = pIva;
+    newValues.indirizzoResidenza = {};
+    if (paeseResidenza !== patient.indirizzoResidenza?.paese)
+      newValues.indirizzoResidenza.paese = paeseResidenza;
+    if (provinciaResidenza !== patient.indirizzoResidenza?.provincia)
+      newValues.indirizzoResidenza.provincia = provinciaResidenza;
+    if (capResidenza !== patient.indirizzoResidenza?.cap)
+      newValues.indirizzoResidenza.cap = capResidenza;
+    if (viaResidenza !== patient.indirizzoResidenza?.via)
+      newValues.indirizzoResidenza.via = viaResidenza;
+    if (civicoResidenza !== patient.indirizzoResidenza?.civico)
+      newValues.indirizzoResidenza.civico = civicoResidenza;
+    if (telefono !== patient.telefono) newValues.telefono = telefono;
+    if (email !== patient.email) newValues.email = email;
+    if (new Date(dataNascita) !== new Date(patient.dataNascita))
+      newValues.dataNascita = new Date(dataNascita);
+    newValues.luogoNascita = {};
+    if (paeseNascita !== patient.luogoNascita?.paese)
+      newValues.luogoNascita.paese = paeseNascita;
+    if (provinciaNascita !== patient.luogoNascita?.provincia)
+      newValues.luogoNascita.provincia = provinciaNascita;
+    if (capNascita !== patient.luogoNascita?.cap)
+      newValues.luogoNascita.cap = capNascita;
+    if (Number.parseFloat(prezzo) !== Number.parseFloat(patient.prezzo))
+      newValues.prezzo = Number.parseFloat(prezzo);
+    try {
+      await updatePatient(patient._id, newValues);
+    } catch (err) {
+      console.error(err);
+    }
     openNextView();
   }
 
