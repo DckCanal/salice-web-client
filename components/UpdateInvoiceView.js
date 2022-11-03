@@ -66,7 +66,9 @@ export default function UpdateInvoiceView({
     if (Date.parse(cashedDateTime) != Date.parse(invoice.dataIncasso))
       newValues.dataIncasso = new Date(cashedDateTime);
     try {
-      updateInvoice(invoice._id, newValues);
+      console.log(`Values to be updated: ${JSON.stringify(newValues)}`);
+      const updatedInvoice = await updateInvoice(invoice._id, newValues);
+      console.log(updatedInvoice);
     } catch (err) {
       console.error(err);
     }
@@ -135,7 +137,7 @@ export default function UpdateInvoiceView({
           <FormControlLabel
             control={
               <Checkbox
-                defaultChecked={{ cashed }}
+                defaultChecked={cashed}
                 id="cashed"
                 name="cashed"
                 onChange={(_ev, checked) => {
