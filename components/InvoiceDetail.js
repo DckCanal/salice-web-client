@@ -29,6 +29,8 @@ export default function InvoiceDetail({
   patient,
   openPatientDetail,
   openUpdateInvoice,
+  deleteInvoice,
+  openHome,
 }) {
   if (invoice == undefined || patient == undefined)
     return <p>Invoice not found...</p>;
@@ -67,7 +69,18 @@ export default function InvoiceDetail({
           >
             <EditIcon />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={async (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              try {
+                const res = await deleteInvoice(invoice);
+                if (res) openHome();
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+          >
             <DeleteIcon />
           </IconButton>
         </Box>

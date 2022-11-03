@@ -21,9 +21,11 @@ export default function PatientDetail({
   invoices,
   openInvoiceDetail,
   createNewInvoice,
+  deletePatient,
   deleteInvoice,
   openUpdateInvoice,
   openUpdatePatient,
+  openHome,
 }) {
   // invoices: is a subset of appData.invoices, containing only patient's ones.
   if (patient == undefined || invoices == undefined)
@@ -170,7 +172,18 @@ export default function PatientDetail({
             >
               <HistoryEduIcon />
             </IconButton>
-            <IconButton>
+            <IconButton
+              onClick={async (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                try {
+                  const res = await deletePatient(patient);
+                  if (res) openHome();
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
+            >
               <DeleteIcon />
             </IconButton>
           </Box>

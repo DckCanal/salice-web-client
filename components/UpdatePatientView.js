@@ -11,7 +11,12 @@ import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
 
-export default function UpdatePatientView({ patient, openNextView }) {
+export default function UpdatePatientView({
+  patient,
+  openNextView,
+  updatePatient,
+  deletePatient,
+}) {
   const [name, setName] = React.useState(patient.nome || undefined);
   const [surname, setSurname] = React.useState(patient.cognome || undefined);
   const [codFisc, setCodFisc] = React.useState(patient.codiceFiscale || "");

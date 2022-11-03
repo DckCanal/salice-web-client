@@ -8,6 +8,7 @@ import ListTableToolbar from "./ListTableToolbar";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 
@@ -40,6 +41,7 @@ export default function PatientList({
   openPatientDetail,
   createNewInvoice,
   openUpdatePatient,
+  deletePatient,
 }) {
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
@@ -110,7 +112,7 @@ export default function PatientList({
     {
       field: "actions",
       headerName: "Azioni",
-      //width: 150,
+      width: 150,
       align: "center",
       headerAlign: "center",
       sortable: false,
@@ -138,6 +140,15 @@ export default function PatientList({
             }}
           >
             <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              deletePatient(params.row.patient);
+            }}
+          >
+            <DeleteIcon />
           </IconButton>
         </>
       ),

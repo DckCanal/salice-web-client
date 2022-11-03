@@ -86,6 +86,13 @@ function DashboardContent({ invoices, patients, dataManager }) {
     selectedInvoice: undefined,
   });
   const [lightTheme, setLightTheme] = React.useState(false);
+  const openHome = () => {
+    setView({
+      page: "Home",
+      selectedInvoice: undefined,
+      selectedPatient: undefined,
+    });
+  };
   const openPatientDetail = (id) => {
     setView({
       page: "PatientDetail",
@@ -151,6 +158,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           openPatientDetail={openPatientDetail}
           createNewInvoice={createNewInvoice}
           openUpdatePatient={openUpdatePatient}
+          deletePatient={dataManager.removePatient}
         />
       );
     if (view.page === "Graph")
@@ -177,7 +185,9 @@ function DashboardContent({ invoices, patients, dataManager }) {
           createNewInvoice={createNewInvoice}
           openUpdateInvoice={openUpdateInvoice}
           openUpdatePatient={openUpdatePatient}
+          deletePatient={dataManager.removePatient}
           deleteInvoice={dataManager.removeInvoice}
+          openHome={openHome}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -189,6 +199,8 @@ function DashboardContent({ invoices, patients, dataManager }) {
           )}
           openPatientDetail={openPatientDetail}
           openUpdateInvoice={openUpdateInvoice}
+          deleteInvoice={dataManager.removeInvoice}
+          openHome={openHome}
         />
       );
 
@@ -220,6 +232,8 @@ function DashboardContent({ invoices, patients, dataManager }) {
               selectedPatient: undefined,
             })
           }
+          updatePatient={dataManager.updatePatient}
+          deletePatient={dataManager.removePatient}
         />
       );
   };

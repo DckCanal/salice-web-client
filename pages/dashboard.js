@@ -139,18 +139,39 @@ export default function DashboardPage() {
       } else return response;
     },
     removeInvoice: async (inv) => {
-      try{
+      try {
         const res = await deleteInvoice(inv._id);
-        if(res == true){
+        if (res == true) {
           setAppData({
-                     ...appData,
-                    invoices: [
-                    ...appData.invoices.filter((i) => String(i._id) !== String(inv._id)),
-                      ],
-                    });
+            ...appData,
+            invoices: [
+              ...appData.invoices.filter(
+                (i) => String(i._id) !== String(inv._id)
+              ),
+            ],
+          });
           return true;
         }
-      } catch(err){
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    updatePatient: async () => {},
+    removePatient: async (p) => {
+      try {
+        const res = await deletePatient(p._id);
+        if (res == true) {
+          setAppData({
+            ...appData,
+            patients: [
+              ...appData.patients.filter(
+                (pat) => String(pat._id) !== String(p._id)
+              ),
+            ],
+          });
+          return true;
+        }
+      } catch (err) {
         console.error(err);
       }
     },
