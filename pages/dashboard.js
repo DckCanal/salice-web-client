@@ -68,10 +68,10 @@ export default function DashboardPage() {
         return response;
       }
     },
-    addPatient: (newPat) => {
-      setAppData({ ...appData, patients: [newPat, ...appData.patients] });
-    },
-    addPatientXX: async (
+    // addPatientXX: (newPat) => {
+    //   setAppData({ ...appData, patients: [newPat, ...appData.patients] });
+    // },
+    addPatient: async (
       nome,
       cognome,
       codiceFiscale,
@@ -108,6 +108,8 @@ export default function DashboardPage() {
         prezzo
       );
       if (response.newPatient) {
+        response.newPatient.fatturatoUltimoAnno = 0;
+        response.newPatient.ultimaModifica = new Date();
         setAppData({
           ...appData,
           patients: [response.newPatient, ...appData.patients],

@@ -8,7 +8,7 @@ import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
-import { newPatient } from "../lib/controller";
+//import { newPatient } from "../lib/controller";
 
 export default function NewPatientView({ addPatient }) {
   // ---- COMPONENT STATE --- //
@@ -39,7 +39,7 @@ export default function NewPatientView({ addPatient }) {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const response = await newPatient(
+    const response = await addPatient(
       name,
       surname,
       codFisc,
@@ -57,8 +57,7 @@ export default function NewPatientView({ addPatient }) {
       capNascita,
       prezzo
     );
-    console.log(response);
-    addPatient(response.newPatient);
+    //addPatient(response.newPatient);
   }
 
   // VALIDATORS
@@ -95,7 +94,11 @@ export default function NewPatientView({ addPatient }) {
     return email === "" || validator.isEmail(email);
   }
   function vDataNascita() {
-    return dataNascita === "" || dataNascita == null || !isNaN(Date.parse(dataNascita));
+    return (
+      dataNascita === "" ||
+      dataNascita == null ||
+      !isNaN(Date.parse(dataNascita))
+    );
   }
   function vProvinciaNascita() {
     return provinciaNascita === "" || provRegEx.test(provinciaNascita);
