@@ -14,12 +14,14 @@ import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 import DownloadIcon from "@mui/icons-material/Download";
 import { DataGrid } from "@mui/x-data-grid";
+import { deleteInvoice } from "../lib/controller";
 
 export default function PatientDetail({
   patient,
   invoices,
   openInvoiceDetail,
   createNewInvoice,
+  deleteInvoice,
   openUpdateInvoice,
   openUpdatePatient,
 }) {
@@ -109,6 +111,9 @@ export default function PatientDetail({
             onClick={(ev) => {
               ev.preventDefault();
               ev.stopPropagation();
+              deleteInvoice(
+                invoices.find((i) => String(i._id) === String(params.row.id))
+              );
             }}
           >
             <DeleteIcon />

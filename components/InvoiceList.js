@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 export default function InvoiceList({
   invoices,
   patients,
-  dataManager,
+  deleteInvoice,
   openInvoiceDetail,
   openPatientDetail,
   openUpdateInvoice,
@@ -121,6 +121,7 @@ export default function InvoiceList({
             onClick={(ev) => {
               ev.preventDefault();
               ev.stopPropagation();
+              deleteInvoice(params.row.invoice);
             }}
           >
             <DeleteIcon />

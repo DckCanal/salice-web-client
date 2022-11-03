@@ -117,7 +117,7 @@ export default function DashboardPage() {
         return response.newPatient;
       } else return response;
     },
-    updateInvoice: async (invoiceId, ...newValues) => {
+    updateInvoice: async (invoiceId, newValues) => {
       const response = await updateInvoice(invoiceId, newValues);
       if (response.updatedInvoice) {
         const inv = appData.invoices.find(
@@ -138,13 +138,21 @@ export default function DashboardPage() {
         return response.updatedInvoice;
       } else return response;
     },
-    removeInvoice: (inv) => {
-      setAppData({
-        ...appData,
-        invoices: [
-          ...appData.invoices.filter((i) => String(i._id) !== String(inv._id)),
-        ],
-      });
+    removeInvoice: async (inv) => {
+      try{
+        const res = await deleteInvoice(inv._id);
+        if(res == true){
+          setAppData({
+                     ...appData,
+                    invoices: [
+                    ...appData.invoices.filter((i) => String(i._id) !== String(inv._id)),
+                      ],
+                    });
+          return true;
+        }
+      } catch(err){
+        console.error(err);
+      }
     },
   };
 

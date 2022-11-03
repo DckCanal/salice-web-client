@@ -24,6 +24,7 @@ export default function UpdateInvoiceView({
   patient,
   openNextView,
   updateInvoice,
+  deleteInvoice,
 }) {
   // --- COMPONENT STATE --- //
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
@@ -58,21 +59,42 @@ export default function UpdateInvoiceView({
     const newValues = {};
     if (Number.parseFloat(invoiceAmountTextField) != invoice.valore)
       newValues.valore = Number.parseFloat(invoiceAmountTextField);
-    if (Date.parse(issueDateTime) != Date.parse(invoice.dataEmissione))
+    if (
+      Date.parse(new Date(issueDateTime)) !=
+      Date.parse(new Date(invoice.dataEmissione))
+    ) {
       newValues.dataEmissione = new Date(issueDateTime);
+    }
     if (text !== invoice.testo) newValues.testo = text;
     newValues.cashed = cashed;
     // NaN != NaN is true
-    if (Date.parse(cashedDateTime) != Date.parse(invoice.dataIncasso))
+    if (
+      Date.parse(new Date(cashedDateTime)) !=
+      Date.parse(new Date(invoice.dataIncasso))
+    )
       newValues.dataIncasso = new Date(cashedDateTime);
     try {
-      console.log(`Values to be updated: ${JSON.stringify(newValues)}`);
+      //console.log(`Values to be updated: ${JSON.stringify(newValues)}`);
       const updatedInvoice = await updateInvoice(invoice._id, newValues);
-      console.log(updatedInvoice);
+      //console.log(updatedInvoice);
     } catch (err) {
       console.error(err);
     }
     openNextView();
+  }
+
+  // HANDLER for delete button
+  async function deleteBtn(event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+    setWaiting(true);
+    try {
+      const res = await deleteInvoice(invoice);
+      console.log(res);
+      if (res) openNextView();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   // HANDLER for invoice value TextField change event
@@ -241,6 +263,9 @@ export default function UpdateInvoiceView({
               disabled={!enableSubmit}
               loading={waiting}
               loadingPosition="start"
+              onClick={(event) => {
+                deleteBtn(event);
+              }}
               startIcon={<DeleteIcon />}
               color="error"
             >

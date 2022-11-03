@@ -141,6 +141,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           openInvoiceDetail={openInvoiceDetail}
           openPatientDetail={openPatientDetail}
           openUpdateInvoice={openUpdateInvoice}
+          deleteInvoice={dataManager.removeInvoice}
         />
       );
     if (view.page === "PatientList")
@@ -176,6 +177,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           createNewInvoice={createNewInvoice}
           openUpdateInvoice={openUpdateInvoice}
           openUpdatePatient={openUpdatePatient}
+          deleteInvoice={dataManager.removeInvoice}
         />
       );
     if (view.page === "InvoiceDetail")
@@ -196,6 +198,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           invoice={view.selectedInvoice}
           patient={view.selectedPatient}
           updateInvoice={dataManager.updateInvoice}
+          deleteInvoice={dataManager.removeInvoice}
           openNextView={() =>
             setView({
               page: "InvoiceList",
