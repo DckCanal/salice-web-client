@@ -39,3 +39,5 @@ Put controller and dataManager together
 Missing patient cap nascita
 
 New patient: loading button and openNextView()
+
+Error management

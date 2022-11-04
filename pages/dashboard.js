@@ -68,9 +68,6 @@ export default function DashboardPage() {
         return response;
       }
     },
-    // addPatientXX: (newPat) => {
-    //   setAppData({ ...appData, patients: [newPat, ...appData.patients] });
-    // },
     addPatient: async (
       nome,
       cognome,
@@ -120,10 +117,6 @@ export default function DashboardPage() {
     updateInvoice: async (invoiceId, newValues) => {
       const response = await updateInvoice(invoiceId, newValues);
       if (response.updatedInvoice) {
-        // const inv = appData.invoices.find(
-        //   (i) => String(i._id) === String(invoiceId)
-        // );
-        // inv = response.updatedInvoice;
         setAppData({
           ...appData,
           invoices: [
@@ -159,10 +152,6 @@ export default function DashboardPage() {
     updatePatient: async (patientId, newValues) => {
       const response = await updatePatient(patientId, newValues);
       if (response.updatedPatient) {
-        // const pat = appData.patients.find(
-        //   (p) => String(p._id) === String(patientId)
-        // );
-        // pat = response.updatedPatient;
         setAppData({
           ...appData,
           patients: [
