@@ -96,8 +96,10 @@ export default function UpdatePatientView({
       newValues.luogoNascita.cap = capNascita;
     if (Number.parseFloat(prezzo) !== Number.parseFloat(patient.prezzo))
       newValues.prezzo = Number.parseFloat(prezzo);
+    console.log(`Updating: ${JSON.stringify(newValues)}`);
     try {
-      await updatePatient(patient._id, newValues);
+      const updatedPatient = await updatePatient(patient._id, newValues);
+      console.log(`Updated patient:${JSON.stringify(updatedPatient)}`);
     } catch (err) {
       console.error(err);
     }
