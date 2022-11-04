@@ -50,6 +50,7 @@ export default function PatientList({
       field: "paziente",
       headerName: "Paziente",
       flex: 1,
+      //sortComparator: (a, b) => a.localeCompare(b),
       renderCell: (params) => (
         <Button
           variant="text"
@@ -101,13 +102,13 @@ export default function PatientList({
       field: "prezzo",
       headerName: "Prezzo",
       flex: 0.5,
-      renderCell: (params) => params.row.patient.prezzo,
+      renderCell: (params) => `${params.row.patient.prezzo} €`,
     },
     {
       field: "fatturatoUltimoAnno",
       headerName: "Fatturato ultimo anno",
       flex: 1,
-      renderCell: (params) => params.row.patient.fatturatoUltimoAnno,
+      renderCell: (params) => `${params.row.patient.fatturatoUltimoAnno} €`,
     },
     {
       field: "actions",
@@ -157,6 +158,9 @@ export default function PatientList({
   const rows = patients.map((p) => ({
     id: p._id,
     patient: p,
+    paziente: `${p.cognome} ${p.nome}`,
+    prezzo: p.prezzo,
+    fatturatoUltimoAnno: p.fatturatoUltimoAnno,
   }));
 
   return (

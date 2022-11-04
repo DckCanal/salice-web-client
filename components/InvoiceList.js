@@ -25,10 +25,12 @@ export default function InvoiceList({
     return {
       id: i._id,
       patient,
+      patientName: `${patient.cognome} ${patient.nome}`,
       invoice: i,
       ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
         i.numeroOrdine
       ).padStart(10, "0")}`,
+      value: i.valore,
     };
   });
 
@@ -51,7 +53,7 @@ export default function InvoiceList({
         ).getFullYear()}`,
     },
     {
-      field: "patient",
+      field: "patientName",
       headerName: "Paziente",
       flex: 1,
       renderCell: (params) => (
@@ -74,7 +76,7 @@ export default function InvoiceList({
       align: "center",
       headerAlign: "center",
       flex: 0.3,
-      renderCell: (params) => params.row.invoice.valore,
+      renderCell: (params) => `${params.row.invoice.valore} €`,
     },
     {
       field: "issueDate",
@@ -97,6 +99,7 @@ export default function InvoiceList({
       headerName: "Azioni",
       align: "center",
       headerAlign: "center",
+      sortable: false,
       renderCell: (params) => (
         <>
           <IconButton

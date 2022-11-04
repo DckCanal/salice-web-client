@@ -2,6 +2,7 @@ import * as React from "react";
 import Title from "./Title";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
+import Button from "@mui/material/Button";
 import { italianShortDate } from "../lib/dateUtils";
 
 export default function LastInvoices({
@@ -39,14 +40,26 @@ export default function LastInvoices({
       id: i,
       value: `${lastInvoiceFound || 0}€ (${p.fatturatoUltimoAnno || 0}€)`,
       p,
+      name: `${p.cognome.toUpperCase()} ${p.nome}`,
     };
   });
   const columns = [
     {
       field: "name",
       headerName: "Paziente",
-      renderCell: (params) =>
-        `${params.row.p.cognome.toUpperCase()} ${params.row.p.nome}`,
+      renderCell: (params) => (
+        <Button
+          variant="text"
+          size="small"
+          onClick={(ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            openPatientDetail(params.row.p._id);
+          }}
+        >
+          {`${params.row.p.cognome} ${params.row.p.nome}`}
+        </Button>
+      ),
       flex: 1,
     },
     {
@@ -96,9 +109,9 @@ export default function LastInvoices({
         disableExtendRowFullWidth={false}
         disableSelectionOnClick={true}
         hideFooter={true}
-        onRowClick={(params) => {
-          openPatientDetail(params.row.p._id);
-        }}
+        // onRowClick={(params) => {
+        //   openPatientDetail(params.row.p._id);
+        // }}
       />
     </React.Fragment>
   );
