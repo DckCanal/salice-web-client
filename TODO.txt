@@ -13,8 +13,8 @@ Change PatientListView with x-data-grid OK
 Choose dark/light theme based on system theme
 Correct bug in Anno Precedente, monthly income
 Generate print documents
-Modify patient view
-Modify invoice view
+Modify patient view OK
+Modify invoice view OK
 AppBar adaptive behaviour
 
 PatientDetailView: amounts, by months and years
@@ -23,7 +23,7 @@ Download .zip invoices, choose month or year
 Bottom bar, expandable, showing data loading status and which data is loaded, action to load year
 
 InvoiceListView: simplify InvoiceObj and PatientObj, using renderCell instead of hiding columns OK
-InvoiceListView: deleteInvoice
+InvoiceListView: deleteInvoice OK
 InvoiceListView: make 'ordinal' column not visualizable OK
 
 PatientDetailView: xdatagrid with patient's invoices OK
@@ -37,3 +37,5 @@ On new patient and invoice insertion: loading (disable button), receive response
 Put controller and dataManager together
 
 Missing patient cap nascita
+
+New patient: loading button and openNextView()
