@@ -25,6 +25,7 @@ export default function NewInvoiceView({
   addInvoice,
   selectedPatient,
   openNextView,
+  d,
 }) {
   // --- COMPONENT STATE --- //
   const initialPatient = selectedPatient
@@ -42,13 +43,13 @@ export default function NewInvoiceView({
     selectedPatient === undefined
   );
   const [waiting, setWaiting] = React.useState(false);
-  const autocompleteDefaultValue = initialPatient
-    ? {
-        label: `${initialPatient.cognome} ${initialPatient.nome}`,
-        _id: initialPatient._id,
-        price: initialPatient.prezzo,
-      }
-    : undefined;
+  // const autocompleteDefaultValue = initialPatient
+  //   ? {
+  //       label: `${initialPatient.cognome} ${initialPatient.nome}`,
+  //       _id: initialPatient._id,
+  //       price: initialPatient.prezzo,
+  //     }
+  //   : undefined;
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -63,13 +64,15 @@ export default function NewInvoiceView({
     const data = new FormData(event.currentTarget);
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
+    const dark = data.get("dark") === "on" ? true : false;
 
     const newInvoice = await addInvoice(
       selectedPatientId,
       cashed,
       Number(invoiceAmountTextField),
       invoiceText,
-      issueDateTime
+      issueDateTime,
+      dark
     );
 
     // if it's all OK, go to invoiceList
@@ -223,6 +226,14 @@ export default function NewInvoiceView({
               )}
             />
           </LocalizationProvider>
+
+          {d && (
+            <FormControlLabel
+              control={<Checkbox id="dark" name="dark" />}
+              label="d"
+              sx={{ mt: 3 }}
+            />
+          )}
 
           <LoadingButton
             type="submit"

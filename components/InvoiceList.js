@@ -22,6 +22,7 @@ export default function InvoiceList({
 }) {
   const rows = invoices.map((i) => {
     const patient = patients.find((p) => p._id == i.paziente);
+    console.log(patient);
     return {
       id: i._id,
       patient,
