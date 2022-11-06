@@ -25,7 +25,7 @@ export default function NewInvoiceView({
   addInvoice,
   selectedPatient,
   openNextView,
-  d,
+  d = false,
 }) {
   // --- COMPONENT STATE --- //
   const initialPatient = selectedPatient

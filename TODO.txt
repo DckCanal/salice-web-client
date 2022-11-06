@@ -43,6 +43,3 @@ New patient: loading button and openNextView()
 Error management
 
 Filters for only d invoices
-
-BUGS: rimuovendo la dfattura dal server, non viene rimossa sul client
-    - modificando la fattura, d viene settato su false di default

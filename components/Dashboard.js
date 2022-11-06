@@ -219,6 +219,7 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
               selectedPatient: undefined,
             })
           }
+          d={d}
         />
       );
 
@@ -307,6 +308,7 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
             <IconButton onClick={() => switchd()}>
               <MenuIcon />
+              {d ? "true" : "false"}
             </IconButton>
           </Toolbar>
         </AppBar>
