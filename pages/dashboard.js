@@ -62,7 +62,6 @@ export default function DashboardPage() {
           setAppData({
             ...appData,
             invoices,
-            patients,
           });
         } else {
           updatedPatient.dfatturatoUltimoAnno += Number.parseFloat(
@@ -74,7 +73,6 @@ export default function DashboardPage() {
           setAppData({
             ...appData,
             dinvoices,
-            patients,
           });
         }
 
