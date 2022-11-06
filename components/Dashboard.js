@@ -114,6 +114,20 @@ function DashboardContent({ invoices, patients, dataManager }) {
       selectedPatient: patient,
     });
   };
+  const openInvoiceList = () => {
+    setView({
+      page: "InvoiceList",
+      selectedInvoice: undefined,
+      selectedPatient: undefined,
+    });
+  };
+  const openPatientList = () => {
+    setView({
+      page: "PatientList",
+      selectedInvoice: undefined,
+      selectedPatient: undefined,
+    });
+  };
   const openUpdatePatient = (patient) => {
     setView({
       page: "UpdatePatient",
@@ -169,11 +183,16 @@ function DashboardContent({ invoices, patients, dataManager }) {
           patients={patients}
           addInvoice={dataManager.addInvoice}
           selectedPatient={view.selectedPatient}
-          openNextView={() => setView({ ...view, page: "InvoiceList" })}
+          openNextView={openInvoiceList}
         />
       );
     if (view.page === "NewPatient")
-      return <NewPatientView addPatient={dataManager.addPatient} />;
+      return (
+        <NewPatientView
+          addPatient={dataManager.addPatient}
+          openNextView={openPatientList}
+        />
+      );
     if (view.page === "PatientDetail")
       return (
         <PatientDetail

@@ -74,9 +74,8 @@ export default function UpdateInvoiceView({
     )
       newValues.dataIncasso = new Date(cashedDateTime);
     try {
-      //console.log(`Values to be updated: ${JSON.stringify(newValues)}`);
       const updatedInvoice = await updateInvoice(invoice._id, newValues);
-      //console.log(updatedInvoice);
+      if (updatedInvoice._id) setWaiting(false);
     } catch (err) {
       console.error(err);
     }
@@ -90,11 +89,11 @@ export default function UpdateInvoiceView({
     setWaiting(true);
     try {
       const res = await deleteInvoice(invoice);
-      console.log(res);
-      if (res) openNextView();
+      if (res) setWaiting(false);
     } catch (err) {
       console.error(err);
     }
+    openNextView();
   }
 
   // HANDLER for invoice value TextField change event

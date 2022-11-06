@@ -8,9 +8,10 @@ import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
-//import { newPatient } from "../lib/controller";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
-export default function NewPatientView({ addPatient }) {
+export default function NewPatientView({ addPatient, openNextView }) {
   // ---- COMPONENT STATE --- //
   const [name, setName] = React.useState("");
   const [surname, setSurname] = React.useState("");
@@ -28,6 +29,7 @@ export default function NewPatientView({ addPatient }) {
   const [provinciaNascita, setProvinciaNascita] = React.useState("");
   const [capNascita, setCapNascita] = React.useState("");
   const [prezzo, setPrezzo] = React.useState(0);
+  const [waiting, setWaiting] = React.useState(false);
 
   // RegExp for validators
   const capRegEx = /\d{5}/;
@@ -38,26 +40,34 @@ export default function NewPatientView({ addPatient }) {
   async function submit(event) {
     event.preventDefault();
     if (!validateForm()) return;
+    setWaiting(true);
 
-    const response = await addPatient(
-      name,
-      surname,
-      codFisc,
-      pIva,
-      paeseResidenza,
-      provinciaResidenza,
-      capResidenza,
-      viaResidenza,
-      civicoResidenza,
-      telefono,
-      email,
-      dataNascita,
-      paeseNascita,
-      provinciaNascita,
-      capNascita,
-      prezzo
-    );
-    //addPatient(response.newPatient);
+    try {
+      const newPatient = await addPatient(
+        name,
+        surname,
+        codFisc,
+        pIva,
+        paeseResidenza,
+        provinciaResidenza,
+        capResidenza,
+        viaResidenza,
+        civicoResidenza,
+        telefono,
+        email,
+        dataNascita,
+        paeseNascita,
+        provinciaNascita,
+        capNascita,
+        prezzo
+      );
+      if (newPatient._id) {
+        setWaiting(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    openNextView();
   }
 
   // VALIDATORS
@@ -127,6 +137,7 @@ export default function NewPatientView({ addPatient }) {
       vPiva()
     );
   }
+  const enableSubmit = validateForm();
 
   return (
     <Box
@@ -327,14 +338,17 @@ export default function NewPatientView({ addPatient }) {
             ml: "auto",
           }}
         >
-          <Button
+          <LoadingButton
             type="submit"
             variant="contained"
             fullWidth
+            disabled={!enableSubmit}
+            loading={waiting}
             sx={{ mt: 3, mb: 3 }}
+            startIcon={<SaveIcon />}
           >
             Inserisci
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Box>

@@ -18,7 +18,7 @@ Modify invoice view OK
 AppBar adaptive behaviour
 
 PatientDetailView: amounts, by months and years
-Implement d functionalities
+Implement d functionalities OK
 Download .zip invoices, choose month or year
 Bottom bar, expandable, showing data loading status and which data is loaded, action to load year
 
@@ -32,12 +32,15 @@ PatientListView: add new invoice button OK
 PatientDetailView: responsive header info
 PatientDetailView: responsive show/hide table columns
 
-On new patient and invoice insertion: loading (disable button), receive response, and open detail view, or show error message.
+On new patient and invoice insertion: loading (disable button), receive response, and open detail view, or show error message. OK
 
-Put controller and dataManager together
+Put controller and dataManager together OK
 
 Missing patient cap nascita
 
-New patient: loading button and openNextView()
+New patient: loading button and openNextView() OK
 
 Error management
+
+Load default years: current and previous. 
+Ask for other years to load.

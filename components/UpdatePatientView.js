@@ -106,6 +106,20 @@ export default function UpdatePatientView({
     openNextView();
   }
 
+  // HANDLER for delete button
+  async function deleteBtn(event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+    setWaiting(true);
+    try {
+      const res = await deletePatient(patient);
+      if (res) setWaiting(false);
+    } catch (err) {
+      console.error(err);
+    }
+    openNextView();
+  }
+
   // VALIDATORS
   function vName() {
     return name !== "";
@@ -407,6 +421,9 @@ export default function UpdatePatientView({
               loadingPosition="start"
               startIcon={<DeleteIcon />}
               color="error"
+              onClick={(event) => {
+                deleteBtn(event);
+              }}
             >
               Elimina
             </LoadingButton>

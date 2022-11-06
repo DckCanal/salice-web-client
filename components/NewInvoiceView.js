@@ -5,7 +5,6 @@ import {
   Checkbox,
   FormControlLabel,
   InputAdornment,
-  Button,
   Box,
   Paper,
   Typography,
@@ -42,13 +41,6 @@ export default function NewInvoiceView({
     selectedPatient === undefined
   );
   const [waiting, setWaiting] = React.useState(false);
-  const autocompleteDefaultValue = initialPatient
-    ? {
-        label: `${initialPatient.cognome} ${initialPatient.nome}`,
-        _id: initialPatient._id,
-        price: initialPatient.prezzo,
-      }
-    : undefined;
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -64,20 +56,24 @@ export default function NewInvoiceView({
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
 
-    const newInvoice = await addInvoice(
-      selectedPatientId,
-      cashed,
-      Number(invoiceAmountTextField),
-      invoiceText,
-      issueDateTime
-    );
+    try {
+      const newInvoice = await addInvoice(
+        selectedPatientId,
+        cashed,
+        Number(invoiceAmountTextField),
+        invoiceText,
+        issueDateTime
+      );
 
-    // if it's all OK, go to invoiceList
+      // if it's all OK, go to invoiceList
 
-    if (newInvoice._id) {
-      setWaiting(false);
-      openNextView();
+      if (newInvoice._id) {
+        setWaiting(false);
+      }
+    } catch (err) {
+      console.error(err);
     }
+    openNextView();
 
     // else show error message modal window, reset fields and enable submit
   }
