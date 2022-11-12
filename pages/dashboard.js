@@ -22,7 +22,6 @@ export default function DashboardPage() {
     invoices: undefined,
     patients: undefined,
     d: false,
-    dinvoices: undefined,
   });
   const dataLoaded =
     appData.invoices == undefined || appData.patients == undefined
@@ -56,43 +55,19 @@ export default function DashboardPage() {
           updatedPatient.fatturatoUltimoAnno += Number.parseFloat(
             response.newInvoice.valore
           );
-          const invoices = [...appData.invoices, response.newInvoice].sort(
-            (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
-          );
-          setAppData({
-            ...appData,
-            invoices,
-          });
+          
         } else {
           updatedPatient.dfatturatoUltimoAnno += Number.parseFloat(
             response.newInvoice.valore
           );
-          const dinvoices = [...appData.dinvoices, response.newInvoice].sort(
-            (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
-          );
-          setAppData({
-            ...appData,
-            dinvoices,
-          });
         }
-
-        // setAppData({
-        //   ...appData,
-        //   invoices: [...appData.invoices, response.newInvoice].sort(
-        //     (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
-        //   ),
-        //   patients: appData.patients.map((p) => {
-        //     if (String(p._id) === String(response.newInvoice.paziente)) {
-        //       return {
-        //         ...p,
-        //         fatturatoUltimoAnno:
-        //           p.fatturatoUltimoAnno +
-        //           Number.parseFloat(response.newInvoice.valore),
-        //         ultimaModifica: new Date(),
-        //       };
-        //     } else return p;
-        //   }),
-        // });
+        const invoices = [...appData.invoices, response.newInvoice].sort(
+          (invA, invB) => sortDate(invA.dataEmissione, invB.dataEmissione)
+        );
+        setAppData({
+          ...appData,
+          invoices,
+        });
         return response.newInvoice;
       } else {
         // ERROR, TODO: manage error response
@@ -181,7 +156,7 @@ export default function DashboardPage() {
       try {
         const res = await deleteInvoice(inv._id);
         if (res == true) {
-          if (!inv.d) {
+
             setAppData({
               ...appData,
               invoices: [
@@ -190,16 +165,7 @@ export default function DashboardPage() {
                 ),
               ],
             });
-          } else {
-            setAppData({
-              ...appData,
-              dinvoices: [
-                ...appData.dinvoices.filter(
-                  (i) => String(i._id) !== String(inv._id)
-                ),
-              ],
-            });
-          }
+          
           return true;
         }
       } catch (err) {
@@ -246,9 +212,11 @@ export default function DashboardPage() {
   const loadData = async () => {
     try {
       const invResponse = await getAllInvoices(false);
-      const inv = invResponse.invoices;
+      invResponse.invoices.forEach(i => i.d = false);
+      // const inv = invResponse.invoices;
       const dinvResponse = await getAllInvoices(true);
-      const dinv = dinvResponse.invoices;
+      dinvResponse.invoices.forEach(i => i.d = true);
+      const inv = [...invResponse.invoices, ...dinvResponse.invoices];
       const patResponse = await getAllPatients();
       const pat = patResponse.patients;
 
@@ -257,20 +225,13 @@ export default function DashboardPage() {
       oneYearAgo.setFullYear(now.getFullYear() - 1);
 
       const patientsWithAmount = pat.map((p) => {
-        let amount = 0;
+        let amount = 0, damount = 0;
         inv
           .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
           .forEach((i) => {
             if (i.paziente === p._id) {
-              amount += Number.parseFloat(i.valore);
-            }
-          });
-        let damount = amount;
-        dinv
-          .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
-          .forEach((i) => {
-            if (i.paziente === p._id) {
-              damount += Number.parseFloat(i.valore);
+              if(i.d == false) amount += Number.parseFloat(i.valore);
+              else damount += Number.parseFloat(i.valore);
             }
           });
         return {
@@ -283,7 +244,6 @@ export default function DashboardPage() {
         ...appData,
         invoices: inv,
         patients: patientsWithAmount,
-        dinvoices: dinv,
       });
     } catch (err) {
       console.error(err);
@@ -292,42 +252,6 @@ export default function DashboardPage() {
   if (!dataLoaded) {
     loadData();
   }
-
-  const getdPatients = () => {
-    return appData.patients.map((p) => ({
-      _id: p._id,
-      id: p.id,
-      fatturatoUltimoAnno: p.dfatturatoUltimoAnno,
-      nome: p.nome,
-      cognome: p.cognome,
-      partitaIva: p.partitaIva,
-      indirizzoResidenza: { ...p.indirizzoResidenza },
-      telefono: p.telefono,
-      email: p.email,
-      dataNascita: p.dataNascita,
-      luogoNascita: { ...p.luogoNascita },
-      prezzo: p.prezzo,
-      ultimaModifica: p.ultimaModifica,
-    }));
-  };
-
-  const getPatients = () => {
-    return appData.patients.map((p) => ({
-      _id: p._id,
-      id: p.id,
-      fatturatoUltimoAnno: p.fatturatoUltimoAnno,
-      nome: p.nome,
-      cognome: p.cognome,
-      partitaIva: p.partitaIva,
-      indirizzoResidenza: { ...p.indirizzoResidenza },
-      telefono: p.telefono,
-      email: p.email,
-      dataNascita: p.dataNascita,
-      luogoNascita: { ...p.luogoNascita },
-      prezzo: p.prezzo,
-      ultimaModifica: p.ultimaModifica,
-    }));
-  };
 
   const switchd = () => {
     setAppData({
@@ -350,12 +274,10 @@ export default function DashboardPage() {
         <Dashboard
           invoices={
             appData.d
-              ? [...appData.invoices, ...appData.dinvoices].sort((invA, invB) =>
-                  sortDate(invA.dataEmissione, invB.dataEmissione)
-                )
-              : appData.invoices
+              ? appData.invoices
+              : appData.invoices.filter(i => i.d != true)
           }
-          patients={appData.d ? getdPatients() : getPatients()}
+          patients={appData.patients}
           dataManager={dataManager}
           switchd={switchd}
           d={appData.d}

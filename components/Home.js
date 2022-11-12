@@ -10,6 +10,7 @@ export default function Home({
   patients,
   invoices,
   openPatientDetail,
+  d
 }) {
   const now = new Date();
   const currentMonthlyIncome = () =>
@@ -133,6 +134,7 @@ export default function Home({
             invoices={invoices}
             patients={patients}
             openPatientDetail={openPatientDetail}
+            d={d}
           />
         </Paper>
       </Grid>

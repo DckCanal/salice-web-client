@@ -9,6 +9,7 @@ export default function LastInvoices({
   invoices,
   patients,
   openPatientDetail,
+  d
 }) {
   const now = new Date();
   const oneYearAgo = new Date();
@@ -38,7 +39,7 @@ export default function LastInvoices({
     });
     return {
       id: i,
-      value: `${lastInvoiceFound || 0}€ (${p.fatturatoUltimoAnno || 0}€)`,
+      value: `${lastInvoiceFound || 0}€ (${d ? p.fatturatoUltimoAnno+p.dfatturatoUltimoAnno : p.fatturatoUltimoAnno || 0}€)`,
       p,
       name: `${p.cognome.toUpperCase()} ${p.nome}`,
     };
