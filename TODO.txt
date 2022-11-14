@@ -7,7 +7,7 @@ BUG: when not logged in but opening /dashboard, tries to load patients and throw
 BUG: totale mensile anno precedente sbagliato
 
 Change search text field aspect and behavior (hide in certain views)
-Implemente search text field functionality
+Implemente search text field functionality OK
 Change LastInvoices with x-data-grid OK
 Change PatientListView with x-data-grid OK
 Choose dark/light theme based on system theme

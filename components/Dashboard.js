@@ -324,6 +324,7 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
                 label: `${p.nome} ${p.cognome}`,
                 _id: p._id,
               }))}
+              openPatientDetail={openPatientDetail}
             />
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
             <IconButton onClick={() => switchd()}>
