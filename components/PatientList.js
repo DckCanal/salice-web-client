@@ -169,7 +169,7 @@ export default function PatientList({
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Pazienti
       </Typography>
-      <Box sx={{height: "85%"}}>
+      <Box sx={{height: "90%"}}>
         <DataGrid
           rows={rows}
           columns={columns}

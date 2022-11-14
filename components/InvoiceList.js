@@ -160,8 +160,8 @@ export default function InvoiceList({
     },
   ];
   return (
-    <Box sx={{ width: "100%",  height: "95%" }}>
-      <Paper sx={{ m: 2, p: 2, height: "90%" }}>
+    <Box sx={{ width: "100%",  height: "90%" }}>
+      <Paper sx={{ m: 2, p: 2, height: "95%" }}>
         <Typography variant="h6" component="div" sx={{ mb: 1 }}>
           Fatture
         </Typography>
