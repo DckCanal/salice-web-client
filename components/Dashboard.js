@@ -78,7 +78,7 @@ const darkTheme = createTheme({
   },
 });
 
-function DashboardContent({ invoices, patients, dataManager }) {
+function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
   const [open, setOpen] = React.useState(false);
   const [view, setView] = React.useState({
     page: "Home",
@@ -151,6 +151,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           invoices={invoices}
           patients={patients}
           openPatientDetail={openPatientDetail}
+          d={d}
         />
       );
     if (view.page === "InvoiceList")
@@ -184,6 +185,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
           addInvoice={dataManager.addInvoice}
           selectedPatient={view.selectedPatient}
           openNextView={openInvoiceList}
+          d={d}
         />
       );
     if (view.page === "NewPatient")
@@ -237,6 +239,7 @@ function DashboardContent({ invoices, patients, dataManager }) {
               selectedPatient: undefined,
             })
           }
+          d={d}
         />
       );
 
@@ -323,6 +326,10 @@ function DashboardContent({ invoices, patients, dataManager }) {
               }))}
             />
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
+            <IconButton onClick={() => switchd()}>
+              <MenuIcon />
+              {d ? "true" : "false"}
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -367,12 +374,20 @@ function DashboardContent({ invoices, patients, dataManager }) {
   );
 }
 
-export default function Dashboard({ invoices, patients, dataManager }) {
+export default function Dashboard({
+  invoices,
+  patients,
+  dataManager,
+  switchd,
+  d,
+}) {
   return (
     <DashboardContent
       invoices={invoices}
       patients={patients}
       dataManager={dataManager}
+      switchd={switchd}
+      d={d}
     />
   );
 }

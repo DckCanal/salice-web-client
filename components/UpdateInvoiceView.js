@@ -25,6 +25,7 @@ export default function UpdateInvoiceView({
   openNextView,
   updateInvoice,
   deleteInvoice,
+  d = false,
 }) {
   // --- COMPONENT STATE --- //
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
@@ -44,6 +45,7 @@ export default function UpdateInvoiceView({
   const [textError, setTextError] = React.useState(
     invoice.testo === "" || invoice.testo == undefined
   );
+  const [dark, setDark] = React.useState(invoice.d ? true : false);
 
   const [waiting, setWaiting] = React.useState(false);
 
@@ -73,6 +75,11 @@ export default function UpdateInvoiceView({
       Date.parse(new Date(invoice.dataIncasso))
     )
       newValues.dataIncasso = new Date(cashedDateTime);
+    // if (dark) {
+    //   if (!invoice.d) newValues.d = true;
+    // } else {
+    //   if (invoice.d) newValues.d = false;
+    // }
     try {
       const updatedInvoice = await updateInvoice(invoice._id, newValues);
       if (updatedInvoice._id) setWaiting(false);
@@ -237,6 +244,22 @@ export default function UpdateInvoiceView({
               )}
             />
           </LocalizationProvider>
+          {/* {d && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id="dark"
+                  name="dark"
+                  defaultChecked={invoice.d ? true : false}
+                  onChange={(_ev, checked) => {
+                    setDark(checked);
+                  }}
+                />
+              }
+              label="d"
+              sx={{ mt: 3 }}
+            />
+          )} */}
           <Box
             sx={{
               mt: 1,

@@ -24,6 +24,7 @@ export default function NewInvoiceView({
   addInvoice,
   selectedPatient,
   openNextView,
+  d = false,
 }) {
   // --- COMPONENT STATE --- //
   const initialPatient = selectedPatient
@@ -55,15 +56,16 @@ export default function NewInvoiceView({
     const data = new FormData(event.currentTarget);
     const invoiceText = data.get("text").trim();
     const cashed = data.get("cashed") === "on" ? true : false;
+    const dark = data.get("dark") === "on" ? true : false;
 
-    try {
-      const newInvoice = await addInvoice(
-        selectedPatientId,
-        cashed,
-        Number(invoiceAmountTextField),
-        invoiceText,
-        issueDateTime
-      );
+    try{const newInvoice = await addInvoice(
+      selectedPatientId,
+      cashed,
+      Number(invoiceAmountTextField),
+      invoiceText,
+      issueDateTime,
+      dark
+    );
 
       // if it's all OK, go to invoiceList
 
@@ -219,6 +221,14 @@ export default function NewInvoiceView({
               )}
             />
           </LocalizationProvider>
+
+          {d && (
+            <FormControlLabel
+              control={<Checkbox id="dark" name="dark" />}
+              label="d"
+              sx={{ mt: 3 }}
+            />
+          )}
 
           <LoadingButton
             type="submit"
