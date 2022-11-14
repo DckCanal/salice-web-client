@@ -1,5 +1,6 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
@@ -164,19 +165,21 @@ export default function PatientList({
   }));
 
   return (
-    <Paper sx={{ m: 2, p: 2 }}>
+    <Paper sx={{ m: 2, p: 2, height: "90%" }}>
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Pazienti
       </Typography>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        autoHeight={true}
-        disableSelectionOnClick={true}
-        components={{
-          Toolbar: ListTableToolbar,
-        }}
-      />
+      <Box sx={{height: "85%"}}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={25}
+          disableSelectionOnClick={true}
+          components={{
+            Toolbar: ListTableToolbar,
+          }}
+        />
+      </Box>
     </Paper>
   );
 }
