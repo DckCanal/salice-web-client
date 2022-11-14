@@ -1,8 +1,10 @@
+import * as React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -12,6 +14,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 
+
+function YearButtonGroup({years, selectedYears, handleYearsChange}){
+  return (
+    <ToggleButtonGroup onChange={handleYearsChange} value={selectedYears}>
+      {years.map((y,i) => (
+        <ToggleButton key={i} value={i}>{`${y}`}</ToggleButton>
+      ))}
+    </ToggleButtonGroup>
+  )
+}
+
 export default function InvoiceList({
   invoices,
   patients,
@@ -20,7 +33,19 @@ export default function InvoiceList({
   openPatientDetail,
   openUpdateInvoice,
 }) {
-  const rows = invoices.map((i) => {
+  const [yearsIndex, setYearsIndex] = React.useState([0]);
+  const years = invoices.reduce((years,invoice) => {
+    const year = new Date(invoice.dataEmissione).getFullYear();
+    if (!years.includes(year)) return [...years, year];
+    return years;
+  },[]).sort((y1,y2) => y2-y1);
+  const handleYearsChange = (ev, newYearsIndex) => setYearsIndex(newYearsIndex);
+  const rows = invoices.filter(i => {
+    const year = new Date(i.dataEmissione).getFullYear();
+    const index = years.indexOf(year);
+    return yearsIndex.includes(index);
+  })
+  .map((i) => {
     const patient = patients.find((p) => p._id == i.paziente);
     return {
       id: i._id,
@@ -135,22 +160,31 @@ export default function InvoiceList({
     },
   ];
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ m: 2, p: 2 }}>
+    <Box sx={{ width: "100%",  height: "95%" }}>
+      <Paper sx={{ m: 2, p: 2, height: "90%" }}>
         <Typography variant="h6" component="div" sx={{ mb: 1 }}>
           Fatture
         </Typography>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          autoHeight={true}
-          disableSelectionOnClick={true}
-          components={{
-            Toolbar: ListTableToolbar,
-          }}
-          checkboxSelection={true}
-          onRowClick={(params) => openInvoiceDetail(params.row.invoice._id)}
-        />
+        <Box sx={{mb:2}}>
+          <YearButtonGroup 
+            years={years}
+            selectedYears={yearsIndex}
+            handleYearsChange={handleYearsChange}
+          />
+        </Box>
+        <Box sx={{height: "85%"}}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={25}
+            disableSelectionOnClick={true}
+            components={{
+              Toolbar: ListTableToolbar,
+            }}
+            checkboxSelection={true}
+            onRowClick={(params) => openInvoiceDetail(params.row.invoice._id)}
+          />
+        </Box>
       </Paper>
     </Box>
   );
