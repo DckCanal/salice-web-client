@@ -14,7 +14,6 @@ export default function SearchField({ optionList, openPatientDetail }) {
       sx={{ width: 300 }}
       onChange={(ev, val) => {
         if (val == null) return;
-        console.log(JSON.stringify(val));
         openPatientDetail(val._id);
         return;
       }}
