@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const invoiceSchema = new mongoose.Schema(
   {
     valore: Number,
