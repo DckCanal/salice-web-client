@@ -2,6 +2,7 @@
 import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/userModel";
 import jwt from "jsonwebtoken";
+import {serialize} from 'cookie';
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -20,8 +21,9 @@ const createSendToken = (user, statusCode, res) => {
 
   // in production, send cookie only on https, not http
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-  res.cookie("jwt", token, cookieOptions);
+  // res.cookie("jwt", token, cookieOptions);
   user.password = undefined;
+  res.setHeader('Set-Cookie', serialize('jwt', token, cookieOptions));
   res.status(statusCode).json({
     status: "success",
     token,
@@ -33,7 +35,8 @@ const createSendToken = (user, statusCode, res) => {
 
 export default async function handler(req, res) {
   const { method } = req;
-  console.log("Body: ", JSON.stringify(req.body));
+  // console.log("Body: ", JSON.stringify(req.body));
+  // console.log("Cookies: ", JSON.stringify(req.cookies));
 
   if (method !== "POST") {
     res.status(400).json({
@@ -43,6 +46,7 @@ export default async function handler(req, res) {
     return;
   } else {
     const conn = await dbConnect();
+    
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400).json({ message: "Please provide email and password" });
@@ -51,8 +55,9 @@ export default async function handler(req, res) {
     try {
       const user = await User.findOne({ email }).select("+password");
       const users = await User.find();
+      console.log(user, users);
       if (!user || !(await user.correctPassword(password, user.password))) {
-        console.log(user, users);
+        
         res
           .status(401)
           .json({ message: "Unauthorized: incorrect email or password" });

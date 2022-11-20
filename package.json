@@ -21,6 +21,7 @@
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "codice-fiscale-js": "^2.3.18",
+    "cookie": "^0.5.0",
     "crypto": "^1.0.1",
     "downloadjs": "^1.4.7",
     "exceljs": "^4.3.0",

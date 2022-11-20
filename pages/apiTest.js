@@ -1,3 +1,8 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 import * as React from "react";
 import axios from "axios";
 
@@ -19,7 +24,7 @@ export default function ApiTest() {
       });
       setRes(res);
     } catch (err) {
-      setRes(err);
+      setRes({status: 'error', error: err});
     }
   };
   return (
@@ -31,6 +36,7 @@ export default function ApiTest() {
         marginTop: 30,
         marginRight: "auto",
         marginLeft: "auto",
+        fontFamily: 'roboto'
       }}
     >
       <button
@@ -41,6 +47,7 @@ export default function ApiTest() {
           ":hover": {
             backgroundColor: "#66eeee",
           },
+          fontFamily: 'roboto'
         }}
         onClick={() => sendReq()}
       >
