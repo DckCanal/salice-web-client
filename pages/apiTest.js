@@ -7,20 +7,22 @@ import * as React from "react";
 import axios from "axios";
 
 const url = "/api/users/login";
-const data = {
-  email: "",
-  password: "",
-};
 
 export default function ApiTest() {
   const [res, setRes] = React.useState(undefined);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const sendReq = async () => {
+    console.log(email, password)
     try {
       const res = await axios({
         method: "POST",
         url,
         withCredentials: true,
-        data,
+        data: {
+          email,
+          password
+        },
       });
       setRes(res);
     } catch (err) {
@@ -51,8 +53,10 @@ export default function ApiTest() {
         }}
         onClick={() => sendReq()}
       >
-        Send API req
+        Send LOGIN req
       </button>
+      <input type='text' name='username' onChange={(ev) => {setEmail(ev.target.value)}} />
+      <input type='password' name='pwd' onChange={(ev) => {setPassword(ev.target.value)}} />
       <div
         style={{
           width: "500px",
@@ -64,7 +68,7 @@ export default function ApiTest() {
         }}
       >
         {/* <p>{res && `${res.data.nome} ${res.data.cognome}`}</p> */}
-        <p>{res && JSON.stringify(res)}</p>
+        <p>{res && `Welcome ${res.data.data.user.fullName}\n${JSON.stringify(res)}`}</p>
       </div>
     </div>
   );

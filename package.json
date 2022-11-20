@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^2.4.0",
     "mongoose": "^6.7.2",
-    "next": "12.1.5",
+    "next": "^13.0.4",
     "nodemailer": "^6.8.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
