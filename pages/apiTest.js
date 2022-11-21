@@ -5,15 +5,15 @@ import "@fontsource/roboto/700.css";
 
 import * as React from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const url = "/api/users/login";
 
 export default function ApiTest() {
   const [res, setRes] = React.useState(undefined);
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const sendReq = async () => {
-    console.log(email, password)
     try {
       const res = await axios({
         method: "POST",
@@ -21,12 +21,12 @@ export default function ApiTest() {
         withCredentials: true,
         data: {
           email,
-          password
+          password,
         },
       });
       setRes(res);
     } catch (err) {
-      setRes({status: 'error', error: err});
+      setRes({ status: "error", error: err });
     }
   };
   return (
@@ -38,7 +38,7 @@ export default function ApiTest() {
         marginTop: 30,
         marginRight: "auto",
         marginLeft: "auto",
-        fontFamily: 'roboto'
+        fontFamily: "roboto",
       }}
     >
       <button
@@ -49,18 +49,30 @@ export default function ApiTest() {
           ":hover": {
             backgroundColor: "#66eeee",
           },
-          fontFamily: 'roboto'
+          fontFamily: "roboto",
         }}
         onClick={() => sendReq()}
       >
         Send LOGIN req
       </button>
-      <input type='text' name='username' onChange={(ev) => {setEmail(ev.target.value)}} />
-      <input type='password' name='pwd' onChange={(ev) => {setPassword(ev.target.value)}} />
+      <input
+        type="text"
+        name="username"
+        onChange={(ev) => {
+          setEmail(ev.target.value);
+        }}
+      />
+      <input
+        type="password"
+        name="pwd"
+        onChange={(ev) => {
+          setPassword(ev.target.value);
+        }}
+      />
       <div
         style={{
           width: "500px",
-          height: "300px",
+          // height: "300px",
           marginTop: "20px",
           backgroundColor: res?.status === "error" ? "#ffeeee" : "#eeffee",
           borderRadius: 0,
@@ -68,8 +80,14 @@ export default function ApiTest() {
         }}
       >
         {/* <p>{res && `${res.data.nome} ${res.data.cognome}`}</p> */}
-        <p>{res && `Welcome ${res.data.data.user.fullName}\n${JSON.stringify(res)}`}</p>
+        <p>
+          {res &&
+            res?.status !== "error" &&
+            `Welcome ${res.data.data.user.fullName}\n${JSON.stringify(res)}`}
+        </p>
       </div>
+      <Link href="tests/invoiceTest">Test invoices</Link>
+      <Link href="tests/patientTest">Test patients</Link>
     </div>
   );
 }
