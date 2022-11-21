@@ -1,8 +1,7 @@
-// import { signup } from "../../../controllers/authController";
 import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/userModel";
 import jwt from "jsonwebtoken";
-import {serialize} from 'cookie';
+import { serialize } from "cookie";
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,7 +22,7 @@ const createSendToken = (user, statusCode, res) => {
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
   // res.cookie("jwt", token, cookieOptions);
   user.password = undefined;
-  res.setHeader('Set-Cookie', serialize('jwt', token, cookieOptions));
+  res.setHeader("Set-Cookie", serialize("jwt", token, cookieOptions));
   res.status(statusCode).json({
     status: "success",
     token,
@@ -46,10 +45,10 @@ export default async function handler(req, res) {
     return;
   } else {
     const conn = await dbConnect();
-    
+
     const { email, password } = req.body;
     if (!email || !password) {
-      res.status(400).json({ message: "Please provide email and password" });
+      res.status(400).json({ message: "Please provide email and password." });
       return;
     }
     try {
@@ -57,10 +56,9 @@ export default async function handler(req, res) {
       const users = await User.find();
       console.log(user, users);
       if (!user || !(await user.correctPassword(password, user.password))) {
-        
         res
           .status(401)
-          .json({ message: "Unauthorized: incorrect email or password" });
+          .json({ message: "Unauthorized: incorrect email or password." });
         return;
       }
       createSendToken(user, 200, res);
@@ -68,7 +66,7 @@ export default async function handler(req, res) {
       console.error(err);
       res
         .status(500)
-        .json({ message: "Internal server error... try again later" });
+        .json({ message: "Internal server error... try again later." });
     }
   }
 }
