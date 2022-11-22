@@ -20,7 +20,6 @@ const createSendToken = (user, statusCode, res) => {
 
   // in production, send cookie only on https, not http
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-  // res.cookie("jwt", token, cookieOptions);
   user.password = undefined;
   res.setHeader("Set-Cookie", serialize("jwt", token, cookieOptions));
   res.status(statusCode).json({
@@ -50,7 +49,6 @@ export default async function handler(req, res) {
     }
     try {
       const user = await User.findOne({ email }).select("+password");
-      const users = await User.find();
       if (!user || !(await user.correctPassword(password, user.password))) {
         res
           .status(401)
