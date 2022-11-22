@@ -2,6 +2,7 @@ import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/userModel";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
+import sendBadRequest from "../../../lib/badRequestError";
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -34,9 +35,7 @@ const createSendToken = (user, statusCode, res) => {
 export default async function handler(req, res) {
   const { method } = req;
   if (method !== "POST") {
-    res.status(400).json({
-      message: `Can't manage ${method} requests on this API endpoint`,
-    });
+    sendBadRequest(res);
     console.error(`${method} can't be managed`);
     return;
   } else {
