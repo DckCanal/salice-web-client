@@ -34,9 +34,6 @@ const createSendToken = (user, statusCode, res) => {
 
 export default async function handler(req, res) {
   const { method } = req;
-  // console.log("Body: ", JSON.stringify(req.body));
-  // console.log("Cookies: ", JSON.stringify(req.cookies));
-
   if (method !== "POST") {
     res.status(400).json({
       message: `Can't manage ${method} requests on this API endpoint`,
@@ -54,7 +51,6 @@ export default async function handler(req, res) {
     try {
       const user = await User.findOne({ email }).select("+password");
       const users = await User.find();
-      console.log(user, users);
       if (!user || !(await user.correctPassword(password, user.password))) {
         res
           .status(401)
