@@ -9,12 +9,12 @@ import filterObj from "../../../lib/filterObj";
 export default async function handler(req, res) {
   const { method } = req;
   if (!["GET", "PATCH", "DELETE"].includes(method)) {
-    sendBadRequest(res);
+    sendBadRequest(req, res);
     console.error(`${method} can't be managed`);
     return;
   }
   try {
-    const user = protectAndGetUser(req);
+    const user = await protectAndGetUser(req);
     const { invoiceId } = req.query;
     if (!mongoose.Types.ObjectId.isValid(invoiceId))
       throw new AppError(`Id ${invoiceId} is not a valid id.`, 400);

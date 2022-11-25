@@ -9,7 +9,7 @@ import filterObj from "../../../lib/filterObj";
 export default async function handler(req, res) {
   const { method } = req;
   if (method !== "GET" && method !== "POST") {
-    sendBadRequest(res);
+    sendBadRequest(req, res);
     console.error(`${method} can't be managed`);
     return;
   }
@@ -27,10 +27,10 @@ export default async function handler(req, res) {
       if (patientId) {
         if (!mongoose.Types.ObjectId.isValid(patientId))
           throw new AppError(`Patient id ${patientId} is not a valid id.`, 400);
+        const patient = await Patient.findById(patientId);
+        if (!patient || String(patient.utente) !== String(user._id))
+          throw new AppError(`Patient with id ${patientId} not found.`, 404);
       }
-      const patient = await Patient.findById(patientId);
-      if (!patient || String(patient.utente) !== String(user._id))
-        throw new AppError(`Patient with id ${patientId} not found.`, 404);
 
       if (cashed == "true") {
         filter.dataIncasso = { $ne: null };
@@ -78,6 +78,11 @@ export default async function handler(req, res) {
         .sort(filteredSortParams.join(" "))
         .skip(skip)
         .limit(limit);
+      if (invoices == undefined)
+        throw new AppError(
+          `There was an error retrieving invoices... Please try again later.`,
+          500
+        );
       res.status(200).json({
         status: "success",
         results: invoices.length,
@@ -141,6 +146,12 @@ export default async function handler(req, res) {
       }
 
       const invoice = await new Invoice(filteredBody).save();
+      if (!invoice)
+        throw new AppError(
+          `There was an error creating new invoice... Try again later.`,
+          500
+        );
+
       await Patient.findByIdAndUpdate(filteredBody.paziente, {
         ultimaModifica: new Date(filteredBody.dataEmissione),
       });
