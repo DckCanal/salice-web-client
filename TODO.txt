@@ -46,3 +46,5 @@ Load default years: current and previous.
 Ask for other years to load.
 
 Filters for only d invoices
+
+FIX update patient bug: error thrown and not updated
