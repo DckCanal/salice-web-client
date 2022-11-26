@@ -5,6 +5,7 @@ import sendBadRequest from "../../../lib/badRequestError";
 import mongoose from "mongoose";
 import AppError from "../../../lib/appError";
 import filterObj from "../../../lib/filterObj";
+import sendError from "../../../lib/errorManager";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -109,6 +110,6 @@ export default async function handler(req, res) {
       });
     }
   } catch (err) {
-    res.status(err.statusCode).json({ message: err.message });
+    sendError(err, res);
   }
 }

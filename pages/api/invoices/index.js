@@ -5,6 +5,7 @@ import sendBadRequest from "../../../lib/badRequestError";
 import mongoose from "mongoose";
 import AppError from "../../../lib/appError";
 import filterObj from "../../../lib/filterObj";
+import sendError from "../../../lib/errorManager";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -90,7 +91,7 @@ export default async function handler(req, res) {
       });
     } else if (method === "POST") {
       const filteredBody = filterObj(
-        req.body,
+        { ...req.body, utente: user._id },
         "utente",
         "paziente",
         "valore",
@@ -126,6 +127,7 @@ export default async function handler(req, res) {
           $gte: `${year}-01-01`,
           $lte: `${year}-12-31`,
         },
+        utente: user._id,
       };
       const invoices = await Invoice.find(filter);
       if (!filteredBody.numeroOrdine) {
@@ -155,6 +157,7 @@ export default async function handler(req, res) {
       await Patient.findByIdAndUpdate(filteredBody.paziente, {
         ultimaModifica: new Date(filteredBody.dataEmissione),
       });
+
       res.status(201).json({
         status: "success",
         data: {
@@ -163,6 +166,6 @@ export default async function handler(req, res) {
       });
     }
   } catch (err) {
-    res.status(err.statusCode).json({ message: err.message });
+    sendError(err, res);
   }
 }
