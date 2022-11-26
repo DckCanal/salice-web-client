@@ -20,7 +20,7 @@ export default function LoginPage() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SignIn loginUrl={loginUrl} />
+      <SignIn loginUrl={localLoginUrl} />
     </div>
   );
 }
