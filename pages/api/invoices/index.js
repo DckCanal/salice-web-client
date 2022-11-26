@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
   try {
     const user = await protectAndGetUser(req);
-    if (method == "GET") {
+    if (method === "GET") {
       let filter = {
         utente: user._id,
       };
