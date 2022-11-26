@@ -87,10 +87,7 @@ export default async function handler(req, res) {
       if (!unactivedPatient)
         throw new AppError(`Patient not found. ID: ${patientId}`, 404);
 
-      res.status(204).json({
-        status: "success",
-        data: null,
-      });
+      res.status(204).end();
     }
   } catch (err) {
     sendError(err, res);

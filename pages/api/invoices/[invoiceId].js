@@ -104,10 +104,7 @@ export default async function handler(req, res) {
       if (!deletedInvoice) {
         throw new AppError(`Invoice not found. ID:${invoiceId}`, 404);
       }
-      res.status(204).json({
-        status: "success",
-        data: null,
-      });
+      res.status(204).end();
     }
   } catch (err) {
     sendError(err, res);
