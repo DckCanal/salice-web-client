@@ -2,6 +2,7 @@ import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/userModel";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
+import { setCookie } from "nookies";
 import sendBadRequest from "../../../lib/badRequestError";
 
 const signToken = (id) => {
@@ -12,17 +13,22 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true, //can't be modified or accessed by the browser
+    sameSite: "lax",
+    path: "/",
   };
 
   // in production, send cookie only on https, not http
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
   user.password = undefined;
-  res.setHeader("Set-Cookie", serialize("jwt", token, cookieOptions));
+
+  //res.setHeader("Set-Cookie", serialize("jwt", String(token), cookieOptions));
+  setCookie({ res }, "jwt", String(token), cookieOptions);
   res.status(statusCode).json({
     status: "success",
     token,
