@@ -111,7 +111,7 @@ export default function NewInvoiceView({
       !isNaN(Date.parse(issueDateTime))
     );
   }
-  const enableSubmit = validateForm();
+  const enableSubmit = true;//validateForm();
 
   return (
     <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>

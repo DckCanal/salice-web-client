@@ -137,7 +137,7 @@ export default function NewPatientView({ addPatient, openNextView }) {
       vPiva()
     );
   }
-  const enableSubmit = validateForm();
+  const enableSubmit = true; //validateForm();
 
   return (
     <Box
