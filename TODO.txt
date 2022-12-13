@@ -49,7 +49,7 @@ Filters for only d invoices
 
 FIX update patient bug: error thrown and not updated
 
-FIX: d behavior duplicating invoices and not saving d invoices with d set to true
+FIX: d behavior duplicating invoices and not saving d invoices with d set to true OK
 
 FIX: deleting patients makes app crash, reading fields of undefined
 
