@@ -98,7 +98,8 @@ export default async function handler(req, res) {
         "testo",
         "dataEmissione",
         "dataIncasso",
-        "numeroOrdine"
+        "numeroOrdine",
+        "d"
       );
 
       if (!mongoose.Types.ObjectId.isValid(filteredBody.paziente))
@@ -119,32 +120,38 @@ export default async function handler(req, res) {
       }
 
       // Finding or checking numeroOrdine
-      const year = filteredBody.dataEmissione
-        ? new Date(filteredBody.dataEmissione).getFullYear()
-        : new Date(Date.now()).getFullYear();
-      const filter = {
-        dataEmissione: {
-          $gte: `${year}-01-01`,
-          $lte: `${year}-12-31`,
-        },
-        utente: user._id,
-      };
-      const invoices = await Invoice.find(filter);
-      if (!filteredBody.numeroOrdine) {
-        // Setting max numeroOrdine
-        const maxNumeroOrdine = invoices
-          .map((i) => i.numeroOrdine)
-          .reduce((maxNO, curNO) => (curNO > maxNO ? curNO : maxNO), 0);
-        filteredBody.numeroOrdine = maxNumeroOrdine + 1;
+      if (filteredBody.d != true) {
+        const year = filteredBody.dataEmissione
+          ? new Date(filteredBody.dataEmissione).getFullYear()
+          : new Date(Date.now()).getFullYear();
+        const filter = {
+          dataEmissione: {
+            $gte: `${year}-01-01`,
+            $lte: `${year}-12-31`,
+          },
+          utente: user._id,
+        };
+        const invoices = await Invoice.find(filter);
+        if (!filteredBody.numeroOrdine) {
+          // Setting max numeroOrdine
+          const maxNumeroOrdine = invoices
+            .map((i) => i.numeroOrdine)
+            .reduce((maxNO, curNO) => (curNO > maxNO ? curNO : maxNO), 0);
+          filteredBody.numeroOrdine = maxNumeroOrdine + 1;
+        } else {
+          // Check if given numeroOrdine already exists
+          if (
+            invoices.find(
+              (inv) => inv.numeroOrdine == filteredBody.numeroOrdine
+            )
+          )
+            throw new AppError(
+              `Duplicated order number ${filteredBody.numeroOrdine}`,
+              400
+            );
+        }
       } else {
-        // Check if given numeroOrdine already exists
-        if (
-          invoices.find((inv) => inv.numeroOrdine == filteredBody.numeroOrdine)
-        )
-          throw new AppError(
-            `Duplicated order number ${filteredBody.numeroOrdine}`,
-            400
-          );
+        filteredBody.numeroOrdine = -1;
       }
 
       const invoice = await new Invoice(filteredBody).save();
@@ -154,9 +161,11 @@ export default async function handler(req, res) {
           500
         );
 
-      await Patient.findByIdAndUpdate(filteredBody.paziente, {
-        ultimaModifica: new Date(filteredBody.dataEmissione),
-      });
+      if (filteredBody.d != true) {
+        await Patient.findByIdAndUpdate(filteredBody.paziente, {
+          ultimaModifica: new Date(filteredBody.dataEmissione),
+        });
+      }
 
       res.status(201).json({
         status: "success",
