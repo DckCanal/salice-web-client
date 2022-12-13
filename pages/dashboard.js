@@ -50,12 +50,11 @@ export default function DashboardPage() {
         const updatedPatient = appData.patients.find(
           (p) => String(p._id) === String(response.newInvoice.paziente)
         );
-        updatedPatient.ultimaModifica = new Date();
+        if (d === false) updatedPatient.ultimaModifica = new Date();
         if (!d) {
           updatedPatient.fatturatoUltimoAnno += Number.parseFloat(
             response.newInvoice.valore
           );
-          
         } else {
           updatedPatient.dfatturatoUltimoAnno += Number.parseFloat(
             response.newInvoice.valore
@@ -156,16 +155,15 @@ export default function DashboardPage() {
       try {
         const res = await deleteInvoice(inv._id);
         if (res == true) {
+          setAppData({
+            ...appData,
+            invoices: [
+              ...appData.invoices.filter(
+                (i) => String(i._id) !== String(inv._id)
+              ),
+            ],
+          });
 
-            setAppData({
-              ...appData,
-              invoices: [
-                ...appData.invoices.filter(
-                  (i) => String(i._id) !== String(inv._id)
-                ),
-              ],
-            });
-          
           return true;
         }
       } catch (err) {
@@ -212,10 +210,10 @@ export default function DashboardPage() {
   const loadData = async () => {
     try {
       const invResponse = await getAllInvoices(false);
-      invResponse.invoices.forEach(i => i.d = false);
+      invResponse.invoices.forEach((i) => (i.d = false));
       // const inv = invResponse.invoices;
       const dinvResponse = await getAllInvoices(true);
-      dinvResponse.invoices.forEach(i => i.d = true);
+      dinvResponse.invoices.forEach((i) => (i.d = true));
       const inv = [...invResponse.invoices, ...dinvResponse.invoices];
       const patResponse = await getAllPatients();
       const pat = patResponse.patients;
@@ -225,12 +223,13 @@ export default function DashboardPage() {
       oneYearAgo.setFullYear(now.getFullYear() - 1);
 
       const patientsWithAmount = pat.map((p) => {
-        let amount = 0, damount = 0;
+        let amount = 0,
+          damount = 0;
         inv
           .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
           .forEach((i) => {
             if (i.paziente === p._id) {
-              if(i.d == false) amount += Number.parseFloat(i.valore);
+              if (i.d == false) amount += Number.parseFloat(i.valore);
               else damount += Number.parseFloat(i.valore);
             }
           });
@@ -275,7 +274,7 @@ export default function DashboardPage() {
           invoices={
             appData.d
               ? appData.invoices
-              : appData.invoices.filter(i => i.d != true)
+              : appData.invoices.filter((i) => i.d != true)
           }
           patients={appData.patients}
           dataManager={dataManager}

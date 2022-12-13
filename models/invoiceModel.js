@@ -19,6 +19,10 @@ const invoiceSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    d: {
+      type: Boolean,
+      default: false,
+    },
     numeroOrdinePerAnno: {
       type: String,
       select: false,

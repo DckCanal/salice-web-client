@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       let filter = {
         utente: user._id,
       };
-      const { year, patient: patientId, cashed, sort } = req.query;
+      const { year, patient: patientId, cashed, sort, d } = req.query;
       const page = req.query.page * 1 || 1;
       const limit = req.query.limit * 1 || 5000;
       const skip = (page - 1) * limit;
@@ -31,9 +31,10 @@ export default async function handler(req, res) {
         const patient = await Patient.findById(patientId);
         if (!patient || String(patient.utente) !== String(user._id))
           throw new AppError(`Patient with id ${patientId} not found.`, 404);
+        filter.paziente = patientId;
       }
 
-      if (cashed == "true") {
+      if (cashed === "true") {
         filter.dataIncasso = { $ne: null };
       } else if (cashed == "false") {
         filter.dataIncasso = { $eq: null };
@@ -42,6 +43,12 @@ export default async function handler(req, res) {
           "Cashed parameter must be either true or false.",
           400
         );
+
+      if (d === "true") {
+        filter.d = { $eq: true };
+      } else if (d === "false") {
+        filter.d = { $ne: true };
+      }
 
       if (year) {
         if (isNaN(year))
@@ -74,7 +81,6 @@ export default async function handler(req, res) {
         if (p === "-numeroOrdine") return "-numeroOrdinePerAnno";
         return p;
       });
-
       const invoices = await Invoice.find(filter)
         .sort(filteredSortParams.join(" "))
         .skip(skip)
