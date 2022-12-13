@@ -64,7 +64,7 @@ export default function NewInvoiceView({
         cashed,
         Number(invoiceAmountTextField),
         invoiceText,
-        issueDateTime,
+        new Date(issueDateTime),
         dark
       );
 
@@ -105,30 +105,14 @@ export default function NewInvoiceView({
 
   // VALIDATOR for STATE values
   function validateForm() {
-    // FIXME: on production build Date.parse(issueDateTime) isNaN
-    console.log("selectedPatientId: ", selectedPatientId);
-    console.log("invoiceAmountTextField: ", invoiceAmountTextField);
-    console.log(
-      "invoiceAmountTextField is a number? ",
-      !isNaN(invoiceAmountTextField)
-    );
-
-    console.log("issueDateTime:", issueDateTime);
-    console.log("Date.parse(issueDateTime): ", Date.parse(issueDateTime));
-    console.log(
-      "!isNaN(Date.parse(issueDateTime)): ",
-      !isNaN(Date.parse(issueDateTime))
-    );
     return (
       selectedPatientId !== "" &&
       !isNaN(invoiceAmountTextField) &&
       Number(invoiceAmountTextField) >= 0 &&
-      !isNaN(Date.parse(issueDateTime))
+      !isNaN(Date.parse(new Date(issueDateTime)))
     );
   }
-  // const enableSubmit = true;
   const enableSubmit = validateForm();
-  //console.log(validateForm());
 
   return (
     <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
@@ -226,7 +210,7 @@ export default function NewInvoiceView({
             <DateTimePicker
               label="Data emissione"
               onChange={(newValue) => {
-                setIssueDateTime(newValue);
+                setIssueDateTime(new Date(newValue));
               }}
               value={issueDateTime}
               renderInput={(params) => (
