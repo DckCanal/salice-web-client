@@ -55,7 +55,7 @@ export default function NewPatientView({ addPatient, openNextView }) {
         civicoResidenza,
         telefono,
         email,
-        dataNascita,
+        new Date(dataNascita),
         paeseNascita,
         provinciaNascita,
         capNascita,
@@ -107,7 +107,7 @@ export default function NewPatientView({ addPatient, openNextView }) {
     return (
       dataNascita === "" ||
       dataNascita == null ||
-      !isNaN(Date.parse(dataNascita))
+      !isNaN(Date.parse(new Date(dataNascita)))
     );
   }
   function vProvinciaNascita() {
@@ -137,7 +137,7 @@ export default function NewPatientView({ addPatient, openNextView }) {
       vPiva()
     );
   }
-  const enableSubmit = true; //validateForm();
+  const enableSubmit = validateForm();
 
   return (
     <Box
