@@ -58,14 +58,15 @@ export default function NewInvoiceView({
     const cashed = data.get("cashed") === "on" ? true : false;
     const dark = data.get("dark") === "on" ? true : false;
 
-    try{const newInvoice = await addInvoice(
-      selectedPatientId,
-      cashed,
-      Number(invoiceAmountTextField),
-      invoiceText,
-      issueDateTime,
-      dark
-    );
+    try {
+      const newInvoice = await addInvoice(
+        selectedPatientId,
+        cashed,
+        Number(invoiceAmountTextField),
+        invoiceText,
+        issueDateTime,
+        dark
+      );
 
       // if it's all OK, go to invoiceList
 
@@ -104,6 +105,20 @@ export default function NewInvoiceView({
 
   // VALIDATOR for STATE values
   function validateForm() {
+    // FIXME: on production build Date.parse(issueDateTime) isNaN
+    console.log("selectedPatientId: ", selectedPatientId);
+    console.log("invoiceAmountTextField: ", invoiceAmountTextField);
+    console.log(
+      "invoiceAmountTextField is a number? ",
+      !isNaN(invoiceAmountTextField)
+    );
+
+    console.log("issueDateTime:", issueDateTime);
+    console.log("Date.parse(issueDateTime): ", Date.parse(issueDateTime));
+    console.log(
+      "!isNaN(Date.parse(issueDateTime)): ",
+      !isNaN(Date.parse(issueDateTime))
+    );
     return (
       selectedPatientId !== "" &&
       !isNaN(invoiceAmountTextField) &&
@@ -111,7 +126,9 @@ export default function NewInvoiceView({
       !isNaN(Date.parse(issueDateTime))
     );
   }
-  const enableSubmit = true;//validateForm();
+  // const enableSubmit = true;
+  const enableSubmit = validateForm();
+  //console.log(validateForm());
 
   return (
     <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
