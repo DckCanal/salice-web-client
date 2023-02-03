@@ -57,7 +57,7 @@ export default function InvoiceDetail({
         <Box>
           <IconButton
             onClick={() => {
-              excelInvoice(invoice, patient);
+              excelInvoice(patient, invoice);
             }}
           >
             <DownloadIcon />
