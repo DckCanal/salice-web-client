@@ -3,6 +3,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
 import {
@@ -19,6 +20,12 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 export default function DashboardPage() {
   const [appData, setAppData] = React.useState({
