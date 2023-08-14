@@ -146,7 +146,7 @@ export default function SignIn({ loginUrl }) {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={waitingLoginAttempt}
+                  disabled={waitingLoginAttempt || inputError || emailError}
                   sx={{ mt: 3, mb: 2 }}
                 >
                   Entra
