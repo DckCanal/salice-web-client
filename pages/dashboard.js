@@ -301,6 +301,7 @@ export default function DashboardPage() {
                   : theme.palette.grey[900],
 
               flexGrow: 1,
+              m: 0,
               display: "flex",
               justifyContent: "center",
               flexDirection: "column",
