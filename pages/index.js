@@ -7,7 +7,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 export default function LoginPage() {
-  const loginUrl = "http://localhost:3000/api/v1/users/login";
+  //const loginUrl = "http://localhost:3000/api/v1/users/login";
   const localLoginUrl = "/api/users/login";
 
   return (
