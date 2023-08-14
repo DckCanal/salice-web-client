@@ -67,6 +67,7 @@ export default function SignIn({ loginUrl }) {
         router.push("/dashboard");
       }
     } catch (err) {
+      setWaitingLoginAttempt(false);
       console.log(err.code, err.response.status);
       const { status } = err.response;
       if (status == 400) {
