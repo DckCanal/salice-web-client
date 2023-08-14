@@ -270,50 +270,52 @@ export default function DashboardPage() {
   };
 
   return (
-    <div>
-      <Head>
-        <title>il Salice - WebApp</title>
-        <meta
-          name="description"
-          content="Web application to manage patients and invoices."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      {dataLoaded ? (
-        <Dashboard
-          invoices={
-            appData.d
-              ? appData.invoices
-              : appData.invoices.filter((i) => i.d != true)
-          }
-          patients={appData.patients}
-          dataManager={dataManager}
-          switchd={switchd}
-          d={appData.d}
-        ></Dashboard>
-      ) : (
-        <Box
-          sx={{
-            // backgroundColor: (theme) =>
-            //   theme.palette.mode === "light"
-            //     ? theme.palette.grey[100]
-            //     : theme.palette.grey[900],
+    <ThemeProvider theme={theme}>
+      <div>
+        <Head>
+          <title>il Salice - WebApp</title>
+          <meta
+            name="description"
+            content="Web application to manage patients and invoices."
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        {dataLoaded ? (
+          <Dashboard
+            invoices={
+              appData.d
+                ? appData.invoices
+                : appData.invoices.filter((i) => i.d != true)
+            }
+            patients={appData.patients}
+            dataManager={dataManager}
+            switchd={switchd}
+            d={appData.d}
+          ></Dashboard>
+        ) : (
+          <Box
+            sx={{
+              // backgroundColor: (theme) =>
+              //   theme.palette.mode === "light"
+              //     ? theme.palette.grey[100]
+              //     : theme.palette.grey[900],
 
-            flexGrow: 1,
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <CircularProgress />
-          <Typography component="h3" variant="h5">
-            Caricamento pazienti e fatture in corso...
-          </Typography>
-        </Box>
-      )}
-    </div>
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "100vh",
+              overflow: "auto",
+            }}
+          >
+            <CircularProgress />
+            <Typography component="h3" variant="h5">
+              Caricamento pazienti e fatture in corso...
+            </Typography>
+          </Box>
+        )}
+      </div>
+    </ThemeProvider>
   );
 }
