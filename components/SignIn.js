@@ -4,8 +4,6 @@ import { Paper } from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -28,6 +26,7 @@ export default function SignIn({ loginUrl }) {
   const clearInputError = () => {
     inputError & setInputError(false);
   };
+
   const validateEmail = (event) => {
     clearInputError();
     const email = event.target.value;
@@ -37,9 +36,7 @@ export default function SignIn({ loginUrl }) {
       setEmailError(false);
     }
   };
-  const handlePasswordTyping = (event) => {
-    clearInputError();
-  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -67,10 +64,7 @@ export default function SignIn({ loginUrl }) {
         setSuccessfulLogin(true);
         setEmailError(false);
         setInputError(false);
-        //router.push("/dashboard");
-        // window.setTimeout(() => {
-        //   location.assign("/dashboard");
-        // }, 1500);
+        router.push("/dashboard");
       }
     } catch (err) {
       console.log(err.code, err.response.status);
@@ -82,7 +76,7 @@ export default function SignIn({ loginUrl }) {
         // UNAUTHORIZED, wrong email or password
         setInputError(true);
       } else if (status == 500) {
-        // INTERNAL SERVER ERROR
+        //TODO: INTERNAL SERVER ERROR
       }
     }
   };
@@ -114,7 +108,7 @@ export default function SignIn({ loginUrl }) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Indirizzo email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -133,10 +127,10 @@ export default function SignIn({ loginUrl }) {
                 error={inputError}
                 onChange={clearInputError}
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               {successfulLogin ? (
                 <Typography
                   component="h1"
@@ -154,7 +148,7 @@ export default function SignIn({ loginUrl }) {
                   disabled={waitingLoginAttempt}
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Entra
                 </Button>
               )}
             </Box>
