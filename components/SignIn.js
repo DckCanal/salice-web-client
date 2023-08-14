@@ -23,6 +23,7 @@ export default function SignIn({ loginUrl }) {
   const [inputError, setInputError] = React.useState(false);
   const [emailError, setEmailError] = React.useState(false);
   const [waitingLoginAttempt, setWaitingLoginAttempt] = React.useState(false);
+  const [successfulLogin, setSuccessfulLogin] = React.useState(false);
   const router = useRouter();
   const clearInputError = () => {
     inputError & setInputError(false);
@@ -63,6 +64,7 @@ export default function SignIn({ loginUrl }) {
       });
       setWaitingLoginAttempt(false);
       if (res.data.status === "success") {
+        setSuccessfulLogin(true);
         setEmailError(false);
         setInputError(false);
         router.push("/dashboard");
@@ -99,7 +101,7 @@ export default function SignIn({ loginUrl }) {
             }}
           >
             <Typography component="h1" variant="h5">
-              Sign in
+              Accedi
             </Typography>
             <Box
               component="form"
@@ -135,15 +137,21 @@ export default function SignIn({ loginUrl }) {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={waitingLoginAttempt}
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
+              {successfulLogin ? (
+                <Typography component="h1" variant="h5" color="secondary">
+                  Benvenuto!
+                </Typography>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  disabled={waitingLoginAttempt}
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+              )}
             </Box>
           </Box>
         </Paper>
