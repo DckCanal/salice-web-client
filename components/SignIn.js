@@ -22,6 +22,7 @@ const theme = createTheme({
 export default function SignIn({ loginUrl }) {
   const [inputError, setInputError] = React.useState(false);
   const [emailError, setEmailError] = React.useState(false);
+  const [waitingLoginAttempt, setWaitingLoginAttempt] = React.useState(false);
   const router = useRouter();
   const clearInputError = () => {
     inputError & setInputError(false);
@@ -50,6 +51,7 @@ export default function SignIn({ loginUrl }) {
     if (!validator.isEmail(email)) return;
 
     try {
+      setWaitingLoginAttempt(true);
       const res = await axios({
         method: "POST",
         url: loginUrl,
@@ -59,6 +61,7 @@ export default function SignIn({ loginUrl }) {
           password,
         },
       });
+      setWaitingLoginAttempt(false);
       if (res.data.status === "success") {
         setEmailError(false);
         setInputError(false);
@@ -136,6 +139,7 @@ export default function SignIn({ loginUrl }) {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={waitingLoginAttempt}
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
