@@ -1,5 +1,8 @@
 import Head from "next/head";
 import React from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
 import {
@@ -282,7 +285,25 @@ export default function DashboardPage() {
           d={appData.d}
         ></Dashboard>
       ) : (
-        <p>Loading...</p>
+        <Box
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100vh",
+            overflow: "auto",
+          }}
+        >
+          <CircularProgress />
+          <Typography component="h3" variant="h5">
+            Caricamento pazienti e fatture in corso...
+          </Typography>
+        </Box>
       )}
     </div>
   );
