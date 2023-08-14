@@ -1,6 +1,6 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import { Paper } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -22,6 +22,7 @@ const theme = createTheme({
 export default function SignIn({ loginUrl }) {
   const [inputError, setInputError] = React.useState(false);
   const [emailError, setEmailError] = React.useState(false);
+  const router = useRouter();
   const clearInputError = () => {
     inputError & setInputError(false);
   };
@@ -61,9 +62,10 @@ export default function SignIn({ loginUrl }) {
       if (res.data.status === "success") {
         setEmailError(false);
         setInputError(false);
-        window.setTimeout(() => {
-          location.assign("/dashboard");
-        }, 1500);
+        router.push("/dashboard");
+        // window.setTimeout(() => {
+        //   location.assign("/dashboard");
+        // }, 1500);
       }
     } catch (err) {
       console.log(err.code, err.response.status);
