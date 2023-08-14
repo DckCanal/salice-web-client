@@ -67,7 +67,7 @@ export default function SignIn({ loginUrl }) {
         setSuccessfulLogin(true);
         setEmailError(false);
         setInputError(false);
-        router.push("/dashboard");
+        //router.push("/dashboard");
         // window.setTimeout(() => {
         //   location.assign("/dashboard");
         // }, 1500);
@@ -138,7 +138,12 @@ export default function SignIn({ loginUrl }) {
                 label="Remember me"
               />
               {successfulLogin ? (
-                <Typography component="h1" variant="h5" color="secondary">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="#4caf50"
+                  align="center"
+                >
                   Benvenuto!
                 </Typography>
               ) : (
