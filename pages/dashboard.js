@@ -1,5 +1,6 @@
 import Head from "next/head";
 import React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -271,6 +272,8 @@ export default function DashboardPage() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
+
       <div>
         <Head>
           <title>il Salice - WebApp</title>
@@ -295,11 +298,6 @@ export default function DashboardPage() {
         ) : (
           <Box
             sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-
               flexGrow: 1,
               m: 0,
               display: "flex",
@@ -311,7 +309,7 @@ export default function DashboardPage() {
             }}
           >
             <CircularProgress />
-            <Typography component="h3" variant="h5">
+            <Typography component="h3" variant="h5" sx={{ mt: 3 }}>
               Caricamento pazienti e fatture in corso...
             </Typography>
           </Box>
