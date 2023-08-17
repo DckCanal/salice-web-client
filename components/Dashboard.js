@@ -86,6 +86,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
     selectedInvoice: undefined,
   });
   const [lightTheme, setLightTheme] = React.useState(false);
+
+  // /dashboard
   const openHome = () => {
     setView({
       page: "Home",
@@ -93,6 +95,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: undefined,
     });
   };
+
+  // /patients/[id]
   const openPatientDetail = (id) => {
     setView({
       page: "PatientDetail",
@@ -100,6 +104,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedInvoice: undefined,
     });
   };
+
+  // /invoices/[id]
   const openInvoiceDetail = (id) => {
     setView({
       page: "InvoiceDetail",
@@ -107,6 +113,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: undefined,
     });
   };
+
+  // /invoices/[id] -> modal Window
   const openUpdateInvoice = (invoice, patient) => {
     setView({
       page: "UpdateInvoice",
@@ -114,6 +122,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: patient,
     });
   };
+
+  // /invoices
   const openInvoiceList = () => {
     setView({
       page: "InvoiceList",
@@ -121,6 +131,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: undefined,
     });
   };
+
+  // /patients
   const openPatientList = () => {
     setView({
       page: "PatientList",
@@ -128,6 +140,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: undefined,
     });
   };
+
+  // /patients/[id] -> modal Window
   const openUpdatePatient = (patient) => {
     setView({
       page: "UpdatePatient",
@@ -135,6 +149,8 @@ function DashboardContent({ invoices, patients, dataManager, switchd, d }) {
       selectedPatient: patient,
     });
   };
+
+  // /newInvoice
   const createNewInvoice = (patientId) => {
     setView({
       ...view,
