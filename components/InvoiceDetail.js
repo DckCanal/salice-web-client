@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -24,6 +25,7 @@ const TextLine = ({ children, width }) => {
   );
 };
 
+// TODO: manage undefined patient while loading
 export default function InvoiceDetail({
   invoice,
   patient,
@@ -104,9 +106,13 @@ export default function InvoiceDetail({
           </Typography>
         </Box>
         <Box sx={{ width: "66%" }}>
-          <Button variant="text" onClick={() => openPatientDetail(patient._id)}>
-            {patient.cognome} {patient.nome}
-          </Button>
+          <Link href={`/patients/${patient._id}`} passHref>
+            {" "}
+            <Button variant="text">
+              {/*onClick={() => openPatientDetail(patient._id)}>*/}
+              {patient.cognome} {patient.nome}
+            </Button>
+          </Link>
           <Divider />
           {patient.codiceFiscale && (
             <TextLine>{patient.codiceFiscale}</TextLine>

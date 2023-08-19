@@ -1,4 +1,6 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Title from "./Title";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,8 +11,9 @@ export default function LastInvoices({
   invoices,
   patients,
   openPatientDetail,
-  d
+  d,
 }) {
+  const router = useRouter();
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
@@ -39,7 +42,11 @@ export default function LastInvoices({
     });
     return {
       id: i,
-      value: `${lastInvoiceFound || 0}€ (${d ? p.fatturatoUltimoAnno+p.dfatturatoUltimoAnno : p.fatturatoUltimoAnno || 0}€)`,
+      value: `${lastInvoiceFound || 0}€ (${
+        d
+          ? p.fatturatoUltimoAnno + p.dfatturatoUltimoAnno
+          : p.fatturatoUltimoAnno || 0
+      }€)`,
       p,
       name: `${p.cognome.toUpperCase()} ${p.nome}`,
     };
@@ -49,17 +56,19 @@ export default function LastInvoices({
       field: "name",
       headerName: "Paziente",
       renderCell: (params) => (
-        <Button
-          variant="text"
-          size="small"
-          onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
-            openPatientDetail(params.row.p._id);
-          }}
-        >
-          {`${params.row.p.cognome} ${params.row.p.nome}`}
-        </Button>
+        <Link href={`/patients/${params.row.p._id}`} passHref>
+          <Button
+            variant="text"
+            size="small"
+            // onClick={(ev) => {
+            //   ev.preventDefault();
+            //   ev.stopPropagation();
+            //   openPatientDetail(params.row.p._id);
+            // }}
+          >
+            {`${params.row.p.cognome} ${params.row.p.nome}`}
+          </Button>
+        </Link>
       ),
       flex: 1,
     },
@@ -110,9 +119,10 @@ export default function LastInvoices({
         disableExtendRowFullWidth={false}
         disableSelectionOnClick={true}
         hideFooter={true}
-        // onRowClick={(params) => {
-        //   openPatientDetail(params.row.p._id);
-        // }}
+        onRowClick={(params) => {
+          //   openPatientDetail(params.row.p._id);
+          router.push(`/patients/${params.row.p._id}`);
+        }}
       />
     </React.Fragment>
   );

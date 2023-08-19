@@ -54,3 +54,14 @@ FIX: d behavior duplicating invoices and not saving d invoices with d set to tru
 FIX: deleting patients makes app crash, reading fields of undefined
 
 TODO: users functionalities
+
+
+useSWR inside each page to fetch data from server or use cached. OK
+
+
+Context:
+ - d
+ - year from invoices page
+
+Links to fix: OK
+Patient List to patient detail OK

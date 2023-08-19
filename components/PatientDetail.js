@@ -1,4 +1,6 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -27,20 +29,23 @@ export default function PatientDetail({
   openUpdatePatient,
   openHome,
 }) {
-  // invoices: is a subset of appData.invoices, containing only patient's ones.
+  const router = useRouter();
+  // invoices: is a subset of appData.invoices, containing only patient's ones. WRONG!!
   if (patient == undefined || invoices == undefined)
     return <p>Patient not found...</p>;
   const res = patient.indirizzoResidenza;
-  const rows = invoices.map((i) => ({
-    id: i._id,
-    ordinal: i.numeroOrdine,
-    value: i.valore,
-    issueDate: new Date(i.dataEmissione),
-    collectDate: new Date(i.dataIncasso),
-    ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
-      i.numeroOrdine
-    ).padStart(10, "0")}`,
-  }));
+  const rows = invoices
+    .filter((i) => String(i.paziente) === String(patient._id))
+    .map((i) => ({
+      id: i._id,
+      ordinal: i.numeroOrdine,
+      value: i.valore,
+      issueDate: new Date(i.dataEmissione),
+      collectDate: new Date(i.dataIncasso),
+      ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
+        i.numeroOrdine
+      ).padStart(10, "0")}`,
+    }));
   const columns = [
     {
       field: "id",
@@ -148,13 +153,15 @@ export default function PatientDetail({
             {patient.cognome.toUpperCase()} {patient.nome}
           </Typography>
           <Box>
-            <IconButton
-              onClick={() => {
-                createNewInvoice(patient._id);
-              }}
-            >
-              <PostAddIcon />
-            </IconButton>
+            <Link href={`/newInvoice/${patient._id}`} passHref>
+              <IconButton
+              // onClick={() => {
+              //   createNewInvoice(patient._id);
+              // }}
+              >
+                <PostAddIcon />
+              </IconButton>
+            </Link>
             <IconButton
               onClick={(ev) => {
                 ev.preventDefault();
@@ -288,7 +295,8 @@ export default function PatientDetail({
           }}
           checkboxSelection={true}
           onRowClick={(params) => {
-            openInvoiceDetail(params.row.id);
+            // openInvoiceDetail(params.row.id);
+            router.push(`/invoices/${params.row.id}`);
           }}
         />
       </Paper>

@@ -10,7 +10,7 @@ export default function Home({
   patients,
   invoices,
   openPatientDetail,
-  d
+  d,
 }) {
   const now = new Date();
   const currentMonthlyIncome = () =>

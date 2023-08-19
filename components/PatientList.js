@@ -1,4 +1,6 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -44,6 +46,7 @@ export default function PatientList({
   openUpdatePatient,
   deletePatient,
 }) {
+  const router = useRouter();
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
 
@@ -53,11 +56,13 @@ export default function PatientList({
       flex: 1,
       //sortComparator: (a, b) => a.localeCompare(b),
       renderCell: (params) => (
-        <Button
-          variant="text"
-          size="small"
-          onClick={() => openPatientDetail(params.row.id)}
-        >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
+        <Link href={`/patients/${params.row.id}`} passHref>
+          <Button
+            variant="text"
+            size="small"
+            //onClick={() => openPatientDetail(params.row.id)}
+          >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
+        </Link>
       ),
     },
     {
@@ -169,7 +174,7 @@ export default function PatientList({
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Pazienti
       </Typography>
-      <Box sx={{height: "90%"}}>
+      <Box sx={{ height: "90%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -178,6 +183,7 @@ export default function PatientList({
           components={{
             Toolbar: ListTableToolbar,
           }}
+          onRowClick={(params) => router.push(`/patients/${params.row.id}`)}
         />
       </Box>
     </Paper>
