@@ -1,6 +1,5 @@
 import * as React from "react";
-import useSWR from "swr";
-import axios from "axios";
+import { useRouter } from "next/router";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -14,11 +13,10 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ListItems from "./listItems";
-import SearchField from "./SearchField";
 import DarkThemeToggler from "./DarkThemeToggler";
-
-const fetcher = (url) =>
-  axios.get(url, { withCredentials: true }).then((res) => res.data);
+import { useUser } from "../lib/hooks";
+import SearchField from "./SearchField";
+import { usePatients } from "../lib/hooks";
 
 const drawerWidth = 240;
 
@@ -74,12 +72,14 @@ const darkTheme = createTheme({
 });
 
 export default function Layout({ children }) {
-  // const { patients, patientsError } = useSWR("/api/patients", fetcher);
-  // const { invoices, invoicesError } = useSWR("/api/invoices", fetcher);
   const [lightTheme, setLightTheme] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [d, setD] = React.useState(false);
-  const [view, setView] = React.useState("Home");
+  const { user, error, isLoading } = useUser();
+  const router = useRouter();
+  const { patients } = usePatients();
+
+  console.log(patients, patients === undefined);
 
   const switchd = () => setD((d) => !d);
 
@@ -88,28 +88,6 @@ export default function Layout({ children }) {
   };
   const toggleLightTheme = () => {
     setLightTheme(!lightTheme);
-  };
-
-  const getListItemKey = (view) => {
-    if (view.page === "Home") return 1;
-    if (view.page === "InvoiceList") return 2;
-    if (view.page === "PatientList") return 3;
-    if (view.page === "Graph") return 4;
-    if (view.page === "NewInvoice") return 5;
-    if (view.page === "NewPatient") return 6;
-    if (view.page === "PatientDetail") return 7;
-    if (view.page === "InvoiceDetail") return 8;
-  };
-  const listItemClickHandler = (viewPage) => {
-    return function (event) {
-      event.preventDefault();
-      setView({
-        ...view,
-        page: viewPage,
-        selectedInvoice: undefined,
-        selectedPatient: undefined,
-      });
-    };
   };
 
   return (
@@ -122,18 +100,20 @@ export default function Layout({ children }) {
               pr: "24px", // keep right padding when drawer closed
             }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
+            {!error && (
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <Typography
               component="h1"
               variant="h6"
@@ -143,42 +123,47 @@ export default function Layout({ children }) {
             >
               il Salice
             </Typography>
-            {/* TODO: INTRODURRE BARRA DI RICERCA!! */}
-            {/* <SearchField
-              optionList={patients.map((p) => ({
+            {/* TODO: INTRODURRE NUOVAMENTE BARRA DI RICERCA!! */}
+            <SearchField
+              optionList={patients?.map((p) => ({
                 label: `${p.nome} ${p.cognome}`,
                 _id: p._id,
               }))}
-              openPatientDetail={openPatientDetail}
-            /> */}
+              openPatientDetail={(id) => {
+                router.push(`/patients/${id}`);
+              }}
+              disabled={patients === undefined}
+            />
+            {!error && (
+              <IconButton onClick={() => switchd()}>
+                <MenuIcon />
+                {d ? "true" : "false"}
+              </IconButton>
+            )}
+            {!error && <p>{user?.fullName}</p>}
             <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
-            <IconButton onClick={() => switchd()}>
-              <MenuIcon />
-              {d ? "true" : "false"}
-            </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <ListItems
-              sel={getListItemKey(view)}
-              clickHandler={listItemClickHandler}
-            />
-          </List>
-        </Drawer>
+        {!error && (
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              <ListItems />
+            </List>
+          </Drawer>
+        )}
         <Box
           component="main"
           sx={{

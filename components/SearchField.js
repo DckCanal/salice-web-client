@@ -1,7 +1,11 @@
 import { TextField, Autocomplete, InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
-export default function SearchField({ optionList, openPatientDetail }) {
+export default function SearchField({
+  optionList,
+  openPatientDetail,
+  disabled = false,
+}) {
   return (
     <Autocomplete
       disablePortal
@@ -18,8 +22,14 @@ export default function SearchField({ optionList, openPatientDetail }) {
         return;
       }}
       renderInput={(params) => (
-        <TextField variant="filled" label="Paziente" autoFocus={true} {...params} />
+        <TextField
+          variant="filled"
+          label="Paziente"
+          autoFocus={true}
+          {...params}
+        />
       )}
+      disabled={disabled}
     />
   );
 }

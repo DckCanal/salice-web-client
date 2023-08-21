@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
-export default function ListItems({ sel, clickHandler }) {
+export default function ListItems() {
   const router = useRouter();
   const pathname = router.pathname;
   return (

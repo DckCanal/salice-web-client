@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { usePatients, useInvoices } from "../lib/hooks";
+import { useUser } from "../lib/hooks";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
 import {
@@ -30,6 +30,7 @@ const theme = createTheme({
 });
 
 export default function DashboardPage() {
+  //const { user, error, isLoading } = useUser();
   const [appData, setAppData] = React.useState({
     invoices: undefined,
     patients: undefined,

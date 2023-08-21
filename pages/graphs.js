@@ -1,6 +1,8 @@
 import Layout from "../components/layout";
+import { useUser } from "../lib/hooks";
 
 export default function Graphs() {
+  const { user, error, isLoading } = useUser();
   return <h4>Work in progress...</h4>;
 }
 
