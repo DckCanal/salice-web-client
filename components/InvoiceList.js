@@ -31,8 +31,6 @@ export default function InvoiceList({
   invoices,
   patients,
   deleteInvoice,
-  openInvoiceDetail,
-  openPatientDetail,
   openUpdateInvoice,
 }) {
   const [yearsIndex, setYearsIndex] = React.useState([0]);
@@ -89,15 +87,7 @@ export default function InvoiceList({
       flex: 1,
       renderCell: (params) => (
         <Link href={`/patients/${params.row.patient._id}`} passHref>
-          <Button
-            variant="text"
-            size="small"
-            // onClick={(ev) => {
-            //   ev.preventDefault();
-            //   ev.stopPropagation();
-            //   openPatientDetail(params.row.patient._id);
-            // }}
-          >
+          <Button variant="text" size="small">
             {`${params.row.patient.cognome} ${params.row.patient.nome}`}
           </Button>
         </Link>
@@ -195,7 +185,6 @@ export default function InvoiceList({
               Toolbar: ListTableToolbar,
             }}
             checkboxSelection={true}
-            //onRowClick={(params) => openInvoiceDetail(params.row.invoice._id)}
             onRowClick={(params) =>
               router.push(`/invoices/${params.row.invoice._id}`)
             }

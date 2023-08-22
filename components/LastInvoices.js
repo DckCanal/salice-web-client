@@ -7,12 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { italianShortDate } from "../lib/dateUtils";
 
-export default function LastInvoices({
-  invoices,
-  patients,
-  openPatientDetail,
-  d,
-}) {
+export default function LastInvoices({ invoices, patients, d }) {
   const router = useRouter();
   const now = new Date();
   const oneYearAgo = new Date();
@@ -57,15 +52,7 @@ export default function LastInvoices({
       headerName: "Paziente",
       renderCell: (params) => (
         <Link href={`/patients/${params.row.p._id}`} passHref>
-          <Button
-            variant="text"
-            size="small"
-            // onClick={(ev) => {
-            //   ev.preventDefault();
-            //   ev.stopPropagation();
-            //   openPatientDetail(params.row.p._id);
-            // }}
-          >
+          <Button variant="text" size="small">
             {`${params.row.p.cognome} ${params.row.p.nome}`}
           </Button>
         </Link>
@@ -120,7 +107,6 @@ export default function LastInvoices({
         disableSelectionOnClick={true}
         hideFooter={true}
         onRowClick={(params) => {
-          //   openPatientDetail(params.row.p._id);
           router.push(`/patients/${params.row.p._id}`);
         }}
       />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -29,11 +30,10 @@ const TextLine = ({ children, width }) => {
 export default function InvoiceDetail({
   invoice,
   patient,
-  openPatientDetail,
   openUpdateInvoice,
   deleteInvoice,
-  openHome,
 }) {
+  const router = useRouter();
   if (invoice == undefined || patient == undefined)
     return <p>Invoice not found...</p>;
   const date = new Date(invoice.dataEmissione);
@@ -77,7 +77,7 @@ export default function InvoiceDetail({
               ev.stopPropagation();
               try {
                 const res = await deleteInvoice(invoice);
-                if (res) openHome();
+                if (res) router.push("/dashboard");
               } catch (err) {
                 console.error(err);
               }
@@ -109,7 +109,6 @@ export default function InvoiceDetail({
           <Link href={`/patients/${patient._id}`} passHref>
             {" "}
             <Button variant="text">
-              {/*onClick={() => openPatientDetail(patient._id)}>*/}
               {patient.cognome} {patient.nome}
             </Button>
           </Link>

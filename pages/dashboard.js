@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useUser } from "../lib/hooks";
+import Layout from "../components/layout";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
 import {
@@ -294,7 +294,6 @@ export default function DashboardPage() {
             }
             patients={appData.patients}
             dataManager={dataManager}
-            switchd={switchd}
             d={appData.d}
           ></Dashboard>
         ) : (
@@ -320,3 +319,7 @@ export default function DashboardPage() {
     </ThemeProvider>
   );
 }
+
+DashboardPage.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};

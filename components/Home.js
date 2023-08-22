@@ -130,12 +130,7 @@ export default function Home({
       {/* Last invoices */}
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column", m: 2 }}>
-          <LastInvoices
-            invoices={invoices}
-            patients={patients}
-            openPatientDetail={openPatientDetail}
-            d={d}
-          />
+          <LastInvoices invoices={invoices} patients={patients} d={d} />
         </Paper>
       </Grid>
     </Grid>

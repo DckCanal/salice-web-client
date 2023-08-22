@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import { Button, Box, Typography } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -30,6 +31,8 @@ export default function NewPatientView({ addPatient, openNextView }) {
   const [capNascita, setCapNascita] = React.useState("");
   const [prezzo, setPrezzo] = React.useState(0);
   const [waiting, setWaiting] = React.useState(false);
+
+  const router = useRouter();
 
   // RegExp for validators
   const capRegEx = /\d{5}/;
@@ -67,7 +70,7 @@ export default function NewPatientView({ addPatient, openNextView }) {
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    router.push("/patients");
   }
 
   // VALIDATORS

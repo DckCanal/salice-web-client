@@ -41,8 +41,6 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
 
 export default function PatientList({
   patients,
-  openPatientDetail,
-  createNewInvoice,
   openUpdatePatient,
   deletePatient,
 }) {
@@ -127,7 +125,8 @@ export default function PatientList({
         <>
           <IconButton
             onClick={() => {
-              createNewInvoice(params.row.id);
+              //createNewInvoice(params.row.id);
+              router.push(`/newInvoice/${params.row.id}`);
             }}
           >
             <PostAddIcon />

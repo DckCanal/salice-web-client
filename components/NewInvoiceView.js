@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import {
   Autocomplete,
   TextField,
@@ -23,7 +24,6 @@ export default function NewInvoiceView({
   patients,
   addInvoice,
   selectedPatient,
-  openNextView,
   d = false,
 }) {
   // --- COMPONENT STATE --- //
@@ -42,6 +42,7 @@ export default function NewInvoiceView({
     selectedPatient === undefined
   );
   const [waiting, setWaiting] = React.useState(false);
+  const router = useRouter();
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -76,7 +77,7 @@ export default function NewInvoiceView({
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    router.push("/invoices/");
 
     // else show error message modal window, reset fields and enable submit
   }

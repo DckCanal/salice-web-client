@@ -21,13 +21,10 @@ import { deleteInvoice } from "../lib/controller";
 export default function PatientDetail({
   patient,
   invoices,
-  openInvoiceDetail,
-  createNewInvoice,
   deletePatient,
   deleteInvoice,
   openUpdateInvoice,
   openUpdatePatient,
-  openHome,
 }) {
   const router = useRouter();
   // invoices: is a subset of appData.invoices, containing only patient's ones. WRONG!!
@@ -185,7 +182,7 @@ export default function PatientDetail({
                 ev.stopPropagation();
                 try {
                   const res = await deletePatient(patient);
-                  if (res) openHome();
+                  if (res) router.push("/dashboard");
                 } catch (err) {
                   console.error(err);
                 }
