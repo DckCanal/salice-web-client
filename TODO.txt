@@ -1,7 +1,7 @@
-Home graph has to be responsive.
+Home graph has to be responsive. OK
 SignIn.js, manage HTTP error code 500
 Added rapid action buttons in 'Ultime fatture' table
-Change browser's back button behavior
+Change browser's back button behavior OK
 Add a "reload data" button
 BUG: when not logged in but opening /dashboard, tries to load patients and throws and exception because it's undefined
 BUG: totale mensile anno precedente sbagliato
@@ -65,8 +65,8 @@ Context:
 
 Links to fix: OK
 Patient List to patient detail OK
-Update Patient page
-Update Invoice page
+Update Patient page OK
+Update Invoice page OK
 
 On delete patient: check if it has invoices, don't show delete button
 
@@ -78,8 +78,11 @@ NewInvoiceView -> openNextView to be set to /invoices/[newInvoiceId]
 
 Same as above on NewPatientView
 
-On ListTable, action button click catched by row 'onClickAction'
+On ListTable, action button click catched by row 'onClickAction': <Link> sovrapposti
 
 Login page doesn't uses light theme
 
 Peek theme from system
+
+Push down alongside the DOM, my hooks (useInvoices...): fetch data where needed,
+and manage loading and error state in an easier way!

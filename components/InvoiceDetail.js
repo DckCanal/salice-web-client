@@ -64,13 +64,15 @@ export default function InvoiceDetail({
           >
             <DownloadIcon />
           </IconButton>
-          <IconButton
-            onClick={() => {
-              openUpdateInvoice(invoice, patient);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/invoices/update/${invoice._id}`} passHref>
+            <IconButton
+            // onClick={() => {
+            //   openUpdateInvoice(invoice, patient);
+            // }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={async (ev) => {
               ev.preventDefault();

@@ -123,14 +123,15 @@ export default function PatientList({
       sortable: false,
       renderCell: (params) => (
         <>
-          <IconButton
-            onClick={() => {
-              //createNewInvoice(params.row.id);
-              router.push(`/newInvoice/${params.row.id}`);
-            }}
-          >
-            <PostAddIcon />
-          </IconButton>
+          <Link href={`/newInvoice/${params.row.id}`} passHref>
+            <IconButton
+            //onClick={() => {
+            //router.push(`/newInvoice/${params.row.id}`);
+            //</Link>}}
+            >
+              <PostAddIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={() => {
               alert("TODO: download documents");
@@ -138,15 +139,17 @@ export default function PatientList({
           >
             <HistoryEduIcon />
           </IconButton>
-          <IconButton
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              openUpdatePatient(params.row.patient);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/patients/update/${params.row.patient._id}`} passHref>
+            <IconButton
+            // onClick={(ev) => {
+            //   ev.preventDefault();
+            //   ev.stopPropagation();
+            //   openUpdatePatient(params.row.patient);
+            // }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();

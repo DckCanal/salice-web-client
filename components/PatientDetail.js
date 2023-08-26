@@ -99,18 +99,20 @@ export default function PatientDetail({
           >
             <DownloadIcon />
           </IconButton>
-          <IconButton
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              openUpdateInvoice(
-                invoices.find((i) => String(i._id) === String(params.row.id)),
-                patient
-              );
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/invoices/update/${params.row.id}`} passHref>
+            <IconButton
+            // onClick={(ev) => {
+            //   ev.preventDefault();
+            //   ev.stopPropagation();
+            //   openUpdateInvoice(
+            //     invoices.find((i) => String(i._id) === String(params.row.id)),
+            //     patient
+            //   );
+            // }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();
@@ -159,15 +161,17 @@ export default function PatientDetail({
                 <PostAddIcon />
               </IconButton>
             </Link>
-            <IconButton
-              onClick={(ev) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-                openUpdatePatient(patient);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+            <Link href={`/patients/update/${patient._id}`} passHref>
+              <IconButton
+              // onClick={(ev) => {
+              //   ev.preventDefault();
+              //   ev.stopPropagation();
+              //   openUpdatePatient(patient);
+              // }}
+              >
+                <EditIcon />
+              </IconButton>
+            </Link>
 
             <IconButton
               onClick={() => {

@@ -139,15 +139,17 @@ export default function InvoiceList({
           >
             <DownloadIcon />
           </IconButton>
-          <IconButton
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              openUpdateInvoice(params.row.invoice, params.row.patient);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/invoices/update/${params.row.invoice._id}`} passHref>
+            <IconButton
+            // onClick={(ev) => {
+            //   ev.preventDefault();
+            //   ev.stopPropagation();
+            //   openUpdateInvoice(params.row.invoice, params.row.patient);
+            // }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();
