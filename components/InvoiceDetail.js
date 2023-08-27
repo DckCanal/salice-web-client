@@ -27,12 +27,7 @@ const TextLine = ({ children, width }) => {
 };
 
 // TODO: manage undefined patient while loading
-export default function InvoiceDetail({
-  invoice,
-  patient,
-  openUpdateInvoice,
-  deleteInvoice,
-}) {
+export default function InvoiceDetail({ invoice, patient, deleteInvoice }) {
   const router = useRouter();
   if (invoice == undefined || patient == undefined)
     return <p>Invoice not found...</p>;

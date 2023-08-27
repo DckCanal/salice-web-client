@@ -86,3 +86,27 @@ Peek theme from system
 
 Push down alongside the DOM, my hooks (useInvoices...): fetch data where needed,
 and manage loading and error state in an easier way!
+Don't pass data manager functions as props, but import from lib folder!
+
+
+
+Reducers and context:
+    - data loading inside useEffect() of dashbaord component, firing 'load' action(s)
+    - data mix:
+        - fatturatoUltimoAnno: extract from patient and use a state for dashboard; use hook 'useMemo'
+        to avoid regenerating the array on each render
+        - patient.ultimaModifica: reload data on mutation??
+
+Maybe reducers should even not be used. Use swr instead.
+
+SWR:
+    - useInvoices, usePatients... on even component
+    - fatturatoUltimoAnno: depends on invoices and patients, so use useMemo to calculate it. If there
+    is no change between page navigation, preceiding values are used.
+    - on useInvoices, don't sort invoices: send correct server request
+    - options:
+        - revalidateOnFocus: not needed, there won't be any change between screen lock and unlock
+
+
+
+Check if useMemo is needed in MUI tables, specially for items sorting.
