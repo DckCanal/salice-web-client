@@ -1,10 +1,17 @@
 import Head from "next/head";
 import React from "react";
+
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 import Layout from "../components/layout";
 import Dashboard from "../components/Dashboard";
 import { sortDate } from "../lib/dateUtils";
@@ -16,12 +23,7 @@ import {
   deleteInvoice,
   deletePatient,
 } from "../lib/controller";
-
 import { getAllInvoices, getAllPatients } from "../lib/controller";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 
 const theme = createTheme({
   palette: {

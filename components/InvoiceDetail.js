@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -8,14 +9,17 @@ import Button from "@mui/material/Button";
 import DoneIcon from "@mui/icons-material/Done";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import IconButton from "@mui/material/IconButton";
-
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
 import Chip from "@mui/material/Chip";
+import { CircularProgress } from "@mui/material";
+
 import { italianMonth } from "../lib/dateUtils";
 import excelInvoice from "../lib/excelLib";
+import { deleteInvoice } from "../lib/controller";
+import { useInvoice, usePatient } from "../lib/hooks";
+import ErrorBox from "./ErrorBox";
 
 const TextLine = ({ children, width }) => {
   const w = width ? width : "auto";
@@ -26,24 +30,68 @@ const TextLine = ({ children, width }) => {
   );
 };
 
+const PaperContainer = ({ children }) => (
+  <Paper
+    sx={{
+      mt: 2,
+      p: 4,
+      maxWidth: "700px",
+      minWidth: "500px",
+      mr: "auto",
+      ml: "auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    }}
+  >
+    {children}
+  </Paper>
+);
+
 // TODO: manage undefined patient while loading
-export default function InvoiceDetail({ invoice, patient, deleteInvoice }) {
+export default function InvoiceDetail({ id }) {
   const router = useRouter();
-  if (invoice == undefined || patient == undefined)
-    return <p>Invoice not found...</p>;
+  const {
+    invoice,
+    isLoading: isLoadingInvoice,
+    error: invoiceError,
+  } = useInvoice(id);
+  const {
+    patient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+  } = usePatient(invoice?.paziente);
+
+  if (isLoadingInvoice || isLoadingPatient)
+    return (
+      <PaperContainer>
+        <CircularProgress sx={{ mx: "auto" }} />
+      </PaperContainer>
+    );
+
+  if (invoiceError)
+    return (
+      <PaperContainer>
+        <ErrorBox
+          title="Errore nel caricamento della fattura"
+          text={invoiceError}
+        />
+      </PaperContainer>
+    );
+  if (patientError)
+    return (
+      <PaperContainer>
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={patientError}
+        />
+      </PaperContainer>
+    );
+
   const date = new Date(invoice.dataEmissione);
   const cashed = invoice.dataIncasso !== undefined;
   return (
-    <Paper
-      sx={{
-        mt: 2,
-        p: 4,
-        maxWidth: "700px",
-        minWidth: "500px",
-        mr: "auto",
-        ml: "auto",
-      }}
-    >
+    <PaperContainer>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Typography variant="h5">
           Fattura N. {invoice.numeroOrdine} del{" "}
@@ -60,11 +108,7 @@ export default function InvoiceDetail({ invoice, patient, deleteInvoice }) {
             <DownloadIcon />
           </IconButton>
           <Link href={`/invoices/update/${invoice._id}`} passHref>
-            <IconButton
-            // onClick={() => {
-            //   openUpdateInvoice(invoice, patient);
-            // }}
-            >
+            <IconButton>
               <EditIcon />
             </IconButton>
           </Link>
@@ -197,6 +241,6 @@ export default function InvoiceDetail({ invoice, patient, deleteInvoice }) {
           />
         )}
       </Box>
-    </Paper>
+    </PaperContainer>
   );
 }

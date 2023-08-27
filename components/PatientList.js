@@ -1,19 +1,25 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
-import ListTableToolbar from "./ListTableToolbar";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+
+import ListTableToolbar from "./ListTableToolbar";
+import ErrorBox from "./ErrorBox";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
+import { deletePatient } from "../lib/controller";
+import { usePatients } from "../lib/hooks";
+import { CircularProgress } from "@mui/material";
 
 /*
   PatientList. Field to show:
@@ -39,12 +45,34 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
 
 // TODO: correct whatsapp link
 
-export default function PatientList({
-  patients,
-  openUpdatePatient,
-  deletePatient,
-}) {
+const Container = ({ children }) => (
+  <Paper sx={{ m: 2, p: 2, height: "90%" }}>{children}</Paper>
+);
+
+export default function PatientList() {
   const router = useRouter();
+  const { patients, isLoading, error } = usePatients();
+  if (isLoading)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            mt: 15,
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+  if (error)
+    return (
+      <Container>
+        <ErrorBox title="Errore nel caricamento dei pazienti" text={error} />
+      </Container>
+    );
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
 
@@ -172,7 +200,7 @@ export default function PatientList({
   }));
 
   return (
-    <Paper sx={{ m: 2, p: 2, height: "90%" }}>
+    <Container>
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Pazienti
       </Typography>
@@ -188,6 +216,6 @@ export default function PatientList({
           onRowClick={(params) => router.push(`/patients/${params.row.id}`)}
         />
       </Box>
-    </Paper>
+    </Container>
   );
 }

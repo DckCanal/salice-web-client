@@ -1,12 +1,5 @@
 import * as React from "react";
 import Home from "./Home";
-import PatientList from "./PatientList";
-import InvoiceList from "./InvoiceList";
-import Graph from "./Graph";
-import NewInvoiceView from "./NewInvoiceView";
-import NewPatientView from "./NewPatientView";
-import PatientDetail from "./PatientDetail";
-import InvoiceDetail from "./InvoiceDetail";
 import UpdateInvoiceView from "./UpdateInvoiceView";
 import UpdatePatientView from "./UpdatePatientView";
 

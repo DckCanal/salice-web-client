@@ -1,21 +1,27 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import ListTableToolbar from "./ListTableToolbar";
-import excelInvoice from "../lib/excelLib";
-import { sortDate, italianShortDate } from "../lib/dateUtils";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
+import { CircularProgress } from "@mui/material";
+
+import ListTableToolbar from "./ListTableToolbar";
+import excelInvoice from "../lib/excelLib";
+import { sortDate, italianShortDate } from "../lib/dateUtils";
+import { useInvoices, usePatients } from "../lib/hooks";
+import { deleteInvoice } from "../lib/controller";
+import ErrorBox from "./ErrorBox";
 
 function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
   return (
@@ -27,14 +33,61 @@ function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
   );
 }
 
-export default function InvoiceList({
-  invoices,
-  patients,
-  deleteInvoice,
-  openUpdateInvoice,
-}) {
-  const [yearsIndex, setYearsIndex] = React.useState([0]);
+const Container = ({ children }) => (
+  <Box sx={{ width: "100%", height: "90%" }}>
+    <Paper sx={{ m: 2, p: 2, height: "95%" }}>{children}</Paper>
+  </Box>
+);
+
+export default function InvoiceList() {
+  const [yearsIndex, setYearsIndex] = React.useState([0]); // TODO: USE CONTEXT!
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+  const {
+    patients,
+    isLoading: isLoadingPatients,
+    error: patientsError,
+  } = usePatients();
   const router = useRouter();
+
+  if (isLoadingInvoices || isLoadingPatients)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            mt: 10,
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+
+  if (invoicesError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento delle fatture"
+          text={invoicesError}
+        />
+      </Container>
+    );
+  if (patientsError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento dei pazienti"
+          text={patientsError}
+        />
+      </Container>
+    );
+
   const years = invoices
     .reduce((years, invoice) => {
       const year = new Date(invoice.dataEmissione).getFullYear();
@@ -165,34 +218,32 @@ export default function InvoiceList({
     },
   ];
   return (
-    <Box sx={{ width: "100%", height: "90%" }}>
-      <Paper sx={{ m: 2, p: 2, height: "95%" }}>
-        <Typography variant="h6" component="div" sx={{ mb: 1 }}>
-          Fatture
-        </Typography>
-        <Box sx={{ mb: 2 }}>
-          <YearButtonGroup
-            years={years}
-            selectedYears={yearsIndex}
-            handleYearsChange={handleYearsChange}
-          />
-        </Box>
-        <Box sx={{ height: "85%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={25}
-            disableSelectionOnClick={true}
-            components={{
-              Toolbar: ListTableToolbar,
-            }}
-            checkboxSelection={true}
-            onRowClick={(params) =>
-              router.push(`/invoices/${params.row.invoice._id}`)
-            }
-          />
-        </Box>
-      </Paper>
-    </Box>
+    <Container>
+      <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+        Fatture
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <YearButtonGroup
+          years={years}
+          selectedYears={yearsIndex}
+          handleYearsChange={handleYearsChange}
+        />
+      </Box>
+      <Box sx={{ height: "85%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={25}
+          disableSelectionOnClick={true}
+          components={{
+            Toolbar: ListTableToolbar,
+          }}
+          checkboxSelection={true}
+          onRowClick={(params) =>
+            router.push(`/invoices/${params.row.invoice._id}`)
+          }
+        />
+      </Box>
+    </Container>
   );
 }

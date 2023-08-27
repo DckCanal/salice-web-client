@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,25 +12,87 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import Chip from "@mui/material/Chip";
+import DownloadIcon from "@mui/icons-material/Download";
+import { DataGrid } from "@mui/x-data-grid";
+import { CircularProgress } from "@mui/material";
+
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
-import DownloadIcon from "@mui/icons-material/Download";
-import { DataGrid } from "@mui/x-data-grid";
-import { deleteInvoice } from "../lib/controller";
+import { deleteInvoice, deletePatient } from "../lib/controller";
+import { useInvoices, usePatient } from "../lib/hooks";
+import ErrorBox from "./ErrorBox";
 
-export default function PatientDetail({
-  patient,
-  invoices,
-  deletePatient,
-  deleteInvoice,
-  openUpdateInvoice,
-  openUpdatePatient,
-}) {
+const Container = ({ children }) => (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <Paper
+      sx={{
+        mt: 2,
+        ml: 2,
+        mr: 2,
+        p: 4,
+        minWidth: "700px",
+        maxWidth: "900px",
+      }}
+    >
+      {children}
+    </Paper>
+  </Box>
+);
+
+export default function PatientDetail({ id }) {
   const router = useRouter();
-  // invoices: is a subset of appData.invoices, containing only patient's ones. WRONG!!
-  if (patient == undefined || invoices == undefined)
-    return <p>Patient not found...</p>;
+  const {
+    patient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+  } = usePatient(id);
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+
+  if (isLoadingInvoices || isLoadingPatient)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+
+  if (patientError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={patientError}
+        />
+      </Container>
+    );
+  if (invoicesError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento delle fatture"
+          text={invoicesError}
+        />
+      </Container>
+    );
+
   const res = patient.indirizzoResidenza;
   const rows = invoices
     .filter((i) => String(i.paziente) === String(patient._id))
