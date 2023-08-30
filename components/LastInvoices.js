@@ -1,33 +1,71 @@
 import * as React from "react";
+import { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Title from "./Title";
+
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
-import { italianShortDate } from "../lib/dateUtils";
+import { CircularProgress } from "@mui/material";
 
-export default function LastInvoices({ invoices, patients, d }) {
+import Title from "./Title";
+import ErrorBox from "./ErrorBox";
+import { italianShortDate } from "../lib/dateUtils";
+import { useInvoices, usePatients } from "../lib/hooks";
+import { DContext } from "./DContext";
+
+export default function LastInvoices() {
   const router = useRouter();
+  const d = useContext(DContext);
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+  const {
+    patients,
+    isLoading: isLoadingPatients,
+    error: patientsError,
+  } = usePatients();
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
 
+  if (patientsError)
+    return (
+      <ErrorBox
+        title="Errore nel caricamento del paziente"
+        text={patientsError}
+      />
+    );
+
+  if (invoicesError)
+    return (
+      <ErrorBox
+        title="Errore nel caricamento delle fatture"
+        text={invoicesError}
+      />
+    );
+
   // GET patients already ordered by server? This is only a slice()
   const lastPatients = patients
-    .sort((p1, p2) => {
-      return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica)
-        ? -1
-        : 1;
-    })
-    .slice(0, 21);
+    ? patients
+        .sort((p1, p2) => {
+          return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica)
+            ? -1
+            : 1;
+        })
+        .slice(0, 21)
+    : [];
 
   // GET invoices already ordered by server? This is only a filter()
   const lastInvoices = invoices
-    .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
-    .sort((i1, i2) =>
-      Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
-    );
+    ? invoices
+        .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
+        .sort((i1, i2) =>
+          Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
+        )
+    : [];
   const rows = lastPatients.map((p, i) => {
     let lastInvoiceFound = undefined;
     lastInvoices.forEach((i) => {
@@ -96,20 +134,24 @@ export default function LastInvoices({ invoices, patients, d }) {
     },
   ];
   return (
-    <React.Fragment>
+    <>
       <Title>Ultime fatture</Title>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        autoHeight={true}
-        density="compact"
-        disableExtendRowFullWidth={false}
-        disableSelectionOnClick={true}
-        hideFooter={true}
-        onRowClick={(params) => {
-          router.push(`/patients/${params.row.p._id}`);
-        }}
-      />
-    </React.Fragment>
+      {isLoadingInvoices || isLoadingPatients ? (
+        <CircularProgress sx={{ mx: "auto", mt: 10 }} />
+      ) : (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          autoHeight={true}
+          density="compact"
+          disableExtendRowFullWidth={false}
+          disableSelectionOnClick={true}
+          hideFooter={true}
+          onRowClick={(params) => {
+            router.push(`/patients/${params.row.p._id}`);
+          }}
+        />
+      )}
+    </>
   );
 }

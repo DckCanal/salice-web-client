@@ -1,11 +1,14 @@
-import { TextField, Autocomplete, InputAdornment } from "@mui/material";
-import { Search } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import { TextField, Autocomplete } from "@mui/material";
+import { usePatients } from "../lib/hooks";
 
-export default function SearchField({
-  optionList,
-  openPatientDetail,
-  disabled = false,
-}) {
+export default function SearchField() {
+  const router = useRouter();
+  const { patients, error, isLoading } = usePatients();
+  const optionList = patients?.map((p) => ({
+    label: `${p.nome} ${p.cognome}`,
+    _id: p._id,
+  }));
   return (
     <Autocomplete
       disablePortal
@@ -16,9 +19,9 @@ export default function SearchField({
       id="patient-list"
       options={optionList}
       sx={{ width: 300 }}
-      onChange={(ev, val) => {
+      onChange={(_ev, val) => {
         if (val == null) return;
-        openPatientDetail(val._id);
+        router.push(`/patients/${val._id}`);
         return;
       }}
       renderInput={(params) => (
@@ -29,7 +32,7 @@ export default function SearchField({
           {...params}
         />
       )}
-      disabled={disabled}
+      disabled={error || isLoading}
     />
   );
 }

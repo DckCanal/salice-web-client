@@ -1,85 +1,109 @@
+import { useContext } from "react";
+
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+
 import IncomePaper from "./IncomePaper";
 import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
-import { italianMonth } from "../lib/dateUtils";
 
-export default function Home({
-  lightTheme,
-  patients,
-  invoices,
-  openPatientDetail,
-  d,
-}) {
+import { italianMonth } from "../lib/dateUtils";
+import { useInvoices, usePatients } from "../lib/hooks";
+import { DContext } from "./DContext";
+
+export default function Home() {
+  const d = useContext(DContext);
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+  const {
+    patients,
+    isLoading: isLoadingPatients,
+    error: patientsError,
+  } = usePatients();
   const now = new Date();
   const currentMonthlyIncome = () =>
-    invoices.reduce((sum, inv) => {
-      const invDate = new Date(inv.dataEmissione);
-      if (
-        invDate.getFullYear() == now.getFullYear() &&
-        invDate.getMonth() == now.getMonth()
-      ) {
-        return sum + Number.parseFloat(inv.valore);
-      }
-      return sum;
-    }, 0);
+    invoices
+      ? invoices.reduce((sum, inv) => {
+          const invDate = new Date(inv.dataEmissione);
+          if (
+            invDate.getFullYear() == now.getFullYear() &&
+            invDate.getMonth() == now.getMonth()
+          ) {
+            return sum + Number.parseFloat(inv.valore);
+          }
+          return sum;
+        }, 0)
+      : 0;
   const currentAnnualIncome = () =>
-    invoices.reduce((sum, inv) => {
-      const invDate = new Date(inv.dataEmissione);
-      if (invDate.getFullYear() == now.getFullYear()) {
-        return sum + Number.parseFloat(inv.valore);
-      }
-      return sum;
-    }, 0);
+    invoices
+      ? invoices.reduce((sum, inv) => {
+          const invDate = new Date(inv.dataEmissione);
+          if (invDate.getFullYear() == now.getFullYear()) {
+            return sum + Number.parseFloat(inv.valore);
+          }
+          return sum;
+        }, 0)
+      : 0;
   const previousMonthlyIncome = () =>
-    invoices.reduce((sum, inv) => {
-      const invDate = new Date(inv.dataEmissione);
-      if (
-        now.getMonth() == 1 &&
-        invDate.getMonth() == 12 &&
-        invDate.getFullYear() == now.getFullYear() - 1
-      ) {
-        return sum + Number.parseFloat(inv.valore);
-      } else if (
-        invDate.getFullYear() == now.getFullYear() &&
-        invDate.getMonth() == now.getMonth() - 1
-      ) {
-        return sum + Number.parseFloat(inv.valore);
-      }
-      return sum;
-    }, 0);
+    invoices
+      ? invoices.reduce((sum, inv) => {
+          const invDate = new Date(inv.dataEmissione);
+          if (
+            now.getMonth() == 1 &&
+            invDate.getMonth() == 12 &&
+            invDate.getFullYear() == now.getFullYear() - 1
+          ) {
+            return sum + Number.parseFloat(inv.valore);
+          } else if (
+            invDate.getFullYear() == now.getFullYear() &&
+            invDate.getMonth() == now.getMonth() - 1
+          ) {
+            return sum + Number.parseFloat(inv.valore);
+          }
+          return sum;
+        }, 0)
+      : 0;
   const previousAnnualIncome = () =>
-    invoices.reduce((sum, inv) => {
-      const invDate = new Date(inv.dataEmissione);
-      if (invDate.getFullYear() == now.getFullYear() - 1) {
-        return sum + Number.parseFloat(inv.valore);
-      }
-      return sum;
-    }, 0);
+    invoices
+      ? invoices.reduce((sum, inv) => {
+          const invDate = new Date(inv.dataEmissione);
+          if (invDate.getFullYear() == now.getFullYear() - 1) {
+            return sum + Number.parseFloat(inv.valore);
+          }
+          return sum;
+        }, 0)
+      : 0;
   const currentIncomeByMonth = invoices
-    .filter(
-      (inv) => new Date(inv.dataEmissione).getFullYear() == now.getFullYear()
-    )
-    .reduce((monthlyIncome, inv) => {
-      const m = new Date(inv.dataEmissione).getMonth();
-      monthlyIncome[m] = monthlyIncome[m]
-        ? monthlyIncome[m] + inv.valore
-        : inv.valore;
-      return monthlyIncome;
-    }, new Array().fill(undefined, 0, 12));
+    ? invoices
+        .filter(
+          (inv) =>
+            new Date(inv.dataEmissione).getFullYear() == now.getFullYear()
+        )
+        .reduce((monthlyIncome, inv) => {
+          const m = new Date(inv.dataEmissione).getMonth();
+          monthlyIncome[m] = monthlyIncome[m]
+            ? monthlyIncome[m] + inv.valore
+            : inv.valore;
+          return monthlyIncome;
+        }, new Array().fill(undefined, 0, 12))
+    : new Array().fill(0, 0, 12);
   const previousIncomeByMonth = invoices
-    .filter(
-      (inv) =>
-        new Date(inv.dataEmissione).getFullYear() == now.getFullYear() - 1
-    )
-    .reduce((monthlyIncome, inv) => {
-      const m = new Date(inv.dataEmissione).getMonth();
-      monthlyIncome[m] = monthlyIncome[m]
-        ? monthlyIncome[m] + inv.valore
-        : inv.valore;
-      return monthlyIncome;
-    }, new Array().fill(undefined, 0, 12));
+    ? invoices
+        .filter(
+          (inv) =>
+            new Date(inv.dataEmissione).getFullYear() == now.getFullYear() - 1
+        )
+        .reduce((monthlyIncome, inv) => {
+          const m = new Date(inv.dataEmissione).getMonth();
+          monthlyIncome[m] = monthlyIncome[m]
+            ? monthlyIncome[m] + inv.valore
+            : inv.valore;
+          return monthlyIncome;
+        }, new Array().fill(undefined, 0, 12))
+    : new Array().fill(0, 0, 12);
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -94,7 +118,6 @@ export default function Home({
           }}
         >
           <Chart
-            lightTheme={lightTheme}
             currentIncome={currentIncomeByMonth}
             previousIncome={previousIncomeByMonth}
             currentLabel={now.getFullYear()}
@@ -130,7 +153,7 @@ export default function Home({
       {/* Last invoices */}
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column", m: 2 }}>
-          <LastInvoices invoices={invoices} patients={patients} d={d} />
+          <LastInvoices />
         </Paper>
       </Grid>
     </Grid>

@@ -1,11 +1,5 @@
-import Head from "next/head";
 import React from "react";
-
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Head from "next/head";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -13,7 +7,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import Layout from "../components/layout";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import { sortDate } from "../lib/dateUtils";
 import {
   newInvoice,
@@ -23,25 +17,12 @@ import {
   deleteInvoice,
   deletePatient,
 } from "../lib/controller";
-import { getAllInvoices, getAllPatients } from "../lib/controller";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
 
 export default function DashboardPage() {
-  //const { user, error, isLoading } = useUser();
   const [appData, setAppData] = React.useState({
     invoices: undefined,
     patients: undefined,
-    d: false,
   });
-  const dataLoaded =
-    appData.invoices == undefined || appData.patients == undefined
-      ? false
-      : true;
 
   const dataManager = {
     addInvoice: async (
@@ -222,103 +203,70 @@ export default function DashboardPage() {
     },
   };
 
-  const loadData = async () => {
-    try {
-      const invResponse = await getAllInvoices(false);
-      invResponse.invoices.forEach((i) => (i.d = false));
-      // const inv = invResponse.invoices;
-      const dinvResponse = await getAllInvoices(true);
-      dinvResponse.invoices.forEach((i) => (i.d = true));
-      const inv = [...invResponse.invoices, ...dinvResponse.invoices];
-      const patResponse = await getAllPatients();
-      const pat = patResponse.patients;
+  // const loadData = async () => {
+  //   try {
+  //     const invResponse = await getAllInvoices(false);
+  //     invResponse.invoices.forEach((i) => (i.d = false));
+  //     // const inv = invResponse.invoices;
+  //     const dinvResponse = await getAllInvoices(true);
+  //     dinvResponse.invoices.forEach((i) => (i.d = true));
+  //     const inv = [...invResponse.invoices, ...dinvResponse.invoices];
+  //     const patResponse = await getAllPatients();
+  //     const pat = patResponse.patients;
 
-      const now = new Date();
-      const oneYearAgo = new Date();
-      oneYearAgo.setFullYear(now.getFullYear() - 1);
+  //     const now = new Date();
+  //     const oneYearAgo = new Date();
+  //     oneYearAgo.setFullYear(now.getFullYear() - 1);
 
-      const patientsWithAmount = pat.map((p) => {
-        let amount = 0,
-          damount = 0;
-        inv
-          .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
-          .forEach((i) => {
-            if (i.paziente === p._id) {
-              if (i.d == false) amount += Number.parseFloat(i.valore);
-              else damount += Number.parseFloat(i.valore);
-            }
-          });
-        return {
-          ...p,
-          fatturatoUltimoAnno: amount,
-          dfatturatoUltimoAnno: damount,
-        };
-      });
-      setAppData({
-        ...appData,
-        invoices: inv,
-        patients: patientsWithAmount,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  if (!dataLoaded) {
-    loadData();
-  }
+  //     const patientsWithAmount = pat.map((p) => {
+  //       let amount = 0,
+  //         damount = 0;
+  //       inv
+  //         .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
+  //         .forEach((i) => {
+  //           if (i.paziente === p._id) {
+  //             if (i.d == false) amount += Number.parseFloat(i.valore);
+  //             else damount += Number.parseFloat(i.valore);
+  //           }
+  //         });
+  //       return {
+  //         ...p,
+  //         fatturatoUltimoAnno: amount,
+  //         dfatturatoUltimoAnno: damount,
+  //       };
+  //     });
+  //     setAppData({
+  //       ...appData,
+  //       invoices: inv,
+  //       patients: patientsWithAmount,
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // if (!dataLoaded) {
+  //   loadData();
+  // }
 
-  const switchd = () => {
-    setAppData({
-      ...appData,
-      d: !appData.d,
-    });
-  };
+  // function switchd() {
+  //   setAppData({
+  //     ...appData,
+  //     d: !appData.d,
+  //   });
+  // }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-
-      <div>
-        <Head>
-          <title>il Salice - WebApp</title>
-          <meta
-            name="description"
-            content="Web application to manage patients and invoices."
-          />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        {dataLoaded ? (
-          <Dashboard
-            invoices={
-              appData.d
-                ? appData.invoices
-                : appData.invoices.filter((i) => i.d != true)
-            }
-            patients={appData.patients}
-            dataManager={dataManager}
-            d={appData.d}
-          ></Dashboard>
-        ) : (
-          <Box
-            sx={{
-              flexGrow: 1,
-              m: 0,
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-              height: "100vh",
-              overflow: "auto",
-            }}
-          >
-            <CircularProgress />
-            <Typography component="h3" variant="h5" sx={{ mt: 3 }}>
-              Caricamento pazienti e fatture in corso...
-            </Typography>
-          </Box>
-        )}
-      </div>
-    </ThemeProvider>
+    <>
+      <Head>
+        <title>il Salice - WebApp</title>
+        <meta
+          name="description"
+          content="Web application to manage patients and invoices."
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Home />
+    </>
   );
 }
 

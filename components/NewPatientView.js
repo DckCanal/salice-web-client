@@ -11,8 +11,9 @@ import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+// IMPORT ADD PATIENT
 
-export default function NewPatientView({ addPatient, openNextView }) {
+export default function NewPatientView() {
   // ---- COMPONENT STATE --- //
   const [name, setName] = React.useState("");
   const [surname, setSurname] = React.useState("");

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useContext } from "react";
 import { useRouter } from "next/router";
 import {
   Autocomplete,
@@ -9,6 +10,7 @@ import {
   Box,
   Paper,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -18,18 +20,26 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 
+import { DContext } from "./DContext";
+import { usePatient, usePatients } from "../lib/hooks";
+
 // TODO: manage response errors
 
-export default function NewInvoiceView({
-  patients,
-  addInvoice,
-  selectedPatient,
-  d = false,
-}) {
-  // --- COMPONENT STATE --- //
-  const initialPatient = selectedPatient
-    ? patients.find((p) => String(p._id) === String(selectedPatient))
-    : undefined;
+export default function NewInvoiceView({ addInvoice, selectedPatient }) {
+  const d = useContext(DContext);
+  const {
+    patients,
+    isLoading: isLoadingPatients,
+    error: patientsError,
+  } = usePatients();
+  const {
+    patient: initialPatient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+  } = usePatient(selectedPatient);
+  // const initialPatient = selectedPatient
+  //   ? patients.find((p) => String(p._id) === String(selectedPatient))
+  //   : undefined;
   const [selectedPatientId, setSelectedPatientId] = React.useState(
     selectedPatient ? selectedPatient : ""
   );
@@ -124,126 +134,139 @@ export default function NewInvoiceView({
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
-          Nuova fattura
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={submit}
-          noValidate
-          sx={{
-            mt: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "left",
-          }}
-        >
-          {initialPatient == undefined ? (
-            <Autocomplete
-              id="patient-id"
-              name="patient-id"
-              isOptionEqualToValue={(option, value) => option._id === value._id}
-              options={patients.map((p) => ({
-                label: `${p.cognome} ${p.nome}`,
-                _id: p._id,
-                price: p.prezzo,
-              }))}
+        {isLoadingPatient || isLoadingPatients ? (
+          <>
+            <Typography component="h1" variant="h5">
+              Caricamento pazienti...
+            </Typography>
+            <CircularProgress sx={{ mx: "auto", mt: 5 }} />
+          </>
+        ) : (
+          <>
+            <Typography component="h1" variant="h5">
+              Nuova fattura
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={submit}
+              noValidate
               sx={{
-                minWidth: 300,
-                mt: 3,
+                mt: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "left",
               }}
-              renderInput={(params) => (
+            >
+              {initialPatient == undefined ? (
+                <Autocomplete
+                  id="patient-id"
+                  name="patient-id"
+                  isOptionEqualToValue={(option, value) =>
+                    option._id === value._id
+                  }
+                  options={patients.map((p) => ({
+                    label: `${p.cognome} ${p.nome}`,
+                    _id: p._id,
+                    price: p.prezzo,
+                  }))}
+                  sx={{
+                    minWidth: 300,
+                    mt: 3,
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      variant="standard"
+                      label="Paziente"
+                      name="pat-id"
+                      error={autocompleteError}
+                      helperText={
+                        autocompleteError ? "Seleziona un paziente" : null
+                      }
+                      {...params}
+                    />
+                  )}
+                  onChange={handlePatientSelectionChange}
+                />
+              ) : (
                 <TextField
                   variant="standard"
-                  label="Paziente"
-                  name="pat-id"
-                  error={autocompleteError}
-                  helperText={
-                    autocompleteError ? "Seleziona un paziente" : null
-                  }
-                  {...params}
+                  disabled
+                  defaultValue={`${initialPatient.cognome} ${initialPatient.nome}`}
                 />
               )}
-              onChange={handlePatientSelectionChange}
-            />
-          ) : (
-            <TextField
-              variant="standard"
-              disabled
-              defaultValue={`${initialPatient.cognome} ${initialPatient.nome}`}
-            />
-          )}
-          <FormControlLabel
-            control={<Checkbox defaultChecked id="cashed" name="cashed" />}
-            label="Incassa ora"
-            sx={{ mt: 3 }}
-          />
-          <TextField
-            label="Valore"
-            id="value"
-            name="value"
-            variant="standard"
-            error={invoiceAmountError}
-            onChange={handleInvoiceValue}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">€</InputAdornment>
-              ),
-            }}
-            sx={{ mt: 3 }}
-            value={invoiceAmountTextField}
-          />
-          <TextField
-            label="Testo"
-            id="text"
-            name="text"
-            variant="standard"
-            defaultValue="Trattamento massoterapico"
-            sx={{
-              minWidth: 300,
-              mt: 3,
-            }}
-          />
-          <LocalizationProvider
-            dateAdapter={AdapterLuxon}
-            adapterLocale={"eu-IT"}
-          >
-            <DateTimePicker
-              label="Data emissione"
-              onChange={(newValue) => {
-                setIssueDateTime(new Date(newValue));
-              }}
-              value={issueDateTime}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
+              <FormControlLabel
+                control={<Checkbox defaultChecked id="cashed" name="cashed" />}
+                label="Incassa ora"
+                sx={{ mt: 3 }}
+              />
+              <TextField
+                label="Valore"
+                id="value"
+                name="value"
+                variant="standard"
+                error={invoiceAmountError}
+                onChange={handleInvoiceValue}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">€</InputAdornment>
+                  ),
+                }}
+                sx={{ mt: 3 }}
+                value={invoiceAmountTextField}
+              />
+              <TextField
+                label="Testo"
+                id="text"
+                name="text"
+                variant="standard"
+                defaultValue="Trattamento massoterapico"
+                sx={{
+                  minWidth: 300,
+                  mt: 3,
+                }}
+              />
+              <LocalizationProvider
+                dateAdapter={AdapterLuxon}
+                adapterLocale={"eu-IT"}
+              >
+                <DateTimePicker
+                  label="Data emissione"
+                  onChange={(newValue) => {
+                    setIssueDateTime(new Date(newValue));
+                  }}
+                  value={issueDateTime}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={{ mt: 3 }}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+
+              {d && (
+                <FormControlLabel
+                  control={<Checkbox id="dark" name="dark" />}
+                  label="d"
                   sx={{ mt: 3 }}
-                  InputLabelProps={{ shrink: true }}
                 />
               )}
-            />
-          </LocalizationProvider>
 
-          {d && (
-            <FormControlLabel
-              control={<Checkbox id="dark" name="dark" />}
-              label="d"
-              sx={{ mt: 3 }}
-            />
-          )}
-
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            sx={{ mt: 3, mb: 3 }}
-            disabled={!enableSubmit}
-            loading={waiting}
-            loadingPosition="start"
-            startIcon={<SaveIcon />}
-          >
-            Inserisci
-          </LoadingButton>
-        </Box>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 3 }}
+                disabled={!enableSubmit}
+                loading={waiting}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
+              >
+                Inserisci
+              </LoadingButton>
+            </Box>
+          </>
+        )}
       </Box>
     </Paper>
   );

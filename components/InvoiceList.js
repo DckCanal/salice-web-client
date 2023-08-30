@@ -178,11 +178,11 @@ export default function InvoiceList() {
       sortable: false,
       renderCell: (params) => (
         <>
-          <Link href={`/invoices/${params.row.invoice._id}`} passHref>
+          {/* <Link href={`/invoices/${params.row.invoice._id}`} passHref>
             <IconButton>
               <VisibilityIcon />
             </IconButton>
-          </Link>
+          </Link> */}
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();

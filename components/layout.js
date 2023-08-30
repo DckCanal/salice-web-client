@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useRouter } from "next/router";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+
+import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
@@ -12,11 +12,12 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+
 import ListItems from "./listItems";
 import DarkThemeToggler from "./DarkThemeToggler";
 import { useUser } from "../lib/hooks";
 import SearchField from "./SearchField";
-import { usePatients } from "../lib/hooks";
+import { DContext } from "./DContext";
 
 const drawerWidth = 240;
 
@@ -64,34 +65,21 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme();
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
 export default function Layout({ children }) {
-  const [lightTheme, setLightTheme] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [d, setD] = React.useState(false);
   const { user, error, isLoading } = useUser();
-  const router = useRouter();
-  const { patients } = usePatients();
 
-  console.log(patients, patients === undefined);
-
-  const switchd = () => setD((d) => !d);
+  function switchd() {
+    setD(!d);
+  }
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const toggleLightTheme = () => {
-    setLightTheme(!lightTheme);
-  };
 
   return (
-    <ThemeProvider theme={lightTheme ? mdTheme : darkTheme}>
+    <DContext.Provider value={d}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -123,17 +111,7 @@ export default function Layout({ children }) {
             >
               il Salice
             </Typography>
-            {/* TODO: INTRODURRE NUOVAMENTE BARRA DI RICERCA!! */}
-            <SearchField
-              optionList={patients?.map((p) => ({
-                label: `${p.nome} ${p.cognome}`,
-                _id: p._id,
-              }))}
-              openPatientDetail={(id) => {
-                router.push(`/patients/${id}`);
-              }}
-              disabled={patients === undefined}
-            />
+            <SearchField />
             {!error && (
               <IconButton onClick={() => switchd()}>
                 <MenuIcon />
@@ -141,7 +119,7 @@ export default function Layout({ children }) {
               </IconButton>
             )}
             {!error && <p>{user?.fullName}</p>}
-            <DarkThemeToggler onClick={toggleLightTheme} isLight={lightTheme} />
+            <DarkThemeToggler />
           </Toolbar>
         </AppBar>
         {!error && (
@@ -181,6 +159,6 @@ export default function Layout({ children }) {
           {children}
         </Box>
       </Box>
-    </ThemeProvider>
+    </DContext.Provider>
   );
 }

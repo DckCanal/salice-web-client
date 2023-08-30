@@ -7,45 +7,67 @@ import {
   Box,
   Paper,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { DateTime } from "luxon";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
+import { useInvoice, usePatient } from "../lib/hooks";
+import ErrorBox from "./ErrorBox";
 // TODO: manage response errors
 
-export default function UpdateInvoiceView({
-  invoice,
-  patient,
-  openNextView,
-  updateInvoice,
-  deleteInvoice,
-  d = false,
-}) {
+const Container = ({ children }) => (
+  <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {children}
+    </Box>
+  </Paper>
+);
+
+export default function UpdateInvoiceView({ invoiceId }) {
   // --- COMPONENT STATE --- //
+  const {
+    invoice,
+    isLoading: isLoadingInvoice,
+    error: invoiceError,
+    mutate: mutateInvoice,
+  } = useInvoice(invoiceId);
+
+  const {
+    patient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+    mutate: mutatePatient,
+  } = usePatient(invoice?.paziente);
+
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
-    invoice.valore ? invoice.valore : 0
+    invoice?.valore ? invoice.valore : 0
   );
-  const [cashed, setCashed] = React.useState(invoice.dataIncasso != undefined);
+  const [cashed, setCashed] = React.useState(invoice?.dataIncasso != undefined);
   const [cashedDateTime, setCashedDateTime] = React.useState(
-    invoice.dataIncasso ? new Date(invoice.dataIncasso) : undefined
+    invoice?.dataIncasso ? new Date(invoice.dataIncasso) : undefined
   );
   const [issueDateTime, setIssueDateTime] = React.useState(
-    invoice.dataEmissione ? new Date(invoice.dataEmissione) : undefined
+    invoice?.dataEmissione ? new Date(invoice.dataEmissione) : undefined
   );
   const [invoiceAmountError, setInvoiceAmountError] = React.useState(false);
   const [text, setText] = React.useState(
-    invoice.testo ? invoice.testo : undefined
+    invoice?.testo ? invoice.testo : undefined
   );
   const [textError, setTextError] = React.useState(
-    invoice.testo === "" || invoice.testo == undefined
+    invoice?.testo === "" || invoice.testo == undefined
   );
-  const [dark, setDark] = React.useState(invoice.d ? true : false);
+  //const [dark, setDark] = React.useState(invoice?.d ? true : false);
 
   const [waiting, setWaiting] = React.useState(false);
 
@@ -136,18 +158,34 @@ export default function UpdateInvoiceView({
   }
   const enableSubmit = validateForm();
 
+  if (invoiceError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento della fattura"
+          text={invoiceError}
+        />
+      </Container>
+    );
+  if (patientError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={patientError}
+        />
+      </Container>
+    );
+
   return (
-    <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Modifica
-        </Typography>
+    <Container>
+      <Typography component="h1" variant="h5">
+        Modifica
+      </Typography>
+
+      {isLoadingInvoice || isLoadingPatient ? (
+        <CircularProgress sx={{ mx: "auto", mt: 15 }} />
+      ) : (
         <Box
           component="form"
           onSubmit={submit}
@@ -160,7 +198,7 @@ export default function UpdateInvoiceView({
           }}
         >
           <Typography variant="h6">
-            {patient.cognome} {patient.nome}
+            {patient?.cognome} {patient?.nome}
           </Typography>
           <FormControlLabel
             control={
@@ -295,7 +333,7 @@ export default function UpdateInvoiceView({
             </LoadingButton>
           </Box>
         </Box>
-      </Box>
-    </Paper>
+      )}
+    </Container>
   );
 }

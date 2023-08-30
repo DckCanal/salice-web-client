@@ -14,7 +14,6 @@ import Title from "./Title";
 import { getShortMonths } from "../lib/dateUtils";
 
 export default function Chart({
-  lightTheme,
   currentIncome,
   previousIncome,
   currentLabel,
@@ -66,7 +65,9 @@ export default function Chart({
             </Label>
           </YAxis>
           <Tooltip
-            contentStyle={{ backgroundColor: lightTheme ? "#ddd" : "#555" }}
+            contentStyle={{
+              backgroundColor: theme.palette.mode === "light" ? "#ddd" : "#555",
+            }}
           />
           <Legend />
           <Line

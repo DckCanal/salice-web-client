@@ -1,10 +1,18 @@
+import { useContext } from "react";
+
+import { useTheme } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import IconButton from "@mui/material/IconButton";
-export default function DarkThemeToggler({ onClick, isLight }) {
+
+import { SwitchThemeContext } from "./ThemeContext";
+
+export default function DarkThemeToggler() {
+  const toggleLightTheme = useContext(SwitchThemeContext);
+  const theme = useTheme();
   return (
-    <IconButton sx={{ ml: 5 }} onClick={onClick}>
-      {isLight ? <NightlightIcon /> : <LightModeIcon />}
+    <IconButton sx={{ ml: 5 }} onClick={toggleLightTheme}>
+      {theme.palette.mode === "light" ? <NightlightIcon /> : <LightModeIcon />}
     </IconButton>
   );
 }
