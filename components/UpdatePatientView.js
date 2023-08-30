@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
-import CircularProgress from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
