@@ -2,20 +2,12 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import { Paper } from "@mui/material";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import validator from "validator";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
 
 export default function SignIn({ loginUrl }) {
   const [inputError, setInputError] = React.useState(false);
@@ -83,79 +75,72 @@ export default function SignIn({ loginUrl }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Paper sx={{ p: 3, mt: 12 }}>
+    <Container component="main" maxWidth="xs">
+      <Paper sx={{ p: 3, mt: 12 }}>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Accedi
+          </Typography>
           <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
           >
-            <Typography component="h1" variant="h5">
-              Accedi
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
-              <TextField
-                margin="normal"
-                required
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Indirizzo email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              error={inputError || emailError}
+              onChange={validateEmail}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              error={inputError}
+              onChange={clearInputError}
+            />
+            {successfulLogin ? (
+              <Typography
+                component="h1"
+                variant="h5"
+                color="#4caf50"
+                align="center"
+              >
+                Benvenuto!
+              </Typography>
+            ) : (
+              <Button
+                type="submit"
                 fullWidth
-                id="email"
-                label="Indirizzo email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                error={inputError || emailError}
-                onChange={validateEmail}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                error={inputError}
-                onChange={clearInputError}
-              />
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
-              {successfulLogin ? (
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  color="#4caf50"
-                  align="center"
-                >
-                  Benvenuto!
-                </Typography>
-              ) : (
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  disabled={waitingLoginAttempt || inputError || emailError}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Entra
-                </Button>
-              )}
-            </Box>
+                variant="contained"
+                disabled={waitingLoginAttempt || inputError || emailError}
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Entra
+              </Button>
+            )}
           </Box>
-        </Paper>
-      </Container>
-    </ThemeProvider>
+        </Box>
+      </Paper>
+    </Container>
   );
 }
