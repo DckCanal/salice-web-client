@@ -65,7 +65,7 @@ export default function UpdateInvoiceView({ invoiceId }) {
     invoice?.testo ? invoice.testo : undefined
   );
   const [textError, setTextError] = React.useState(
-    invoice?.testo === "" || invoice.testo == undefined
+    invoice?.testo === "" || invoice?.testo == undefined
   );
   //const [dark, setDark] = React.useState(invoice?.d ? true : false);
 
