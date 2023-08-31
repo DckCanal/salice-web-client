@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { styled } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -81,7 +80,7 @@ export default function Layout({ children }) {
   return (
     <DContext.Provider value={d}>
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
@@ -114,11 +113,19 @@ export default function Layout({ children }) {
             <SearchField />
             {!error && (
               <IconButton onClick={() => switchd()}>
-                <MenuIcon />
-                {d ? "true" : "false"}
+                <MenuIcon htmlColor="#ffffff" />
+                {d ? (
+                  <Typography component="p" variant="p" color="#ffffff">
+                    true
+                  </Typography>
+                ) : (
+                  <Typography component="p" variant="p" color="#ffffff">
+                    false
+                  </Typography>
+                )}
               </IconButton>
             )}
-            {!error && <p>{user?.fullName}</p>}
+            {/*!error && <p>{user?.fullName}</p>*/}
             <DarkThemeToggler />
           </Toolbar>
         </AppBar>

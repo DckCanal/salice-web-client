@@ -12,7 +12,11 @@ export default function DarkThemeToggler() {
   const theme = useTheme();
   return (
     <IconButton sx={{ ml: 5 }} onClick={toggleLightTheme}>
-      {theme.palette.mode === "light" ? <NightlightIcon /> : <LightModeIcon />}
+      {theme.palette.mode === "light" ? (
+        <NightlightIcon htmlColor="#ffffff" />
+      ) : (
+        <LightModeIcon />
+      )}
     </IconButton>
   );
 }
