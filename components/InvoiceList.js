@@ -41,6 +41,7 @@ const Container = ({ children }) => (
 
 export default function InvoiceList() {
   const [yearsIndex, setYearsIndex] = React.useState([0]); // TODO: USE CONTEXT!
+  // FIX: isLoading is true only on first load! When a revalidation is required, there's a problem
   const {
     invoices,
     isLoading: isLoadingInvoices,

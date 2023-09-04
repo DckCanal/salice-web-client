@@ -7,10 +7,12 @@ export default function SearchField() {
   const theme = useTheme();
   const router = useRouter();
   const { patients, error, isLoading } = usePatients();
-  const optionList = patients?.map((p) => ({
-    label: `${p.nome} ${p.cognome}`,
-    _id: p._id,
-  }));
+  const optionList = patients
+    ? patients.map((p) => ({
+        label: `${p.nome} ${p.cognome}`,
+        _id: p._id,
+      }))
+    : [];
   // theme.palette.text.primary,
   return (
     <ThemeProvider

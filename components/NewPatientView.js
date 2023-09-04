@@ -1,16 +1,20 @@
 import * as React from "react";
 import { useRouter } from "next/router";
+import { mutate } from "swr";
+
 import { Button, Box, Typography } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 import { DateTime } from "luxon";
 import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
+
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
+import { newPatient } from "../lib/controller";
 // IMPORT ADD PATIENT
 
 export default function NewPatientView() {
@@ -47,31 +51,48 @@ export default function NewPatientView() {
     setWaiting(true);
 
     try {
-      const newPatient = await addPatient(
-        name,
-        surname,
-        codFisc,
-        pIva,
-        paeseResidenza,
-        provinciaResidenza,
-        capResidenza,
-        viaResidenza,
-        civicoResidenza,
-        telefono,
-        email,
-        new Date(dataNascita),
-        paeseNascita,
-        provinciaNascita,
-        capNascita,
-        prezzo
+      const { newPatient: addedPatient } = await mutate(
+        "/api/patients",
+        newPatient(
+          name,
+          surname,
+          codFisc,
+          pIva,
+          paeseResidenza,
+          provinciaResidenza,
+          capResidenza,
+          viaResidenza,
+          civicoResidenza,
+          telefono,
+          email,
+          new Date(dataNascita),
+          paeseNascita,
+          provinciaNascita,
+          capNascita,
+          prezzo
+        ),
+        {
+          revalidate: false,
+          populateCache: (addedPatient, cacheData) => {
+            return {
+              ...cacheData,
+              data: {
+                ...cacheData.data,
+                patients: [...cacheData.data.patients, addedPatient],
+              },
+            };
+          },
+        }
       );
-      if (newPatient._id) {
+      if (addedPatient._id) {
         setWaiting(false);
+        router.push(`/patients/${addedPatient._id}`);
       }
+            // else show error message modal window, reset fields and enable submit
+
     } catch (err) {
       console.error(err);
     }
-    router.push("/patients");
   }
 
   // VALIDATORS

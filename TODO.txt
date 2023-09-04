@@ -60,7 +60,7 @@ useSWR inside each page to fetch data from server or use cached. OK
 
 
 Context:
- - d
+ - d OK
  - year from invoices page
 
 Links to fix: OK
@@ -70,7 +70,7 @@ Update Invoice page OK
 
 On delete patient: check if it has invoices, don't show delete button
 
-In Dashboard.js layout is not used!!
+In Dashboard.js layout is not used!! OK
 
 
 NewInvoiceView -> openNextView to be set to /invoices/[newInvoiceId]
@@ -80,12 +80,12 @@ Same as above on NewPatientView
 
 On ListTable, action button click catched by row 'onClickAction': <Link> sovrapposti
 
-Login page doesn't uses light theme
+Login page doesn't uses light theme OK
 
 Peek theme from system
 
 Push down alongside the DOM, my hooks (useInvoices...): fetch data where needed,
-and manage loading and error state in an easier way!
+and manage loading and error state in an easier way! OK
 Don't pass data manager functions as props, but import from lib folder!
 
 
@@ -110,3 +110,11 @@ SWR:
 
 
 Check if useMemo is needed in MUI tables, specially for items sorting.
+
+
+
+SELECTED YEARS: Context and Providers
+D TOGGLE: keyboard handler on dashboard.js
+
+
+InvoiceList: calcolare il fatturato dell'ultimo anno, senza aggiungere campi all'array di pazienti. Usare React.useMemo()

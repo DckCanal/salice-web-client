@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useContext } from "react";
 import { useRouter } from "next/router";
+import { mutate } from "swr";
 import {
   Autocomplete,
   TextField,
@@ -22,11 +23,14 @@ import { DateTime } from "luxon";
 
 import { DContext } from "./DContext";
 import { usePatient, usePatients } from "../lib/hooks";
+import { newInvoice } from "../lib/controller";
 
 // TODO: manage response errors
 
-export default function NewInvoiceView({ addInvoice, selectedPatient }) {
+export default function NewInvoiceView() {
   const d = useContext(DContext);
+  const router = useRouter();
+  const selectedPatient = router.query?.id;
   const {
     patients,
     isLoading: isLoadingPatients,
@@ -37,9 +41,7 @@ export default function NewInvoiceView({ addInvoice, selectedPatient }) {
     isLoading: isLoadingPatient,
     error: patientError,
   } = usePatient(selectedPatient);
-  // const initialPatient = selectedPatient
-  //   ? patients.find((p) => String(p._id) === String(selectedPatient))
-  //   : undefined;
+
   const [selectedPatientId, setSelectedPatientId] = React.useState(
     selectedPatient ? selectedPatient : ""
   );
@@ -52,7 +54,6 @@ export default function NewInvoiceView({ addInvoice, selectedPatient }) {
     selectedPatient === undefined
   );
   const [waiting, setWaiting] = React.useState(false);
-  const router = useRouter();
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -70,26 +71,38 @@ export default function NewInvoiceView({ addInvoice, selectedPatient }) {
     const dark = data.get("dark") === "on" ? true : false;
 
     try {
-      const newInvoice = await addInvoice(
-        selectedPatientId,
-        cashed,
-        Number(invoiceAmountTextField),
-        invoiceText,
-        new Date(issueDateTime),
-        dark
+      const { newInvoice: addedInvoice } = await mutate(
+        "/api/invoices",
+        newInvoice(
+          selectedPatientId,
+          cashed,
+          Number(invoiceAmountTextField),
+          invoiceText,
+          new Date(issueDateTime),
+          dark
+        ),
+        {
+          revalidate: false,
+          populateCache: (addedInvoice, cacheData) => {
+            return {
+              ...cacheData,
+              data: {
+                ...cacheData.data,
+                invoices: [...cacheData.data.invoices, addedInvoice],
+              },
+            };
+          },
+        }
       );
 
-      // if it's all OK, go to invoiceList
-
-      if (newInvoice._id) {
+      if (addedInvoice._id) {
         setWaiting(false);
+        router.push(`/invoices/${addedInvoice._id}`);
       }
+      // else show error message modal window, reset fields and enable submit
     } catch (err) {
       console.error(err);
     }
-    router.push("/invoices/");
-
-    // else show error message modal window, reset fields and enable submit
   }
 
   // HANDLER for Autocomplete change event

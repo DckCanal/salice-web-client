@@ -1,11 +1,8 @@
-import { useRouter } from "next/router";
 import Layout from "../../components/layout";
 import NewInvoiceView from "../../components/NewInvoiceView";
 
 export default function NewInvoicePage() {
-  const router = useRouter();
-  const id = router.query?.id;
-  return <NewInvoiceView selectedPatient={id} />;
+  return <NewInvoiceView />;
 }
 
 NewInvoicePage.getLayout = function getLayout(page) {
