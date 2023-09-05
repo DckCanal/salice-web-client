@@ -77,7 +77,7 @@ export default async function handler(req, res) {
       res.status(200).json({
         status: "success",
         data: {
-          patient: updatedPatient,
+          updatedPatient,
         },
       });
     } else if (method === "DELETE") {

@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
 import {
   TextField,
   Checkbox,
@@ -17,6 +19,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
 import { useInvoice, usePatient } from "../lib/hooks";
+import { updateInvoice } from "../lib/controller";
 import ErrorBox from "./ErrorBox";
 // TODO: manage response errors
 
@@ -34,20 +37,21 @@ const Container = ({ children }) => (
   </Paper>
 );
 
-export default function UpdateInvoiceView({ invoiceId }) {
+export default function UpdateInvoiceView() {
+  const router = useRouter();
+  const invoiceId = router.query.id;
+
   // --- COMPONENT STATE --- //
   const {
     invoice,
     isLoading: isLoadingInvoice,
     error: invoiceError,
-    mutate: mutateInvoice,
   } = useInvoice(invoiceId);
 
   const {
     patient,
     isLoading: isLoadingPatient,
     error: patientError,
-    mutate: mutatePatient,
   } = usePatient(invoice?.paziente);
 
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
@@ -103,12 +107,34 @@ export default function UpdateInvoiceView({ invoiceId }) {
     //   if (invoice.d) newValues.d = false;
     // }
     try {
-      const updatedInvoice = await updateInvoice(invoice._id, newValues);
-      if (updatedInvoice._id) setWaiting(false);
+      const { updatedInvoice } = await mutate(
+        "/api/invoices",
+        updateInvoice(invoice._id, newValues),
+        {
+          revalidate: false,
+          populateCache: (updatedInvoice, cacheData) => {
+            return {
+              ...cacheData,
+              data: {
+                ...cacheData.data,
+                invoices: cacheData.data.invoices.map((inv) => {
+                  if (String(inv._id) === String(updatedInvoice._id))
+                    return updatedInvoice;
+                  else return inv;
+                }),
+              },
+            };
+          },
+        }
+      );
+      if (updatedInvoice._id) {
+        setWaiting(false);
+        router.push(`/invoices/${invoice._id}`);
+      }
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    //openNextView();
   }
 
   // HANDLER for delete button

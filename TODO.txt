@@ -118,3 +118,20 @@ D TOGGLE: keyboard handler on dashboard.js
 
 
 InvoiceList: calcolare il fatturato dell'ultimo anno, senza aggiungere campi all'array di pazienti. Usare React.useMemo()
+
+
+
+paziente.ultimaModifica:
+    quando viene inserita una nuova fattura, ultima modifica viene impostato
+    alla data di emissione di quella fattura. Quando però viene aggiornata una
+    fattura, il campo ultimaModifica non viene aggiornato.
+    FIX: aggiornare ultimaModifica, all'ultima fattura !d intestata al paziente
+        - in pages/api/invoices/[invoiceId].js
+        - in components/updateInvoiceView.js, in populateCache
+
+
+updatePatientView:
+    FIX: validator sulla data di nascita: se vuoto, segna Errore
+    FIX: alla variazione di un campo, l'input field perde il focus
+
+FIX: calendario basco al posto di quello italiano

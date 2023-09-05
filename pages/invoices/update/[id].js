@@ -4,8 +4,6 @@ import Layout from "../../../components/layout";
 import UpdateInvoiceView from "../../../components/UpdateInvoiceView";
 
 export default function UpdateInvoicePage() {
-  const router = useRouter();
-  const id = router.query.id;
   // const {
   //   invoice,
   //   isLoading: invoiceLoading,
@@ -22,7 +20,7 @@ export default function UpdateInvoicePage() {
   // const patient = patients.find(
   //   (p) => String(p._id) === String(invoice.paziente)
   // );
-  return <UpdateInvoiceView invoiceId={id} />;
+  return <UpdateInvoiceView />;
 }
 
 UpdateInvoicePage.getLayout = function getLayout(page) {

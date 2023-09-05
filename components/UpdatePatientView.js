@@ -1,4 +1,7 @@
 import * as React from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+
 import { Box, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -14,9 +17,14 @@ import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
 import ErrorBox from "./ErrorBox";
 import { usePatient } from "../lib/hooks";
+import { updatePatient } from "../lib/controller";
 
-export default function UpdatePatientView({ patientId }) {
-  const { patient, isLoading, error, mutate } = usePatient(patientId);
+export default function UpdatePatientView() {
+  const router = useRouter();
+  const patientId = router.query.id;
+
+  const { patient, isLoading, error } = usePatient(patientId);
+
   const [name, setName] = React.useState(patient?.nome || undefined);
   const [surname, setSurname] = React.useState(patient?.cognome || undefined);
   const [codFisc, setCodFisc] = React.useState(patient?.codiceFiscale || "");
@@ -98,12 +106,35 @@ export default function UpdatePatientView({ patientId }) {
       newValues.prezzo = Number.parseFloat(prezzo);
     console.log(`Updating: ${JSON.stringify(newValues)}`);
     try {
-      const updatedPatient = await updatePatient(patient._id, newValues);
+      const { updatedPatient } = await mutate(
+        "/api/patients",
+        updatePatient(patient._id, newValues),
+        {
+          revalidate: false,
+          populateCache: (updatedPatient, cacheData) => {
+            return {
+              ...cacheData,
+              data: {
+                ...cacheData.data,
+                patients: cacheData.data.patients.map((pat) => {
+                  if (String(pat._id) === String(updatedPatient._id))
+                    return updatedPatient;
+                  else return pat;
+                }),
+              },
+            };
+          },
+        }
+      );
       console.log(`Updated patient:${JSON.stringify(updatedPatient)}`);
+      if (updatedPatient._id) {
+        setWaiting(false);
+        router.push(`/patients/${updatedPatient._id}`);
+      }
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    //openNextView();
   }
 
   // HANDLER for delete button
