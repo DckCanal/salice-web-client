@@ -58,7 +58,7 @@ export default function UpdatePatientView() {
   const [capNascita, setCapNascita] = React.useState(
     patient?.luogoNascita?.CAP || ""
   );
-  const [prezzo, setPrezzo] = React.useState(patient?.prezzo || undefined);
+  const [prezzo, setPrezzo] = React.useState(patient?.prezzo || 0);
 
   const [waiting, setWaiting] = React.useState(false);
 
@@ -104,7 +104,6 @@ export default function UpdatePatientView() {
       newValues.luogoNascita.cap = capNascita;
     if (Number.parseFloat(prezzo) !== Number.parseFloat(patient.prezzo))
       newValues.prezzo = Number.parseFloat(prezzo);
-    console.log(`Updating: ${JSON.stringify(newValues)}`);
     try {
       const { updatedPatient } = await mutate(
         "/api/patients",
@@ -126,7 +125,6 @@ export default function UpdatePatientView() {
           },
         }
       );
-      console.log(`Updated patient:${JSON.stringify(updatedPatient)}`);
       if (updatedPatient._id) {
         setWaiting(false);
         router.push(`/patients/${updatedPatient._id}`);
@@ -134,7 +132,6 @@ export default function UpdatePatientView() {
     } catch (err) {
       console.error(err);
     }
-    //openNextView();
   }
 
   // HANDLER for delete button
