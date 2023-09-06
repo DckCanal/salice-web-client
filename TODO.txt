@@ -117,7 +117,8 @@ SELECTED YEARS: Context and Providers
 D TOGGLE: keyboard handler on dashboard.js
 
 
-InvoiceList: calcolare il fatturato dell'ultimo anno, senza aggiungere campi all'array di pazienti. Usare React.useMemo()
+InvoiceList: calcolare il fatturato dell'ultimo anno, senza aggiungere campi all'array di pazienti. OK
+    Usare React.useMemo()
 
 
 
@@ -131,7 +132,9 @@ paziente.ultimaModifica:
 
 
 updatePatientView:
-    FIX: validator sulla data di nascita: se vuoto, segna Errore
+    FIX: validator sulla data di nascita: se vuoto, segna Errore OK
     FIX: alla variazione di un campo, l'input field perde il focus
 
 FIX: calendario basco al posto di quello italiano
+
+Trasferire fatturatoUltimoAnno in un Context

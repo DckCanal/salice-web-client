@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -16,7 +16,7 @@ import { DContext } from "./DContext";
 
 export default function LastInvoices() {
   const router = useRouter();
-  const d = useContext(DContext);
+  //const d = useContext(DContext);
   const {
     invoices,
     isLoading: isLoadingInvoices,
@@ -27,9 +27,57 @@ export default function LastInvoices() {
     isLoading: isLoadingPatients,
     error: patientsError,
   } = usePatients();
+
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+  const lastInvoices = //useMemo(() => {
+    invoices
+      ? invoices
+          .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
+          .sort((i1, i2) =>
+            Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
+          )
+      : [];
+  // }, [invoices]);
+
+  const fatturatoUltimoAnno = {}; //useMemo(() => {
+  //const f = {};
+  if (invoices !== undefined && patients !== undefined) {
+    patients.forEach((p) => {
+      fatturatoUltimoAnno[p._id] = 0;
+    });
+    //patients.forEach((p) => {
+    lastInvoices.forEach((i) => {
+      fatturatoUltimoAnno[i.paziente] += Number.parseFloat(i.valore);
+    });
+    //});
+  }
+  //   return f;
+  // }, [invoices, patients]);
+
+  const rows = //useMemo(() => {
+    patients && lastInvoices
+      ? patients.slice(0, 21).map((p, i) => {
+          let lastInvoiceFound = undefined;
+          lastInvoices.forEach((i) => {
+            if (i.paziente === p._id) {
+              if (!lastInvoiceFound)
+                lastInvoiceFound = Number.parseFloat(i.valore);
+            }
+          });
+          return {
+            id: i,
+            value: `${lastInvoiceFound || 0}€ (${fatturatoUltimoAnno[p._id]}€)`,
+            p,
+            name: `${p.cognome.toUpperCase()} ${p.nome}`,
+          };
+        })
+      : [];
+  //}, [invoices, patients]);
+
+  //console.log(lastInvoices);
 
   if (patientsError)
     return (
@@ -47,43 +95,6 @@ export default function LastInvoices() {
       />
     );
 
-  // GET patients already ordered by server? This is only a slice()
-  const lastPatients = patients
-    ? patients
-        .sort((p1, p2) => {
-          return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica)
-            ? -1
-            : 1;
-        })
-        .slice(0, 21)
-    : [];
-
-  // GET invoices already ordered by server? This is only a filter()
-  const lastInvoices = invoices
-    ? invoices
-        .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
-        .sort((i1, i2) =>
-          Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
-        )
-    : [];
-  const rows = lastPatients.map((p, i) => {
-    let lastInvoiceFound = undefined;
-    lastInvoices.forEach((i) => {
-      if (i.paziente === p._id) {
-        if (!lastInvoiceFound) lastInvoiceFound = Number.parseFloat(i.valore);
-      }
-    });
-    return {
-      id: i,
-      value: `${lastInvoiceFound || 0}€ (${
-        d
-          ? p.fatturatoUltimoAnno + p.dfatturatoUltimoAnno
-          : p.fatturatoUltimoAnno || 0
-      }€)`,
-      p,
-      name: `${p.cognome.toUpperCase()} ${p.nome}`,
-    };
-  });
   const columns = [
     {
       field: "name",
@@ -136,7 +147,7 @@ export default function LastInvoices() {
   return (
     <>
       <Title>Ultime fatture</Title>
-      {isLoadingInvoices || isLoadingPatients ? (
+      {invoices === undefined || patients === undefined ? (
         <CircularProgress sx={{ mx: "auto", mt: 10 }} />
       ) : (
         <DataGrid

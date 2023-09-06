@@ -22,7 +22,9 @@ export default async function handler(req, res) {
       const limit = req.query.limit * 1 || 5000;
       const skip = (page - 1) * limit;
       const sortParams =
-        sort !== undefined ? sort.split(",") : ["-cognome -nome"];
+        sort !== undefined
+          ? sort.split(",")
+          : /*["-cognome -nome"]*/ ["-ultimaModifica"];
       const allowedSort = [
         "ultimaModifica",
         "cognome",
