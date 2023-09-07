@@ -316,7 +316,6 @@ export default function PatientDetail({ id }) {
                     href={`mailto:${patient.email}`}
                     clickable
                   />
-                  /*<Typography variant="body1">{patient.email}</Typography>*/
                 )}
               </Box>
             </Box>
@@ -340,7 +339,6 @@ export default function PatientDetail({ id }) {
           }}
           checkboxSelection={true}
           onRowClick={(params) => {
-            // openInvoiceDetail(params.row.id);
             router.push(`/invoices/${params.row.id}`);
           }}
         />

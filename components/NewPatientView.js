@@ -8,6 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+
 import { DateTime } from "luxon";
 import validator from "validator";
 import CodiceFiscale from "codice-fiscale-js";
@@ -15,7 +16,6 @@ import CodiceFiscale from "codice-fiscale-js";
 import MarginTextField from "./MarginTextField";
 import FormPaper from "./FormPaper";
 import { newPatient } from "../lib/controller";
-// IMPORT ADD PATIENT
 
 export default function NewPatientView() {
   // ---- COMPONENT STATE --- //

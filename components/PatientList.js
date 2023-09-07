@@ -13,13 +13,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import { CircularProgress } from "@mui/material";
 
 import ListTableToolbar from "./ListTableToolbar";
 import ErrorBox from "./ErrorBox";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
 import { deletePatient } from "../lib/controller";
 import { usePatients } from "../lib/hooks";
-import { CircularProgress } from "@mui/material";
 
 /*
   PatientList. Field to show:
@@ -39,7 +39,7 @@ import { CircularProgress } from "@mui/material";
 
   Actions: 
     - create new Invoice
-    - TODO: modify patient
+    - modify patient
     - send email
 */
 
@@ -80,13 +80,11 @@ export default function PatientList() {
       field: "paziente",
       headerName: "Paziente",
       flex: 1,
-      //sortComparator: (a, b) => a.localeCompare(b),
       renderCell: (params) => (
         <Link href={`/patients/${params.row.id}`} passHref>
           <Button
             variant="text"
             size="small"
-            //onClick={() => openPatientDetail(params.row.id)}
           >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
         </Link>
       ),
@@ -152,11 +150,7 @@ export default function PatientList() {
       renderCell: (params) => (
         <>
           <Link href={`/newInvoice/${params.row.id}`} passHref>
-            <IconButton
-            //onClick={() => {
-            //router.push(`/newInvoice/${params.row.id}`);
-            //</Link>}}
-            >
+            <IconButton>
               <PostAddIcon />
             </IconButton>
           </Link>
@@ -168,13 +162,7 @@ export default function PatientList() {
             <HistoryEduIcon />
           </IconButton>
           <Link href={`/patients/update/${params.row.patient._id}`} passHref>
-            <IconButton
-            // onClick={(ev) => {
-            //   ev.preventDefault();
-            //   ev.stopPropagation();
-            //   openUpdatePatient(params.row.patient);
-            // }}
-            >
+            <IconButton>
               <EditIcon />
             </IconButton>
           </Link>

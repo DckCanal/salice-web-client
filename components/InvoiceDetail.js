@@ -62,13 +62,6 @@ export default function InvoiceDetail({ id }) {
     error: patientError,
   } = usePatient(invoice?.paziente);
 
-  if (isLoadingInvoice || isLoadingPatient)
-    return (
-      <PaperContainer>
-        <CircularProgress sx={{ mx: "auto" }} />
-      </PaperContainer>
-    );
-
   if (invoiceError)
     return (
       <PaperContainer>
@@ -85,6 +78,18 @@ export default function InvoiceDetail({ id }) {
           title="Errore nel caricamento del paziente"
           text={patientError}
         />
+      </PaperContainer>
+    );
+
+  if (
+    isLoadingInvoice ||
+    isLoadingPatient ||
+    invoice === undefined ||
+    patient === undefined
+  )
+    return (
+      <PaperContainer>
+        <CircularProgress sx={{ mx: "auto" }} />
       </PaperContainer>
     );
 
