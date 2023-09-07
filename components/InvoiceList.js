@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -11,7 +12,6 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import { CircularProgress } from "@mui/material";
@@ -22,12 +22,13 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
 import { useInvoices, usePatients } from "../lib/hooks";
 import { deleteInvoice } from "../lib/controller";
 import ErrorBox from "./ErrorBox";
+import { YearContext } from "./YearContext";
 
 function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
   return (
     <ToggleButtonGroup onChange={handleYearsChange} value={selectedYears}>
       {years.map((y, i) => (
-        <ToggleButton key={i} value={i}>{`${y}`}</ToggleButton>
+        <ToggleButton key={i} value={y}>{`${y}`}</ToggleButton>
       ))}
     </ToggleButtonGroup>
   );
@@ -40,8 +41,8 @@ const Container = ({ children }) => (
 );
 
 export default function InvoiceList() {
-  const [yearsIndex, setYearsIndex] = React.useState([0]); // TODO: USE CONTEXT!
-  // FIX: isLoading is true only on first load! When a revalidation is required, there's a problem
+  const [selectedYears, setSelectedYears] = useContext(YearContext);
+
   const {
     invoices,
     isLoading: isLoadingInvoices,
@@ -53,22 +54,6 @@ export default function InvoiceList() {
     error: patientsError,
   } = usePatients();
   const router = useRouter();
-
-  if (isLoadingInvoices || isLoadingPatients)
-    return (
-      <Container>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            mt: 10,
-          }}
-        >
-          <CircularProgress sx={{ mx: "auto" }} />
-        </Box>
-      </Container>
-    );
 
   if (invoicesError)
     return (
@@ -89,6 +74,27 @@ export default function InvoiceList() {
       </Container>
     );
 
+  if (
+    isLoadingInvoices ||
+    isLoadingPatients ||
+    invoices === undefined ||
+    patients === undefined
+  )
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            mt: 10,
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+
   const years = invoices
     .reduce((years, invoice) => {
       const year = new Date(invoice.dataEmissione).getFullYear();
@@ -96,12 +102,13 @@ export default function InvoiceList() {
       return years;
     }, [])
     .sort((y1, y2) => y2 - y1);
-  const handleYearsChange = (ev, newYearsIndex) => setYearsIndex(newYearsIndex);
+  const handleYearsChange = (_ev, years) => {
+    setSelectedYears(years);
+  };
   const rows = invoices
     .filter((i) => {
       const year = new Date(i.dataEmissione).getFullYear();
-      const index = years.indexOf(year);
-      return yearsIndex.includes(index);
+      return selectedYears.includes(year);
     })
     .map((i) => {
       const patient = patients.find((p) => p._id == i.paziente);
@@ -179,11 +186,6 @@ export default function InvoiceList() {
       sortable: false,
       renderCell: (params) => (
         <>
-          {/* <Link href={`/invoices/${params.row.invoice._id}`} passHref>
-            <IconButton>
-              <VisibilityIcon />
-            </IconButton>
-          </Link> */}
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();
@@ -194,13 +196,7 @@ export default function InvoiceList() {
             <DownloadIcon />
           </IconButton>
           <Link href={`/invoices/update/${params.row.invoice._id}`} passHref>
-            <IconButton
-            // onClick={(ev) => {
-            //   ev.preventDefault();
-            //   ev.stopPropagation();
-            //   openUpdateInvoice(params.row.invoice, params.row.patient);
-            // }}
-            >
+            <IconButton>
               <EditIcon />
             </IconButton>
           </Link>
@@ -226,7 +222,7 @@ export default function InvoiceList() {
       <Box sx={{ mb: 2 }}>
         <YearButtonGroup
           years={years}
-          selectedYears={yearsIndex}
+          selectedYears={selectedYears}
           handleYearsChange={handleYearsChange}
         />
       </Box>
