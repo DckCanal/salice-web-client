@@ -6,21 +6,28 @@ export default function ErrorBox({ title, text }) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
+        justifyContent: "center",
+        flexGrow: "1",
         mb: 1,
         bgcolor: red[400],
         p: 2,
       }}
     >
-      <Typography component="h4" variant="h5">
+      <Typography component="h4" variant="h5" textAlign="center">
         {title}
       </Typography>
-      <Divider
-        sx={{
-          my: 2,
-        }}
-      />
-      <Typography component="p">{text}</Typography>
+      {text && (
+        <>
+          <Divider
+            sx={{
+              my: 2,
+            }}
+          />
+          <Typography component="p" textAlign="center">
+            {text}
+          </Typography>
+        </>
+      )}
     </Box>
   );
 }
