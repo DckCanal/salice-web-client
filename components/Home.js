@@ -1,5 +1,3 @@
-import { useContext } from "react";
-
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
@@ -7,103 +5,7 @@ import IncomePaper from "./IncomePaper";
 import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
 
-import { italianMonth } from "../lib/dateUtils";
-import { useInvoices, usePatients } from "../lib/hooks";
-import { DContext } from "./DContext";
-
 export default function Home() {
-  const d = useContext(DContext);
-  const {
-    invoices,
-    isLoading: isLoadingInvoices,
-    error: invoicesError,
-  } = useInvoices();
-  const {
-    patients,
-    isLoading: isLoadingPatients,
-    error: patientsError,
-  } = usePatients();
-  const now = new Date();
-  const currentMonthlyIncome = () =>
-    invoices
-      ? invoices.reduce((sum, inv) => {
-          const invDate = new Date(inv.dataEmissione);
-          if (
-            invDate.getFullYear() == now.getFullYear() &&
-            invDate.getMonth() == now.getMonth()
-          ) {
-            return sum + Number.parseFloat(inv.valore);
-          }
-          return sum;
-        }, 0)
-      : 0;
-  const currentAnnualIncome = () =>
-    invoices
-      ? invoices.reduce((sum, inv) => {
-          const invDate = new Date(inv.dataEmissione);
-          if (invDate.getFullYear() == now.getFullYear()) {
-            return sum + Number.parseFloat(inv.valore);
-          }
-          return sum;
-        }, 0)
-      : 0;
-  const previousMonthlyIncome = () =>
-    invoices
-      ? invoices.reduce((sum, inv) => {
-          const invDate = new Date(inv.dataEmissione);
-          if (
-            now.getMonth() == 1 &&
-            invDate.getMonth() == 12 &&
-            invDate.getFullYear() == now.getFullYear() - 1
-          ) {
-            return sum + Number.parseFloat(inv.valore);
-          } else if (
-            invDate.getFullYear() == now.getFullYear() &&
-            invDate.getMonth() == now.getMonth() - 1
-          ) {
-            return sum + Number.parseFloat(inv.valore);
-          }
-          return sum;
-        }, 0)
-      : 0;
-  const previousAnnualIncome = () =>
-    invoices
-      ? invoices.reduce((sum, inv) => {
-          const invDate = new Date(inv.dataEmissione);
-          if (invDate.getFullYear() == now.getFullYear() - 1) {
-            return sum + Number.parseFloat(inv.valore);
-          }
-          return sum;
-        }, 0)
-      : 0;
-  const currentIncomeByMonth = invoices
-    ? invoices
-        .filter(
-          (inv) =>
-            new Date(inv.dataEmissione).getFullYear() == now.getFullYear()
-        )
-        .reduce((monthlyIncome, inv) => {
-          const m = new Date(inv.dataEmissione).getMonth();
-          monthlyIncome[m] = monthlyIncome[m]
-            ? monthlyIncome[m] + inv.valore
-            : inv.valore;
-          return monthlyIncome;
-        }, new Array().fill(undefined, 0, 12))
-    : new Array().fill(0, 0, 12);
-  const previousIncomeByMonth = invoices
-    ? invoices
-        .filter(
-          (inv) =>
-            new Date(inv.dataEmissione).getFullYear() == now.getFullYear() - 1
-        )
-        .reduce((monthlyIncome, inv) => {
-          const m = new Date(inv.dataEmissione).getMonth();
-          monthlyIncome[m] = monthlyIncome[m]
-            ? monthlyIncome[m] + inv.valore
-            : inv.valore;
-          return monthlyIncome;
-        }, new Array().fill(undefined, 0, 12))
-    : new Array().fill(0, 0, 12);
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -117,12 +19,7 @@ export default function Home() {
             margin: 2,
           }}
         >
-          <Chart
-            currentIncome={currentIncomeByMonth}
-            previousIncome={previousIncomeByMonth}
-            currentLabel={now.getFullYear()}
-            previousLabel={now.getFullYear() - 1}
-          />
+          <Chart />
         </Paper>
       </Grid>
       {/* Income Paper */}
@@ -136,18 +33,7 @@ export default function Home() {
             margin: 2,
           }}
         >
-          <IncomePaper
-            day={now.getDate()}
-            month={italianMonth(now.getMonth())}
-            currentIncome={{
-              monthly: currentMonthlyIncome(),
-              annual: currentAnnualIncome(),
-            }}
-            previousIncome={{
-              monthly: previousMonthlyIncome(),
-              annual: previousAnnualIncome(),
-            }}
-          />
+          <IncomePaper />
         </Paper>
       </Grid>
       {/* Last invoices */}

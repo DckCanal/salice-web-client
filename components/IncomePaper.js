@@ -1,5 +1,4 @@
 import * as React from "react";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import {
   Table,
@@ -7,93 +6,161 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
-function preventDefault(event) {
-  event.preventDefault();
-}
+import ErrorBox from "./ErrorBox";
+import { italianMonth } from "../lib/dateUtils";
+import { useInvoices } from "../lib/hooks";
 
-export default function IncomePaper({
-  day,
-  month,
-  currentIncome,
-  previousIncome,
-}) {
-  return (
-    <React.Fragment>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Fatturato corrente
-      </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography component="p">Mensile</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography component="p">Annuale</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>
-              <Typography component="p" variant="h6">
-                {currentIncome.monthly}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography component="p" variant="h6">
-                {currentIncome.annual}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+const reducer = (sum, inv) => sum + Number.parseFloat(inv.valore);
 
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Anno precedente
-      </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography component="p" color="text.secondary">
-                Mensile
-              </Typography>
-            </TableCell>
+const Container = ({ children }) => (
+  <>
+    <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      Fatturato corrente
+    </Typography>
+    {children}
+  </>
+);
 
-            <TableCell>
-              <Typography component="p" color="text.secondary">
-                Annuale
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>
-              <Typography component="p" color="text.secondary" variant="h6">
-                {previousIncome.monthly}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography component="p" color="text.secondary" variant="h6">
-                {previousIncome.annual}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+export default function IncomePaper() {
+  const { invoices, isLoading, error } = useInvoices();
+  const now = new Date();
+  const day = now.getDate();
+  const month = italianMonth(now.getMonth());
 
-      <Typography
-        color="text.secondary"
-        sx={{ flex: 1 }}
-        textAlign="right"
-        variant="subtitle1"
-      >
-        al {`${day} ${month}`}
-      </Typography>
-    </React.Fragment>
-  );
+  if (error)
+    return (
+      <ErrorBox title="Errore nel caricamento delle fatture" text={error} />
+    );
+
+  if (invoices === undefined || isLoading)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            flexGrow: "1",
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+  else {
+    const currentMonthlyIncome = invoices
+      .filter((i) => {
+        const invDate = new Date(i.dataEmissione);
+        return (
+          invDate.getFullYear() === now.getFullYear() &&
+          invDate.getMonth() === now.getMonth()
+        );
+      })
+      .reduce(reducer, 0);
+    const previousMonthlyIncome = invoices
+      .filter((i) => {
+        const invDate = new Date(i.dataEmissione);
+        return (
+          invDate.getFullYear() === now.getFullYear() - 1 &&
+          invDate.getMonth() === now.getMonth() &&
+          invDate.getDate() <= now.getDate()
+        );
+      })
+      .reduce(reducer, 0);
+    const currentAnnualIncome = invoices
+      .filter(
+        (i) => new Date(i.dataEmissione).getFullYear() === now.getFullYear()
+      )
+      .reduce(reducer, 0);
+    const previousAnnualIncome = invoices
+      .filter((i) => {
+        const invDate = new Date(i.dataEmissione);
+        return (
+          invDate.getFullYear() === now.getFullYear() - 1 &&
+          (invDate.getMonth() < now.getMonth() ||
+            (invDate.getMonth() === now.getMonth() &&
+              invDate.getDate() <= now.getDate()))
+        );
+      })
+      .reduce(reducer, 0);
+    return (
+      <Container>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography component="p">Mensile</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography component="p">Annuale</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow sx={{ "td, th": { border: 0 } }}>
+              <TableCell>
+                <Typography component="p" variant="h6">
+                  {currentMonthlyIncome}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography component="p" variant="h6">
+                  {currentAnnualIncome}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+          Anno precedente
+        </Typography>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography component="p" color="text.secondary">
+                  Mensile
+                </Typography>
+              </TableCell>
+
+              <TableCell>
+                <Typography component="p" color="text.secondary">
+                  Annuale
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow sx={{ "td, th": { border: 0 } }}>
+              <TableCell>
+                <Typography component="p" color="text.secondary" variant="h6">
+                  {previousMonthlyIncome}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography component="p" color="text.secondary" variant="h6">
+                  {previousAnnualIncome}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <Typography
+          color="text.secondary"
+          sx={{ flex: 1 }}
+          textAlign="right"
+          variant="subtitle1"
+        >
+          al {`${day} ${month}`}
+        </Typography>
+      </Container>
+    );
+  }
 }
