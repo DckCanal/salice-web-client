@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { mutate } from "swr";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -121,12 +122,21 @@ export default function InvoiceDetail({ id }) {
             onClick={async (ev) => {
               ev.preventDefault();
               ev.stopPropagation();
-              try {
-                const res = await deleteInvoice(invoice);
-                if (res) router.push("/dashboard");
-              } catch (err) {
-                console.error(err);
-              }
+              await mutate("/api/invoices", deleteInvoice(invoice._id), {
+                revalidate: false,
+                populateCache: (_res, cacheData) => {
+                  return {
+                    ...cacheData,
+                    data: {
+                      ...cacheData.data,
+                      invoices: cacheData.data.invoices.filter(
+                        (i) => String(i._id) !== String(invoice._id)
+                      ),
+                    },
+                  };
+                },
+              });
+              router.push(`/patients/${patient._id}`);
             }}
           >
             <DeleteIcon />

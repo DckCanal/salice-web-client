@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { mutate } from "swr";
 
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -171,9 +172,20 @@ export default function PatientDetail({ id }) {
             onClick={(ev) => {
               ev.preventDefault();
               ev.stopPropagation();
-              deleteInvoice(
-                invoices.find((i) => String(i._id) === String(params.row.id))
-              );
+              mutate("/api/invoices", deleteInvoice(params.row.id), {
+                revalidate: false,
+                populateCache: (_res, cacheData) => {
+                  return {
+                    ...cacheData,
+                    data: {
+                      ...cacheData.data,
+                      invoices: cacheData.data.invoices.filter(
+                        (i) => String(i._id) !== String(params.row.id)
+                      ),
+                    },
+                  };
+                },
+              });
             }}
           >
             <DeleteIcon />
