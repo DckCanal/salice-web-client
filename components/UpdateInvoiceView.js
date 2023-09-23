@@ -101,11 +101,7 @@ export default function UpdateInvoiceView() {
       Date.parse(new Date(invoice.dataIncasso))
     )
       newValues.dataIncasso = new Date(cashedDateTime);
-    // if (dark) {
-    //   if (!invoice.d) newValues.d = true;
-    // } else {
-    //   if (invoice.d) newValues.d = false;
-    // }
+
     try {
       const { updatedInvoice } = await mutate(
         "/api/invoices",
@@ -308,22 +304,6 @@ export default function UpdateInvoiceView() {
               )}
             />
           </LocalizationProvider>
-          {/* {d && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  id="dark"
-                  name="dark"
-                  defaultChecked={invoice.d ? true : false}
-                  onChange={(_ev, checked) => {
-                    setDark(checked);
-                  }}
-                />
-              }
-              label="d"
-              sx={{ mt: 3 }}
-            />
-          )} */}
           <Box
             sx={{
               mt: 1,
