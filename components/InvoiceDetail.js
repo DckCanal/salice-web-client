@@ -1,3 +1,7 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -6,14 +10,17 @@ import Button from "@mui/material/Button";
 import DoneIcon from "@mui/icons-material/Done";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import IconButton from "@mui/material/IconButton";
-
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
 import Chip from "@mui/material/Chip";
+import { CircularProgress } from "@mui/material";
+
 import { italianMonth } from "../lib/dateUtils";
 import excelInvoice from "../lib/excelLib";
+import { deleteInvoice } from "../lib/controller";
+import { useInvoice, usePatient } from "../lib/hooks";
+import ErrorBox from "./ErrorBox";
 
 const TextLine = ({ children, width }) => {
   const w = width ? width : "auto";
@@ -24,29 +31,73 @@ const TextLine = ({ children, width }) => {
   );
 };
 
-export default function InvoiceDetail({
-  invoice,
-  patient,
-  openPatientDetail,
-  openUpdateInvoice,
-  deleteInvoice,
-  openHome,
-}) {
-  if (invoice == undefined || patient == undefined)
-    return <p>Invoice not found...</p>;
+const PaperContainer = ({ children }) => (
+  <Paper
+    sx={{
+      mt: 2,
+      p: 4,
+      maxWidth: "700px",
+      minWidth: "500px",
+      mr: "auto",
+      ml: "auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    }}
+  >
+    {children}
+  </Paper>
+);
+
+// TODO: manage undefined patient while loading
+export default function InvoiceDetail({ id }) {
+  const router = useRouter();
+  const {
+    invoice,
+    isLoading: isLoadingInvoice,
+    error: invoiceError,
+  } = useInvoice(id);
+  const {
+    patient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+  } = usePatient(invoice?.paziente);
+
+  if (invoiceError)
+    return (
+      <PaperContainer>
+        <ErrorBox
+          title="Errore nel caricamento della fattura"
+          text={invoiceError}
+        />
+      </PaperContainer>
+    );
+  if (patientError)
+    return (
+      <PaperContainer>
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={patientError}
+        />
+      </PaperContainer>
+    );
+
+  if (
+    isLoadingInvoice ||
+    isLoadingPatient ||
+    invoice === undefined ||
+    patient === undefined
+  )
+    return (
+      <PaperContainer>
+        <CircularProgress sx={{ mx: "auto" }} />
+      </PaperContainer>
+    );
+
   const date = new Date(invoice.dataEmissione);
   const cashed = invoice.dataIncasso !== undefined;
   return (
-    <Paper
-      sx={{
-        mt: 2,
-        p: 4,
-        maxWidth: "700px",
-        minWidth: "500px",
-        mr: "auto",
-        ml: "auto",
-      }}
-    >
+    <PaperContainer>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Typography variant="h5">
           Fattura N. {invoice.numeroOrdine} del{" "}
@@ -62,23 +113,30 @@ export default function InvoiceDetail({
           >
             <DownloadIcon />
           </IconButton>
-          <IconButton
-            onClick={() => {
-              openUpdateInvoice(invoice, patient);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/invoices/update/${invoice._id}`} passHref>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={async (ev) => {
               ev.preventDefault();
               ev.stopPropagation();
-              try {
-                const res = await deleteInvoice(invoice);
-                if (res) openHome();
-              } catch (err) {
-                console.error(err);
-              }
+              await mutate("/api/invoices", deleteInvoice(invoice._id), {
+                revalidate: false,
+                populateCache: (_res, cacheData) => {
+                  return {
+                    ...cacheData,
+                    data: {
+                      ...cacheData.data,
+                      invoices: cacheData.data.invoices.filter(
+                        (i) => String(i._id) !== String(invoice._id)
+                      ),
+                    },
+                  };
+                },
+              });
+              router.push(`/patients/${patient._id}`);
             }}
           >
             <DeleteIcon />
@@ -104,9 +162,12 @@ export default function InvoiceDetail({
           </Typography>
         </Box>
         <Box sx={{ width: "66%" }}>
-          <Button variant="text" onClick={() => openPatientDetail(patient._id)}>
-            {patient.cognome} {patient.nome}
-          </Button>
+          <Link href={`/patients/${patient._id}`} passHref>
+            {" "}
+            <Button variant="text">
+              {patient.cognome} {patient.nome}
+            </Button>
+          </Link>
           <Divider />
           {patient.codiceFiscale && (
             <TextLine>{patient.codiceFiscale}</TextLine>
@@ -195,6 +256,6 @@ export default function InvoiceDetail({
           />
         )}
       </Box>
-    </Paper>
+    </PaperContainer>
   );
 }

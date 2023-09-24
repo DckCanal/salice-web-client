@@ -1,17 +1,25 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
-import ListTableToolbar from "./ListTableToolbar";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import { CircularProgress } from "@mui/material";
+
+import ListTableToolbar from "./ListTableToolbar";
+import ErrorBox from "./ErrorBox";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
+import { deletePatient } from "../lib/controller";
+import { usePatients } from "../lib/hooks";
 
 /*
   PatientList. Field to show:
@@ -31,19 +39,40 @@ import { sortDate, italianShortDate } from "../lib/dateUtils";
 
   Actions: 
     - create new Invoice
-    - TODO: modify patient
+    - modify patient
     - send email
 */
 
 // TODO: correct whatsapp link
 
-export default function PatientList({
-  patients,
-  openPatientDetail,
-  createNewInvoice,
-  openUpdatePatient,
-  deletePatient,
-}) {
+const Container = ({ children }) => (
+  <Paper sx={{ m: 2, p: 2, height: "90%" }}>{children}</Paper>
+);
+
+export default function PatientList() {
+  const router = useRouter();
+  const { patients, isLoading, error } = usePatients();
+  if (isLoading)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            mt: 15,
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+  if (error)
+    return (
+      <Container>
+        <ErrorBox title="Errore nel caricamento dei pazienti" text={error} />
+      </Container>
+    );
   const columns = [
     { field: "id", headerName: "ID", hide: true, width: 220 },
 
@@ -51,13 +80,13 @@ export default function PatientList({
       field: "paziente",
       headerName: "Paziente",
       flex: 1,
-      //sortComparator: (a, b) => a.localeCompare(b),
       renderCell: (params) => (
-        <Button
-          variant="text"
-          size="small"
-          onClick={() => openPatientDetail(params.row.id)}
-        >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
+        <Link href={`/patients/${params.row.id}`} passHref>
+          <Button
+            variant="text"
+            size="small"
+          >{`${params.row.patient.cognome} ${params.row.patient.nome}`}</Button>
+        </Link>
       ),
     },
     {
@@ -120,13 +149,11 @@ export default function PatientList({
       sortable: false,
       renderCell: (params) => (
         <>
-          <IconButton
-            onClick={() => {
-              createNewInvoice(params.row.id);
-            }}
-          >
-            <PostAddIcon />
-          </IconButton>
+          <Link href={`/newInvoice/${params.row.id}`} passHref>
+            <IconButton>
+              <PostAddIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={() => {
               alert("TODO: download documents");
@@ -134,15 +161,11 @@ export default function PatientList({
           >
             <HistoryEduIcon />
           </IconButton>
-          <IconButton
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              openUpdatePatient(params.row.patient);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Link href={`/patients/update/${params.row.patient._id}`} passHref>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();
@@ -165,11 +188,11 @@ export default function PatientList({
   }));
 
   return (
-    <Paper sx={{ m: 2, p: 2, height: "90%" }}>
+    <Container>
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Pazienti
       </Typography>
-      <Box sx={{height: "90%"}}>
+      <Box sx={{ height: "90%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -178,8 +201,9 @@ export default function PatientList({
           components={{
             Toolbar: ListTableToolbar,
           }}
+          onRowClick={(params) => router.push(`/patients/${params.row.id}`)}
         />
       </Box>
-    </Paper>
+    </Container>
   );
 }

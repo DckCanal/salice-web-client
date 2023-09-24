@@ -1,7 +1,6 @@
 import dbConnect from "../../../lib/dbConnect";
 import User from "../../../models/userModel";
 import jwt from "jsonwebtoken";
-import { serialize } from "cookie";
 import { setCookie } from "nookies";
 import sendBadRequest from "../../../lib/badRequestError";
 

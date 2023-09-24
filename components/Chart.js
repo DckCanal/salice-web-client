@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
+import { CircularProgress, Box } from "@mui/material";
+
 import {
   LineChart,
   Line,
@@ -10,19 +12,57 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import Title from "./Title";
-import { getShortMonths } from "../lib/dateUtils";
 
-export default function Chart({
-  lightTheme,
-  currentIncome,
-  previousIncome,
-  currentLabel,
-  previousLabel,
-}) {
+import Title from "./Title";
+import ErrorBox from "./ErrorBox";
+import { getShortMonths } from "../lib/dateUtils";
+import { useInvoices } from "../lib/hooks";
+
+const reducer = (monthlyIncome, inv) => {
+  const m = new Date(inv.dataEmissione).getMonth();
+  monthlyIncome[m] += Number.parseFloat(inv.valore);
+  return monthlyIncome;
+};
+
+export default function Chart() {
+  const { invoices, error, isLoading } = useInvoices();
   const theme = useTheme();
 
+  if (error)
+    return (
+      <ErrorBox title="Errore nel caricamento delle fatture" text={error} />
+    );
+
+  if (invoices === undefined || isLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          flexGrow: "1",
+        }}
+      >
+        <CircularProgress sx={{ mx: "auto" }} />
+      </Box>
+    );
+
   const data = [];
+  const now = new Date();
+  const previousLabel = now.getFullYear() - 1;
+  const currentLabel = now.getFullYear();
+  const currentIncome = invoices
+    .filter(
+      (i) => new Date(i.dataEmissione).getFullYear() === now.getFullYear()
+    )
+    .reduce(reducer, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    .slice(0, now.getMonth() + 1);
+  const previousIncome = invoices
+    .filter(
+      (i) => new Date(i.dataEmissione).getFullYear() === now.getFullYear() - 1
+    )
+    .reduce(reducer, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   getShortMonths().forEach((m, i) => {
     const newData = {};
     newData["mese"] = m;
@@ -66,7 +106,9 @@ export default function Chart({
             </Label>
           </YAxis>
           <Tooltip
-            contentStyle={{ backgroundColor: lightTheme ? "#ddd" : "#555" }}
+            contentStyle={{
+              backgroundColor: theme.palette.mode === "light" ? "#ddd" : "#555",
+            }}
           />
           <Legend />
           <Line

@@ -1,17 +1,23 @@
 import * as React from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+
 import { Button, Box, Typography } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
-import { DateTime } from "luxon";
-import validator from "validator";
-import CodiceFiscale from "codice-fiscale-js";
-import MarginTextField from "./MarginTextField";
-import FormPaper from "./FormPaper";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 
-export default function NewPatientView({ addPatient, openNextView }) {
+import { DateTime } from "luxon";
+import validator from "validator";
+import CodiceFiscale from "codice-fiscale-js";
+
+import MarginTextField from "./MarginTextField";
+import FormPaper from "./FormPaper";
+import { newPatient } from "../lib/controller";
+
+export default function NewPatientView() {
   // ---- COMPONENT STATE --- //
   const [name, setName] = React.useState("");
   const [surname, setSurname] = React.useState("");
@@ -31,6 +37,8 @@ export default function NewPatientView({ addPatient, openNextView }) {
   const [prezzo, setPrezzo] = React.useState(0);
   const [waiting, setWaiting] = React.useState(false);
 
+  const router = useRouter();
+
   // RegExp for validators
   const capRegEx = /\d{5}/;
   const provRegEx = /[A-Z]{2}/i;
@@ -43,31 +51,48 @@ export default function NewPatientView({ addPatient, openNextView }) {
     setWaiting(true);
 
     try {
-      const newPatient = await addPatient(
-        name,
-        surname,
-        codFisc,
-        pIva,
-        paeseResidenza,
-        provinciaResidenza,
-        capResidenza,
-        viaResidenza,
-        civicoResidenza,
-        telefono,
-        email,
-        new Date(dataNascita),
-        paeseNascita,
-        provinciaNascita,
-        capNascita,
-        prezzo
+      const { newPatient: addedPatient } = await mutate(
+        "/api/patients",
+        newPatient(
+          name,
+          surname,
+          codFisc,
+          pIva,
+          paeseResidenza,
+          provinciaResidenza,
+          capResidenza,
+          viaResidenza,
+          civicoResidenza,
+          telefono,
+          email,
+          new Date(dataNascita),
+          paeseNascita,
+          provinciaNascita,
+          capNascita,
+          prezzo
+        ),
+        {
+          revalidate: false,
+          populateCache: (addedPatient, cacheData) => {
+            return {
+              ...cacheData,
+              data: {
+                ...cacheData.data,
+                patients: [...cacheData.data.patients, addedPatient],
+              },
+            };
+          },
+        }
       );
-      if (newPatient._id) {
+      if (addedPatient._id) {
         setWaiting(false);
+        router.push(`/patients/${addedPatient._id}`);
       }
+            // else show error message modal window, reset fields and enable submit
+
     } catch (err) {
       console.error(err);
     }
-    openNextView();
   }
 
   // VALIDATORS

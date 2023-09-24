@@ -1,36 +1,78 @@
 import * as React from "react";
-import Title from "./Title";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
-import { italianShortDate } from "../lib/dateUtils";
+import { CircularProgress } from "@mui/material";
 
-export default function LastInvoices({
-  invoices,
-  patients,
-  openPatientDetail,
-  d
-}) {
+import Title from "./Title";
+import ErrorBox from "./ErrorBox";
+import { italianShortDate } from "../lib/dateUtils";
+import { useInvoices, usePatients } from "../lib/hooks";
+
+export default function LastInvoices() {
+  const router = useRouter();
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+  const {
+    patients,
+    isLoading: isLoadingPatients,
+    error: patientsError,
+  } = usePatients();
+
+  if (patientsError)
+    return (
+      <ErrorBox
+        title="Errore nel caricamento del paziente"
+        text={patientsError}
+      />
+    );
+
+  if (invoicesError)
+    return (
+      <ErrorBox
+        title="Errore nel caricamento delle fatture"
+        text={invoicesError}
+      />
+    );
+
+  if (
+    invoices === undefined ||
+    patients === undefined ||
+    isLoadingPatients ||
+    isLoadingInvoices
+  )
+    return (
+      <>
+        <Title>Ultime fatture</Title>
+        <CircularProgress sx={{ mx: "auto", my: 10 }} />
+      </>
+    );
+
   const now = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(now.getFullYear() - 1);
 
-  // GET patients already ordered by server? This is only a slice()
-  const lastPatients = patients
-    .sort((p1, p2) => {
-      return Date.parse(p1.ultimaModifica) > Date.parse(p2.ultimaModifica)
-        ? -1
-        : 1;
-    })
-    .slice(0, 21);
-
-  // GET invoices already ordered by server? This is only a filter()
   const lastInvoices = invoices
     .filter((i) => Date.parse(i.dataEmissione) > Date.parse(oneYearAgo))
     .sort((i1, i2) =>
       Date.parse(i1.dataEmissione) > Date.parse(i2.dataEmissione) ? -1 : 1
     );
-  const rows = lastPatients.map((p, i) => {
+
+  const fatturatoUltimoAnno = {};
+  patients.forEach((p) => {
+    fatturatoUltimoAnno[p._id] = 0;
+  });
+  lastInvoices.forEach((i) => {
+    fatturatoUltimoAnno[i.paziente] += Number.parseFloat(i.valore);
+  });
+
+  const rows = patients.slice(0, 21).map((p, i) => {
     let lastInvoiceFound = undefined;
     lastInvoices.forEach((i) => {
       if (i.paziente === p._id) {
@@ -39,27 +81,22 @@ export default function LastInvoices({
     });
     return {
       id: i,
-      value: `${lastInvoiceFound || 0}€ (${d ? p.fatturatoUltimoAnno+p.dfatturatoUltimoAnno : p.fatturatoUltimoAnno || 0}€)`,
+      value: `${lastInvoiceFound || 0}€ (${fatturatoUltimoAnno[p._id]}€)`,
       p,
       name: `${p.cognome.toUpperCase()} ${p.nome}`,
     };
   });
+
   const columns = [
     {
       field: "name",
       headerName: "Paziente",
       renderCell: (params) => (
-        <Button
-          variant="text"
-          size="small"
-          onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
-            openPatientDetail(params.row.p._id);
-          }}
-        >
-          {`${params.row.p.cognome} ${params.row.p.nome}`}
-        </Button>
+        <Link href={`/patients/${params.row.p._id}`} passHref>
+          <Button variant="text" size="small">
+            {`${params.row.p.cognome} ${params.row.p.nome}`}
+          </Button>
+        </Link>
       ),
       flex: 1,
     },
@@ -100,8 +137,9 @@ export default function LastInvoices({
     },
   ];
   return (
-    <React.Fragment>
+    <>
       <Title>Ultime fatture</Title>
+
       <DataGrid
         rows={rows}
         columns={columns}
@@ -110,10 +148,10 @@ export default function LastInvoices({
         disableExtendRowFullWidth={false}
         disableSelectionOnClick={true}
         hideFooter={true}
-        // onRowClick={(params) => {
-        //   openPatientDetail(params.row.p._id);
-        // }}
+        onRowClick={(params) => {
+          router.push(`/patients/${params.row.p._id}`);
+        }}
       />
-    </React.Fragment>
+    </>
   );
 }

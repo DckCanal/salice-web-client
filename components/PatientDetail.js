@@ -1,4 +1,8 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,38 +13,100 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import Chip from "@mui/material/Chip";
+import DownloadIcon from "@mui/icons-material/Download";
+import { DataGrid } from "@mui/x-data-grid";
+import { CircularProgress } from "@mui/material";
+
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
-import DownloadIcon from "@mui/icons-material/Download";
-import { DataGrid } from "@mui/x-data-grid";
-import { deleteInvoice } from "../lib/controller";
+import { deleteInvoice, deletePatient } from "../lib/controller";
+import { useInvoices, usePatient } from "../lib/hooks";
+import ErrorBox from "./ErrorBox";
 
-export default function PatientDetail({
-  patient,
-  invoices,
-  openInvoiceDetail,
-  createNewInvoice,
-  deletePatient,
-  deleteInvoice,
-  openUpdateInvoice,
-  openUpdatePatient,
-  openHome,
-}) {
-  // invoices: is a subset of appData.invoices, containing only patient's ones.
-  if (patient == undefined || invoices == undefined)
-    return <p>Patient not found...</p>;
+const Container = ({ children }) => (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <Paper
+      sx={{
+        mt: 2,
+        ml: 2,
+        mr: 2,
+        p: 4,
+        minWidth: "700px",
+        maxWidth: "900px",
+      }}
+    >
+      {children}
+    </Paper>
+  </Box>
+);
+
+export default function PatientDetail({ id }) {
+  const router = useRouter();
+  const {
+    patient,
+    isLoading: isLoadingPatient,
+    error: patientError,
+  } = usePatient(id);
+  const {
+    invoices,
+    isLoading: isLoadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+
+  if (isLoadingInvoices || isLoadingPatient)
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+          }}
+        >
+          <CircularProgress sx={{ mx: "auto" }} />
+        </Box>
+      </Container>
+    );
+
+  if (patientError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={patientError}
+        />
+      </Container>
+    );
+  if (invoicesError)
+    return (
+      <Container>
+        <ErrorBox
+          title="Errore nel caricamento delle fatture"
+          text={invoicesError}
+        />
+      </Container>
+    );
+
   const res = patient.indirizzoResidenza;
-  const rows = invoices.map((i) => ({
-    id: i._id,
-    ordinal: i.numeroOrdine,
-    value: i.valore,
-    issueDate: new Date(i.dataEmissione),
-    collectDate: new Date(i.dataIncasso),
-    ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
-      i.numeroOrdine
-    ).padStart(10, "0")}`,
-  }));
+  const rows = invoices
+    .filter((i) => String(i.paziente) === String(patient._id))
+    .map((i) => ({
+      id: i._id,
+      ordinal: i.numeroOrdine,
+      value: i.valore,
+      issueDate: new Date(i.dataEmissione),
+      collectDate: new Date(i.dataIncasso),
+      ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
+        i.numeroOrdine
+      ).padStart(10, "0")}`,
+    }));
   const columns = [
     {
       field: "id",
@@ -97,25 +163,29 @@ export default function PatientDetail({
           >
             <DownloadIcon />
           </IconButton>
+          <Link href={`/invoices/update/${params.row.id}`} passHref>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={(ev) => {
               ev.preventDefault();
               ev.stopPropagation();
-              openUpdateInvoice(
-                invoices.find((i) => String(i._id) === String(params.row.id)),
-                patient
-              );
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              deleteInvoice(
-                invoices.find((i) => String(i._id) === String(params.row.id))
-              );
+              mutate("/api/invoices", deleteInvoice(params.row.id), {
+                revalidate: false,
+                populateCache: (_res, cacheData) => {
+                  return {
+                    ...cacheData,
+                    data: {
+                      ...cacheData.data,
+                      invoices: cacheData.data.invoices.filter(
+                        (i) => String(i._id) !== String(params.row.id)
+                      ),
+                    },
+                  };
+                },
+              });
             }}
           >
             <DeleteIcon />
@@ -148,22 +218,16 @@ export default function PatientDetail({
             {patient.cognome.toUpperCase()} {patient.nome}
           </Typography>
           <Box>
-            <IconButton
-              onClick={() => {
-                createNewInvoice(patient._id);
-              }}
-            >
-              <PostAddIcon />
-            </IconButton>
-            <IconButton
-              onClick={(ev) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-                openUpdatePatient(patient);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
+            <Link href={`/newInvoice/${patient._id}`} passHref>
+              <IconButton>
+                <PostAddIcon />
+              </IconButton>
+            </Link>
+            <Link href={`/patients/update/${patient._id}`} passHref>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+            </Link>
 
             <IconButton
               onClick={() => {
@@ -178,7 +242,7 @@ export default function PatientDetail({
                 ev.stopPropagation();
                 try {
                   const res = await deletePatient(patient);
-                  if (res) openHome();
+                  if (res) router.push("/dashboard");
                 } catch (err) {
                   console.error(err);
                 }
@@ -264,7 +328,6 @@ export default function PatientDetail({
                     href={`mailto:${patient.email}`}
                     clickable
                   />
-                  /*<Typography variant="body1">{patient.email}</Typography>*/
                 )}
               </Box>
             </Box>
@@ -288,7 +351,7 @@ export default function PatientDetail({
           }}
           checkboxSelection={true}
           onRowClick={(params) => {
-            openInvoiceDetail(params.row.id);
+            router.push(`/invoices/${params.row.id}`);
           }}
         />
       </Paper>

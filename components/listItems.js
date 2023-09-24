@@ -1,66 +1,52 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
 import Divider from "@mui/material/Divider";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import HomeIcon from "@mui/icons-material/Home";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PersonIcon from "@mui/icons-material/Person";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
-export default function ListItems({ sel, clickHandler }) {
+const itemsData = [
+  ["/dashboard", HomeIcon, "Home"],
+  ["/invoices", DescriptionIcon, "Fatture"],
+  ["/patients", PersonIcon, "Pazienti"],
+  //["/graphs", BarChartIcon, "Grafici"],
+];
+const actionsData = [
+  ["/newInvoice", PostAddIcon, "Nuova fattura"],
+  ["/newPatient", PersonAddIcon, "Nuovo paziente"],
+];
+
+export default function ListItems() {
+  const router = useRouter();
+  const pathname = router.pathname;
+  const createList = (data) =>
+    data.map(([href, Icon, text]) => (
+      <ListItemButton
+        key={href}
+        component={Link}
+        href={href}
+        selected={pathname === href}
+      >
+        <ListItemIcon>
+          <Icon />
+        </ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    ));
   return (
-    <React.Fragment>
-      <ListItemButton selected={sel == 1} onClick={clickHandler("Home")}>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Home" />
-      </ListItemButton>
-      <ListItemButton selected={sel == 2} onClick={clickHandler("InvoiceList")}>
-        <ListItemIcon>
-          <DescriptionIcon />
-        </ListItemIcon>
-        <ListItemText primary="Fatture" />
-      </ListItemButton>
-      <ListItemButton selected={sel == 3} onClick={clickHandler("PatientList")}>
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <ListItemText primary="Pazienti" />
-      </ListItemButton>
-      <ListItemButton selected={sel == 4} onClick={clickHandler("Graph")}>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Grafici" />
-      </ListItemButton>
+    <>
+      {createList(itemsData)}
+
       <Divider sx={{ my: 1 }} />
-      <ListSubheader component="div" inset>
-        Azioni
-      </ListSubheader>
-      <ListItemButton selected={sel == 5} onClick={clickHandler("NewInvoice")}>
-        <ListItemIcon>
-          <PostAddIcon />
-        </ListItemIcon>
-        <ListItemText primary={"Nuova fattura"} />
-      </ListItemButton>
-      <ListItemButton selected={sel == 6} onClick={clickHandler("NewPatient")}>
-        <ListItemIcon>
-          <PersonAddIcon />
-        </ListItemIcon>
-        <ListItemText primary="Nuovo paziente" />
-      </ListItemButton>
-      {/* <ListItemButton selected={sel == 7}>
-        <ListItemIcon>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary={new Date().getFullYear()} />
-      </ListItemButton> */}
-    </React.Fragment>
+
+      {createList(actionsData)}
+    </>
   );
 }

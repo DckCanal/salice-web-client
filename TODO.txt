@@ -1,7 +1,7 @@
-Home graph has to be responsive.
+Home graph has to be responsive. OK
 SignIn.js, manage HTTP error code 500
 Added rapid action buttons in 'Ultime fatture' table
-Change browser's back button behavior
+Change browser's back button behavior OK
 Add a "reload data" button
 BUG: when not logged in but opening /dashboard, tries to load patients and throws and exception because it's undefined
 BUG: totale mensile anno precedente sbagliato
@@ -54,3 +54,87 @@ FIX: d behavior duplicating invoices and not saving d invoices with d set to tru
 FIX: deleting patients makes app crash, reading fields of undefined
 
 TODO: users functionalities
+
+
+useSWR inside each page to fetch data from server or use cached. OK
+
+
+Context:
+ - d OK
+ - year from invoices page
+
+Links to fix: OK
+Patient List to patient detail OK
+Update Patient page OK
+Update Invoice page OK
+
+On delete patient: check if it has invoices, don't show delete button
+
+In Dashboard.js layout is not used!! OK
+
+
+NewInvoiceView -> openNextView to be set to /invoices/[newInvoiceId]
+    Maybe needs to invalidate SWR cached data
+
+Same as above on NewPatientView
+
+On ListTable, action button click catched by row 'onClickAction': <Link> sovrapposti
+
+Login page doesn't uses light theme OK
+
+Peek theme from system
+
+Push down alongside the DOM, my hooks (useInvoices...): fetch data where needed,
+and manage loading and error state in an easier way! OK
+Don't pass data manager functions as props, but import from lib folder!
+
+
+
+Reducers and context:
+    - data loading inside useEffect() of dashbaord component, firing 'load' action(s)
+    - data mix:
+        - fatturatoUltimoAnno: extract from patient and use a state for dashboard; use hook 'useMemo'
+        to avoid regenerating the array on each render
+        - patient.ultimaModifica: reload data on mutation??
+
+Maybe reducers should even not be used. Use swr instead.
+
+SWR:
+    - useInvoices, usePatients... on even component
+    - fatturatoUltimoAnno: depends on invoices and patients, so use useMemo to calculate it. If there
+    is no change between page navigation, preceiding values are used.
+    - on useInvoices, don't sort invoices: send correct server request
+    - options:
+        - revalidateOnFocus: not needed, there won't be any change between screen lock and unlock
+
+
+
+Check if useMemo is needed in MUI tables, specially for items sorting.
+
+
+
+SELECTED YEARS: Context and Providers
+D TOGGLE: keyboard handler on dashboard.js
+
+
+InvoiceList: calcolare il fatturato dell'ultimo anno, senza aggiungere campi all'array di pazienti. OK
+    Usare React.useMemo()
+
+
+
+paziente.ultimaModifica:
+    quando viene inserita una nuova fattura, ultima modifica viene impostato
+    alla data di emissione di quella fattura. Quando però viene aggiornata una
+    fattura, il campo ultimaModifica non viene aggiornato.
+    FIX: aggiornare ultimaModifica, all'ultima fattura !d intestata al paziente
+        - in pages/api/invoices/[invoiceId].js
+        - in components/updateInvoiceView.js, in populateCache
+
+
+updatePatientView:
+    FIX: validator sulla data di nascita: se vuoto, segna Errore OK
+    FIX: alla variazione di un campo, l'input field perde il focus
+
+FIX: calendario basco al posto di quello italiano
+
+Trasferire fatturatoUltimoAnno in un Context
