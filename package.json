@@ -18,7 +18,7 @@
     "@mui/material": "^5.6.2",
     "@mui/x-data-grid": "^5.17.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.4",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
     "codice-fiscale-js": "^2.3.18",
     "cookie": "^0.5.0",
