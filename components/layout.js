@@ -17,6 +17,7 @@ import DarkThemeToggler from "./DarkThemeToggler";
 import { useUser } from "../lib/hooks";
 import SearchField from "./SearchField";
 import { DContext } from "./DContext";
+import { ToggleDContext } from "./SwitchDContext";
 import { YearContext } from "../components/YearContext";
 
 const drawerWidth = 240;
@@ -116,21 +117,9 @@ export default function Layout({ children }) {
                 il Salice
               </Typography>
               <SearchField />
-              {!error && (
-                <IconButton onClick={() => switchd()}>
-                  <MenuIcon htmlColor="#ffffff" />
-                  {d ? (
-                    <Typography component="p" variant="p" color="#ffffff">
-                      true
-                    </Typography>
-                  ) : (
-                    <Typography component="p" variant="p" color="#ffffff">
-                      false
-                    </Typography>
-                  )}
-                </IconButton>
-              )}
-              <DarkThemeToggler />
+              <ToggleDContext.Provider value={switchd}>
+                <DarkThemeToggler />
+              </ToggleDContext.Provider>
             </Toolbar>
           </AppBar>
           {!error && (
