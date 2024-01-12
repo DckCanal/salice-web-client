@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
@@ -13,8 +13,27 @@ const darkTheme = createTheme({
 });
 
 function MyApp({ Component, pageProps }) {
-  const [lightTheme, setLightTheme] = useState(false);
+  const [lightTheme, setLightTheme] = useState(true);
   const getLayout = Component.getLayout || ((page) => page);
+
+  useEffect(() => {
+    window.matchMedia &&
+      setLightTheme(
+        window.matchMedia("(prefers-color-scheme: dark)").matches ? false : true
+      );
+    const handleColorSchemeChange = (event) => setLightTheme(event.matches);
+    window
+      .matchMedia("(prefers-color-scheme: light)")
+      .addEventListener("change", (event) => {
+        handleColorSchemeChange;
+      });
+
+    return () => {
+      window
+        .matchMedia("(prefers-color-scheme: light)")
+        .removeEventListener("change", handleColorSchemeChange);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={lightTheme ? mdTheme : darkTheme}>
