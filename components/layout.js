@@ -68,6 +68,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout({ children }) {
   const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(window.innerWidth > 1200);
   const [d, setD] = React.useState(false);
   const [selectedYears, setSelectedYears] = React.useState([
     new Date().getFullYear(),
@@ -82,6 +83,16 @@ export default function Layout({ children }) {
     setOpen(!open);
   };
   const yearContext = [selectedYears, setSelectedYears];
+
+  React.useEffect(() => {
+    // Verifica se il codice è eseguito lato client prima di utilizzare window
+    if (typeof window !== "undefined") {
+      // Aggiungi un listener per il ridimensionamento della finestra
+      if (window.innerWidth > 1200) {
+        setOpen(true);
+      }
+    }
+  }, []);
 
   return (
     <DContext.Provider value={d}>
