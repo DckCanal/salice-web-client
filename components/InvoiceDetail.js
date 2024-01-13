@@ -36,10 +36,9 @@ const PaperContainer = ({ children }) => (
     sx={{
       mt: 2,
       p: 4,
+      mx: "auto",
       maxWidth: "700px",
-      minWidth: "500px",
-      mr: "auto",
-      ml: "auto",
+      width: { xs: "100%", sm: "96%" },
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -98,14 +97,21 @@ export default function InvoiceDetail({ id }) {
   const cashed = invoice.dataIncasso !== undefined;
   return (
     <PaperContainer>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          mb: 1,
+        }}
+      >
         <Typography variant="h5">
           Fattura N. {invoice.numeroOrdine} del{" "}
           {`${date.getDate()} ${italianMonth(
             date.getMonth()
           ).toLowerCase()} ${date.getFullYear()}`}
         </Typography>
-        <Box>
+        <Box sx={{ mt: { xs: 2, md: 0 } }}>
           <IconButton
             onClick={() => {
               excelInvoice(patient, invoice);
@@ -146,22 +152,25 @@ export default function InvoiceDetail({ id }) {
       <Divider />
       <Box
         sx={{
-          m: 2,
+          mt: 2,
+          mx: { xs: 0, md: 2 },
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "flex-start",
         }}
       >
         <Box
           sx={{
             mt: 1,
-            width: "33%",
+            width: { xs: "100%", md: "33%" },
+            display: { xs: "none", md: "block" },
           }}
         >
           <Typography variant="button" sx={{ m: 2 }}>
             Intestatario
           </Typography>
         </Box>
-        <Box sx={{ width: "66%" }}>
+        <Box sx={{ width: { xs: "100%", md: "66%" } }}>
           <Link href={`/patients/${patient._id}`} passHref>
             {" "}
             <Button variant="text">
@@ -169,61 +178,67 @@ export default function InvoiceDetail({ id }) {
             </Button>
           </Link>
           <Divider />
-          {patient.codiceFiscale && (
-            <TextLine>{patient.codiceFiscale}</TextLine>
-          )}
-          {patient.partitaIva && <TextLine>patient.partitaIva</TextLine>}
-          <TextLine>
-            Residente a {patient.indirizzoResidenza.paese} (
-            {patient.indirizzoResidenza.provincia}),{" "}
-            {patient.indirizzoResidenza.cap}, {patient.indirizzoResidenza.via}{" "}
-            {patient.indirizzoResidenza.civico}
-          </TextLine>
-          {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
-          {patient.email && <TextLine>{patient.email}</TextLine>}
+          <Box sx={{ p: { xs: 2, md: 0 } }}>
+            {patient.codiceFiscale && (
+              <TextLine>{patient.codiceFiscale}</TextLine>
+            )}
+            {patient.partitaIva && <TextLine>patient.partitaIva</TextLine>}
+            <TextLine>
+              Residente a {patient.indirizzoResidenza.paese} (
+              {patient.indirizzoResidenza.provincia}),{" "}
+              {patient.indirizzoResidenza.cap}, {patient.indirizzoResidenza.via}{" "}
+              {patient.indirizzoResidenza.civico}
+            </TextLine>
+            {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
+            {patient.email && <TextLine>{patient.email}</TextLine>}
+          </Box>
         </Box>
       </Box>
       <Divider />
       <Box
         sx={{
-          m: 2,
+          mt: 2,
+          mx: { xs: 0, md: 2 },
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "flex-start",
         }}
       >
         <Box
           sx={{
             mt: 1,
-            width: "33%",
-            p: 2,
+            width: { xs: "100%", md: "33%" },
+            //p: 2,
             pt: 1,
           }}
         >
           <Typography variant="button">Prestazione eseguita</Typography>
         </Box>
-        <Box sx={{ width: "66%", p: 2, pt: 1, mt: 1 }}>
+        <Box sx={{ width: { xs: "100%", md: "66%" }, p: 2, pt: 1, mt: 1 }}>
           <Typography>{invoice.testo}</Typography>
         </Box>
       </Box>
       <Divider />
       <Box
         sx={{
-          m: 2,
+          mt: 2,
+          mx: { xs: 0, md: 2 },
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "flex-start",
         }}
       >
         <Box
           sx={{
             mt: 1,
-            width: "33%",
-            p: 2,
+            width: { xs: "100%", md: "33%" },
+            //p: 2,
             pt: 1,
           }}
         >
           <Typography variant="button">Valore</Typography>
         </Box>
-        <Box sx={{ width: "66%", p: 2, pt: 1, mt: 1 }}>
+        <Box sx={{ width: { xs: "100%", md: "66%" }, p: 2, pt: 1, mt: 1 }}>
           <Typography>{invoice.valore}€</Typography>
         </Box>
       </Box>

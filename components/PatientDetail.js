@@ -35,11 +35,9 @@ const Container = ({ children }) => (
     <Paper
       sx={{
         mt: 2,
-        ml: 2,
-        mr: 2,
         p: 4,
-        minWidth: "700px",
-        maxWidth: "900px",
+        maxWidth: "700px",
+        width: { xs: "100%", sm: "96%" },
       }}
     >
       {children}
@@ -206,14 +204,22 @@ export default function PatientDetail({ id }) {
       <Paper
         sx={{
           mt: 2,
-          ml: 2,
-          mr: 2,
           p: 4,
-          minWidth: "700px",
-          maxWidth: "900px",
+          maxWidth: "700px",
+          width: { xs: "100%", sm: "96%" },
         }}
       >
-        <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: {
+              xs: "column",
+              sm: "row",
+            },
+          }}
+        >
           <Typography variant="h5">
             {patient.cognome.toUpperCase()} {patient.nome}
           </Typography>
@@ -256,7 +262,7 @@ export default function PatientDetail({ id }) {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            alignItems: "flex-end",
+            alignItems: { xs: "flex-start", sm: "flex-end" },
             flexDirection: "column",
           }}
         >
