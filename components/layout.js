@@ -85,13 +85,21 @@ export default function Layout({ children }) {
   const yearContext = [selectedYears, setSelectedYears];
 
   React.useEffect(() => {
+    const autoOpenOrCloseDrawer = () => {
+      if (window.innerWidth > 1200) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    };
     // Verifica se il codice è eseguito lato client prima di utilizzare window
     if (typeof window !== "undefined") {
-      // Aggiungi un listener per il ridimensionamento della finestra
       if (window.innerWidth > 1200) {
         setOpen(true);
       }
+      window.addEventListener("resize", autoOpenOrCloseDrawer);
     }
+    return () => window.removeEventListener("resize", autoOpenOrCloseDrawer);
   }, []);
 
   return (
