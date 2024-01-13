@@ -24,9 +24,7 @@ function MyApp({ Component, pageProps }) {
     const handleColorSchemeChange = (event) => setLightTheme(event.matches);
     window
       .matchMedia("(prefers-color-scheme: light)")
-      .addEventListener("change", (event) => {
-        handleColorSchemeChange;
-      });
+      .addEventListener("change", handleColorSchemeChange);
 
     return () => {
       window
