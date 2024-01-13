@@ -1,9 +1,13 @@
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
+import { BottomNavigation } from "@mui/material";
+import { BottomNavigationAction } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -11,6 +15,9 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import HomeIcon from "@mui/icons-material/Home";
+import DescriptionIcon from "@mui/icons-material/Description";
+import PersonIcon from "@mui/icons-material/Person";
 
 import ListItems from "./listItems";
 import DarkThemeToggler from "./DarkThemeToggler";
@@ -75,6 +82,8 @@ export default function Layout({ children }) {
   ]);
   const { user, error, isLoading } = useUser();
 
+  const router = useRouter();
+
   function switchd() {
     setD(!d);
   }
@@ -110,6 +119,9 @@ export default function Layout({ children }) {
             <Toolbar
               sx={{
                 pr: "24px", // keep right padding when drawer closed
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
             >
               {!error && (
@@ -121,6 +133,10 @@ export default function Layout({ children }) {
                   sx={{
                     marginRight: "36px",
                     ...(open && { display: "none" }),
+                    display: {
+                      xs: "none",
+                      sm: "block",
+                    },
                   }}
                 >
                   <MenuIcon />
@@ -131,10 +147,14 @@ export default function Layout({ children }) {
                 variant="h6"
                 color="inherit"
                 noWrap
-                sx={{ flexGrow: 1 }}
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", sm: "block" },
+                }}
               >
                 il Salice
               </Typography>
+
               <SearchField />
               <ToggleDContext.Provider value={switchd}>
                 <DarkThemeToggler />
@@ -142,7 +162,16 @@ export default function Layout({ children }) {
             </Toolbar>
           </AppBar>
           {!error && (
-            <Drawer variant="permanent" open={open}>
+            <Drawer
+              variant="permanent"
+              open={open}
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "block",
+                },
+              }}
+            >
               <Toolbar
                 sx={{
                   display: "flex",
@@ -177,6 +206,43 @@ export default function Layout({ children }) {
             {/* --- MAIN CONTENT ---  */}
             {children}
           </Box>
+          <BottomNavigation
+            value={router.pathname}
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              width: "100vw",
+              display: {
+                xs: "flex",
+                sm: "none",
+              },
+            }}
+          >
+            <BottomNavigationAction
+              label="Home"
+              value="/dashboard"
+              icon={<HomeIcon />}
+              showLabel={true}
+              href="/dashboard"
+              component={Link}
+            />
+            <BottomNavigationAction
+              label="Fatture"
+              value="/invoices"
+              icon={<DescriptionIcon />}
+              showLabel={true}
+              href="/invoices"
+              component={Link}
+            />
+            <BottomNavigationAction
+              label="Pazienti"
+              value="/patients"
+              icon={<PersonIcon />}
+              showLabel={true}
+              href="/patients"
+              component={Link}
+            />
+          </BottomNavigation>
         </Box>
       </YearContext.Provider>
     </DContext.Provider>
