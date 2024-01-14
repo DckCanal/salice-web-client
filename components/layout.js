@@ -8,6 +8,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 import { BottomNavigation } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
+import { Paper } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -206,43 +207,53 @@ export default function Layout({ children }) {
             {/* --- MAIN CONTENT ---  */}
             {children}
           </Box>
-          <BottomNavigation
-            value={router.pathname}
+          <Paper
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: 0,
-              width: "100vw",
-              display: {
-                xs: "flex",
-                sm: "none",
-              },
+              right: 0,
+              left: 0,
             }}
+            elevation={3}
           >
-            <BottomNavigationAction
-              label="Home"
-              value="/dashboard"
-              icon={<HomeIcon />}
-              showLabel={true}
-              href="/dashboard"
-              component={Link}
-            />
-            <BottomNavigationAction
-              label="Fatture"
-              value="/invoices"
-              icon={<DescriptionIcon />}
-              showLabel={true}
-              href="/invoices"
-              component={Link}
-            />
-            <BottomNavigationAction
-              label="Pazienti"
-              value="/patients"
-              icon={<PersonIcon />}
-              showLabel={true}
-              href="/patients"
-              component={Link}
-            />
-          </BottomNavigation>
+            <BottomNavigation
+              value={router.pathname}
+              sx={{
+                // position: "absolute",
+                // bottom: 0,
+                width: "100vw",
+                display: {
+                  xs: "flex",
+                  sm: "none",
+                },
+              }}
+            >
+              <BottomNavigationAction
+                label="Home"
+                value="/dashboard"
+                icon={<HomeIcon />}
+                showLabel={true}
+                href="/dashboard"
+                component={Link}
+              />
+              <BottomNavigationAction
+                label="Fatture"
+                value="/invoices"
+                icon={<DescriptionIcon />}
+                showLabel={true}
+                href="/invoices"
+                component={Link}
+              />
+              <BottomNavigationAction
+                label="Pazienti"
+                value="/patients"
+                icon={<PersonIcon />}
+                showLabel={true}
+                href="/patients"
+                component={Link}
+              />
+            </BottomNavigation>
+          </Paper>
         </Box>
       </YearContext.Provider>
     </DContext.Provider>
