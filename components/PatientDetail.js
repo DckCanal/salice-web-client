@@ -47,6 +47,14 @@ const Container = ({ children }) => (
 
 export default function PatientDetail({ id }) {
   const router = useRouter();
+  const [colVisibilityModel, setColVisibilityModel] = React.useState({
+    id: false,
+    ordinalWithYear: true,
+    value: true,
+    issueDate: true,
+    collectDate: true,
+    actions: true,
+  });
   const {
     patient,
     isLoading: isLoadingPatient,
@@ -57,6 +65,51 @@ export default function PatientDetail({ id }) {
     isLoading: isLoadingInvoices,
     error: invoicesError,
   } = useInvoices();
+
+  React.useEffect(() => {
+    const toggleColVisibilityOnResize = () => {
+      if (window.innerWidth < 600) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            value: true,
+            issueDate: true,
+            collectDate: false,
+            actions: false,
+          };
+        });
+      } else if (window.innerWidth < 1200) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            value: true,
+            issueDate: true,
+            collectDate: false,
+            actions: true,
+          };
+        });
+      } else {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            value: true,
+            issueDate: true,
+            collectDate: true,
+            actions: true,
+          };
+        });
+      }
+    };
+    if (typeof window !== "undefined") {
+      toggleColVisibilityOnResize();
+    }
+    window.addEventListener("resize", toggleColVisibilityOnResize);
+    return () =>
+      window.removeEventListener("resize", toggleColVisibilityOnResize);
+  }, []);
 
   if (isLoadingInvoices || isLoadingPatient)
     return (
@@ -109,15 +162,14 @@ export default function PatientDetail({ id }) {
     {
       field: "id",
       headerName: "ID",
-      hide: true,
       width: 220,
     },
     {
       field: "ordinalWithYear",
-      headerName: `Numero d'ordine`,
+      headerName: `Numero`,
       align: "center",
       headerAlign: "center",
-      flex: 0.7,
+      flex: 0.5,
       renderCell: (params) =>
         `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
     },
@@ -146,6 +198,8 @@ export default function PatientDetail({ id }) {
       field: "actions",
       headerName: "Azioni",
       align: "center",
+      width: 160,
+      // flex: 1,
       headerAlign: "center",
       renderCell: (params) => (
         <>
@@ -190,7 +244,7 @@ export default function PatientDetail({ id }) {
           </IconButton>
         </>
       ),
-      flex: 0.5,
+      //flex: 0.5,
     },
   ];
   return (
@@ -276,7 +330,7 @@ export default function PatientDetail({ id }) {
         </Box>
 
         <Divider />
-        <Box sx={{ m: 2, ml: 2 }}>
+        <Box sx={{ m: 2, ml: { xs: 0, sm: 2 } }}>
           <Typography variant="h6">Residenza</Typography>
           <Box sx={{ ml: 2, mt: 1 }}>
             {res && res.paese && res.provincia && res.cap && (
@@ -292,7 +346,7 @@ export default function PatientDetail({ id }) {
           </Box>
         </Box>
         <Divider />
-        <Box sx={{ m: 2, ml: 2 }}>
+        <Box sx={{ m: 2, ml: { xs: 0, sm: 2 } }}>
           <Typography variant="h6">Anagrafica</Typography>
           <Box sx={{ ml: 2, mt: 1 }}>
             {patient.codiceFiscale && (
@@ -320,7 +374,7 @@ export default function PatientDetail({ id }) {
         <Divider />
         {(patient.email || patient.telefono) && (
           <>
-            <Box sx={{ m: 2, ml: 2 }}>
+            <Box sx={{ m: 2, ml: { xs: 0, sm: 2 } }}>
               <Typography variant="h6">Recapiti</Typography>
               <Box sx={{ ml: 2, mt: 1 }}>
                 {patient.telefono && (
@@ -342,7 +396,14 @@ export default function PatientDetail({ id }) {
         )}
       </Paper>
       <Paper
-        sx={{ mt: 2, ml: 2, mr: 2, p: 4, minWidth: "700px", maxWidth: "900px" }}
+        sx={{
+          mt: 2,
+          // ml: 2,
+          // mr: 2,
+          p: 4,
+          width: { xs: "100%", sm: "96%" },
+          maxWidth: "900px",
+        }}
       >
         <Typography variant="h6" sx={{ mb: 1 }}>
           Fatture
@@ -350,12 +411,16 @@ export default function PatientDetail({ id }) {
         <DataGrid
           rows={rows}
           columns={columns}
+          columnVisibilityModel={colVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColVisibilityModel(newModel)
+          }
           autoHeight={true}
           disableSelectionOnClick={true}
           components={{
             Toolbar: ListTableToolbar,
           }}
-          checkboxSelection={true}
+          checkboxSelection={false}
           onRowClick={(params) => {
             router.push(`/invoices/${params.row.id}`);
           }}

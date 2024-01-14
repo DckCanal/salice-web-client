@@ -43,7 +43,15 @@ const Container = ({ children }) => (
 
 export default function InvoiceList() {
   const [selectedYears, setSelectedYears] = useContext(YearContext);
-
+  const [colVisibilityModel, setColVisibilityModel] = React.useState({
+    id: false,
+    ordinalWithYear: true,
+    patientName: true,
+    value: true,
+    issueDate: true,
+    collectDate: true,
+    download: true,
+  });
   const {
     invoices,
     isLoading: isLoadingInvoices,
@@ -55,6 +63,54 @@ export default function InvoiceList() {
     error: patientsError,
   } = usePatients();
   const router = useRouter();
+
+  React.useEffect(() => {
+    const toggleColVisibilityOnResize = () => {
+      if (window.innerWidth < 800) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            patientName: true,
+            value: true,
+            issueDate: true,
+            collectDate: false,
+            download: false,
+          };
+        });
+      } else if (window.innerWidth < 1200) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            patientName: true,
+            value: true,
+            issueDate: true,
+            collectDate: false,
+            download: false,
+          };
+        });
+      } else {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            ordinalWithYear: true,
+            patientName: true,
+            value: true,
+            issueDate: true,
+            collectDate: true,
+            download: true,
+          };
+        });
+      }
+    };
+    if (typeof window !== "undefined") {
+      toggleColVisibilityOnResize();
+    }
+    window.addEventListener("resize", toggleColVisibilityOnResize);
+    return () =>
+      window.removeEventListener("resize", toggleColVisibilityOnResize);
+  }, []);
 
   if (invoicesError)
     return (
@@ -134,10 +190,10 @@ export default function InvoiceList() {
     },
     {
       field: "ordinalWithYear",
-      headerName: "Numero d'ordine",
+      headerName: "Numero",
       align: "center",
       headerAlign: "center",
-      flex: 0.7,
+      flex: 0.4,
       renderCell: (params) =>
         `${params.row.invoice.numeroOrdine}/${new Date(
           params.row.invoice.dataEmissione
@@ -245,12 +301,16 @@ export default function InvoiceList() {
         <DataGrid
           rows={rows}
           columns={columns}
+          columnVisibilityModel={colVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColVisibilityModel(newModel)
+          }
           pageSize={25}
           disableSelectionOnClick={true}
           components={{
             Toolbar: ListTableToolbar,
           }}
-          checkboxSelection={true}
+          checkboxSelection={false}
           onRowClick={(params) =>
             router.push(`/invoices/${params.row.invoice._id}`)
           }

@@ -13,7 +13,7 @@ const darkTheme = createTheme({
 });
 
 function MyApp({ Component, pageProps }) {
-  const [lightTheme, setLightTheme] = useState(true);
+  const [lightTheme, setLightTheme] = useState(false);
   const getLayout = Component.getLayout || ((page) => page);
 
   useEffect(() => {

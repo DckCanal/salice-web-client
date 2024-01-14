@@ -243,7 +243,14 @@ export default function InvoiceDetail({ id }) {
         </Box>
       </Box>
       <Divider />
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          mt: 2,
+          mb: { xs: 5, sm: 0 },
+        }}
+      >
         {cashed ? (
           new Date(invoice.dataIncasso).getTime() == date.getTime() ? (
             <Chip

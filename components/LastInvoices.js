@@ -11,9 +11,17 @@ import Title from "./Title";
 import ErrorBox from "./ErrorBox";
 import { italianShortDate } from "../lib/dateUtils";
 import { useInvoices, usePatients } from "../lib/hooks";
+import { TurnedIn } from "@mui/icons-material";
 
 export default function LastInvoices() {
+  const [colVisibilityModel, setColVisibilityModel] = React.useState({
+    name: true,
+    date: true,
+    email: true,
+    value: true,
+  });
   const router = useRouter();
+
   const {
     invoices,
     isLoading: isLoadingInvoices,
@@ -24,6 +32,45 @@ export default function LastInvoices() {
     isLoading: isLoadingPatients,
     error: patientsError,
   } = usePatients();
+
+  React.useEffect(() => {
+    const toggleColVisibilityOnResize = () => {
+      if (window.innerWidth < 800) {
+        setColVisibilityModel((_) => {
+          return {
+            name: true,
+            date: false,
+            email: false,
+            value: true,
+          };
+        });
+      } else if (window.innerWidth < 1200) {
+        setColVisibilityModel((_) => {
+          return {
+            name: true,
+            date: false,
+            email: true,
+            value: true,
+          };
+        });
+      } else {
+        setColVisibilityModel((_) => {
+          return {
+            name: true,
+            date: true,
+            email: true,
+            value: true,
+          };
+        });
+      }
+    };
+    if (typeof window !== "undefined") {
+      toggleColVisibilityOnResize();
+    }
+    window.addEventListener("resize", toggleColVisibilityOnResize);
+    return () =>
+      window.removeEventListener("resize", toggleColVisibilityOnResize);
+  }, []);
 
   if (patientsError)
     return (
@@ -143,6 +190,10 @@ export default function LastInvoices() {
       <DataGrid
         rows={rows}
         columns={columns}
+        columnVisibilityModel={colVisibilityModel}
+        onColumnVisibilityModelChange={(newModel) =>
+          setColVisibilityModel(newModel)
+        }
         autoHeight={true}
         density="compact"
         disableExtendRowFullWidth={false}

@@ -52,6 +52,73 @@ const Container = ({ children }) => (
 export default function PatientList() {
   const router = useRouter();
   const { patients, isLoading, error } = usePatients();
+
+  const [colVisibilityModel, setColVisibilityModel] = React.useState({
+    id: false,
+    paziente: true,
+    codFisc: false,
+    ultimaModifica: true,
+    email: true,
+    telefono: false,
+    prezzo: true,
+    fatturatoUltimoAnno: true,
+    actions: true,
+  });
+
+  React.useEffect(() => {
+    const toggleColVisibilityOnResize = () => {
+      if (window.innerWidth < 800) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            paziente: true,
+            codFisc: false,
+            ultimaModifica: true,
+            email: false,
+            telefono: false,
+            prezzo: true,
+            fatturatoUltimoAnno: false,
+            actions: false,
+          };
+        });
+      } else if (window.innerWidth < 1200) {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            paziente: true,
+            codFisc: false,
+            ultimaModifica: true,
+            email: true,
+            telefono: false,
+            prezzo: true,
+            fatturatoUltimoAnno: true,
+            actions: false,
+          };
+        });
+      } else {
+        setColVisibilityModel((_) => {
+          return {
+            id: false,
+            paziente: true,
+            codFisc: false,
+            ultimaModifica: true,
+            email: true,
+            telefono: false,
+            prezzo: true,
+            fatturatoUltimoAnno: true,
+            actions: true,
+          };
+        });
+      }
+    };
+    if (typeof window !== "undefined") {
+      toggleColVisibilityOnResize();
+    }
+    window.addEventListener("resize", toggleColVisibilityOnResize);
+    return () =>
+      window.removeEventListener("resize", toggleColVisibilityOnResize);
+  }, []);
+
   if (isLoading)
     return (
       <Container>
@@ -74,7 +141,7 @@ export default function PatientList() {
       </Container>
     );
   const columns = [
-    { field: "id", headerName: "ID", hide: true, width: 220 },
+    { field: "id", headerName: "ID", width: 220 },
 
     {
       field: "paziente",
@@ -125,7 +192,6 @@ export default function PatientList() {
       headerName: "Telefono",
       sortable: false,
       flex: 1,
-      hide: true,
       renderCell: (params) => params.row.patient.telefono,
     },
     {
@@ -143,7 +209,7 @@ export default function PatientList() {
     {
       field: "actions",
       headerName: "Azioni",
-      width: 150,
+      width: 180,
       align: "center",
       headerAlign: "center",
       sortable: false,
@@ -196,6 +262,10 @@ export default function PatientList() {
         <DataGrid
           rows={rows}
           columns={columns}
+          columnVisibilityModel={colVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColVisibilityModel(newModel)
+          }
           pageSize={25}
           disableSelectionOnClick={true}
           components={{
