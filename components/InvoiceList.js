@@ -47,6 +47,7 @@ export default function InvoiceList() {
     id: false,
     ordinalWithYear: true,
     patientName: true,
+    codFisc: false,
     value: true,
     issueDate: true,
     collectDate: true,
@@ -72,6 +73,7 @@ export default function InvoiceList() {
             id: false,
             ordinalWithYear: true,
             patientName: true,
+            codFisc: false,
             value: true,
             issueDate: true,
             collectDate: false,
@@ -84,6 +86,7 @@ export default function InvoiceList() {
             id: false,
             ordinalWithYear: true,
             patientName: true,
+            codFisc: false,
             value: true,
             issueDate: true,
             collectDate: false,
@@ -96,6 +99,7 @@ export default function InvoiceList() {
             id: false,
             ordinalWithYear: true,
             patientName: true,
+            codFisc: false,
             value: true,
             issueDate: true,
             collectDate: true,
@@ -173,6 +177,7 @@ export default function InvoiceList() {
         id: i._id,
         patient,
         patientName: `${patient.cognome} ${patient.nome}`,
+        codFisc: patient.codiceFiscale,
         invoice: i,
         ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
           i.numeroOrdine
@@ -213,6 +218,11 @@ export default function InvoiceList() {
           </Button>
         </Link>
       ),
+    },
+    {
+      field: "codFisc",
+      headerName: "Codice fiscale",
+      flex: 1,
     },
     {
       field: "value",
