@@ -3,6 +3,7 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
 export default function ListTableToolbar() {
   return (
@@ -10,6 +11,7 @@ export default function ListTableToolbar() {
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector />
+      <GridToolbarExport />
     </GridToolbarContainer>
   );
 }

@@ -185,7 +185,6 @@ export default function InvoiceList() {
     {
       field: "id",
       headerName: "ID",
-      hide: true,
       width: 220,
     },
     {
@@ -194,6 +193,10 @@ export default function InvoiceList() {
       align: "center",
       headerAlign: "center",
       flex: 0.4,
+      valueFormatter: ({ value }) => {
+        const [year, number] = value.split("-");
+        return `${Number.parseInt(number)}/${year}`;
+      },
       renderCell: (params) =>
         `${params.row.invoice.numeroOrdine}/${new Date(
           params.row.invoice.dataEmissione
@@ -222,6 +225,8 @@ export default function InvoiceList() {
     {
       field: "issueDate",
       headerName: "Data emissione",
+      valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
+      valueGetter: (params) => Date.parse(params.row.invoice.dataEmissione),
       renderCell: (params) =>
         italianShortDate(new Date(params.row.invoice.dataEmissione)),
       flex: 0.7,
@@ -230,6 +235,8 @@ export default function InvoiceList() {
     {
       field: "collectDate",
       headerName: "Data incasso",
+      valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
+      valueGetter: (params) => Date.parse(params.row.invoice.dataIncasso),
       renderCell: (params) =>
         italianShortDate(new Date(params.row.invoice.dataIncasso)),
       flex: 0.7,
@@ -310,6 +317,9 @@ export default function InvoiceList() {
           components={{
             Toolbar: ListTableToolbar,
           }}
+          // slotProps={{
+          //   toolbar: { csvOptions: { allColumns: true, fields: ["id"] } },
+          // }}
           checkboxSelection={false}
           onRowClick={(params) =>
             router.push(`/invoices/${params.row.invoice._id}`)

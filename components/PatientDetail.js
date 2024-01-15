@@ -170,6 +170,10 @@ export default function PatientDetail({ id }) {
       align: "center",
       headerAlign: "center",
       flex: 0.5,
+      valueFormatter: ({ value }) => {
+        const [year, number] = value.split("-");
+        return `${Number.parseInt(number)}/${year}`;
+      },
       renderCell: (params) =>
         `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
     },
@@ -183,6 +187,7 @@ export default function PatientDetail({ id }) {
     {
       field: "issueDate",
       headerName: "Data emissione",
+      valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
       renderCell: (params) => italianShortDate(params.row.issueDate),
       flex: 0.7,
       sortComparator: sortDate,
@@ -190,6 +195,7 @@ export default function PatientDetail({ id }) {
     {
       field: "collectDate",
       headerName: "Data incasso",
+      valueFormatter: ({ value }) => new Date(value).toLocaleDateString(),
       renderCell: (params) => italianShortDate(params.row.collectDate),
       flex: 0.7,
       sortComparator: sortDate,
