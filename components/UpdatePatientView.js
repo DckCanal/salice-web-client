@@ -67,8 +67,6 @@ export default function UpdatePatientView() {
   const provRegEx = /[A-Z]{2}/i;
   const pIvaRegEx = /\d{11}/;
 
-  const enableSubmit = validateForm();
-
   // HANDLER for Form submit event
   async function submit(event) {
     event.preventDefault();
@@ -215,6 +213,7 @@ export default function UpdatePatientView() {
       vPiva()
     );
   }
+  const enableSubmit = validateForm();
 
   const Container = ({ children }) => (
     <Box
