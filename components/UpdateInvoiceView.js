@@ -144,7 +144,7 @@ export default function UpdateInvoiceView() {
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    //openNextView();
   }
 
   // HANDLER for invoice value TextField change event
