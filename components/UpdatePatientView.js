@@ -145,7 +145,7 @@ export default function UpdatePatientView() {
     } catch (err) {
       console.error(err);
     }
-    openNextView();
+    //openNextView();
   }
 
   // VALIDATORS
