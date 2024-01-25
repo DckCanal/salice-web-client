@@ -19,6 +19,19 @@ import ErrorBox from "./ErrorBox";
 import { usePatient } from "../lib/hooks";
 import { updatePatient } from "../lib/controller";
 
+const Container = ({ children }) => (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      m: 4,
+    }}
+  >
+    {children}
+  </Box>
+);
+
 export default function UpdatePatientView() {
   const router = useRouter();
   const patientId = router.query.id;
@@ -66,6 +79,8 @@ export default function UpdatePatientView() {
   const capRegEx = /\d{5}/;
   const provRegEx = /[A-Z]{2}/i;
   const pIvaRegEx = /\d{11}/;
+
+  console.log(name);
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -215,19 +230,6 @@ export default function UpdatePatientView() {
   }
   const enableSubmit = validateForm();
 
-  const Container = ({ children }) => (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        m: 4,
-      }}
-    >
-      {children}
-    </Box>
-  );
-
   if (error)
     return (
       <Container>
@@ -264,12 +266,15 @@ export default function UpdatePatientView() {
               <Typography component="h3" variant="h5">
                 Informazioni personali
               </Typography>
+              {/* <MarginTextField */}
               <MarginTextField
                 variant="standard"
                 label="Nome"
                 name="name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
                 error={!vName()}
                 helperText={!vName() ? "Nome obbligatorio" : null}
               />
