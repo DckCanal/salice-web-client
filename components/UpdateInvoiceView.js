@@ -232,6 +232,10 @@ export default function UpdateInvoiceView() {
                 name="cashed"
                 onChange={(_ev, checked) => {
                   setCashed(checked);
+                  if (checked) {
+                    if (cashedDateTime === undefined)
+                      setCashedDateTime(new Date());
+                  }
                 }}
               />
             }
