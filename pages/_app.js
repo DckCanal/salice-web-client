@@ -1,14 +1,30 @@
 import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { teal, purple } from "@mui/material/colors";
 import { CssBaseline } from "@mui/material";
 
 import "../styles/globals.css";
 import { SwitchThemeContext } from "../components/ThemeContext";
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      main: teal[500],
+    },
+    secondary: {
+      main: purple[500],
+    },
+  },
+});
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    primary: {
+      main: teal[300],
+    },
+    secondary: {
+      main: purple[300],
+    },
   },
 });
 

@@ -33,7 +33,10 @@ export default function IncomePaper() {
 
   if (error)
     return (
-      <ErrorBox title="Errore nel caricamento delle fatture" text={error} />
+      <ErrorBox
+        title="Errore nel caricamento delle fatture"
+        text={error?.message}
+      />
     );
 
   if (invoices === undefined || isLoading)

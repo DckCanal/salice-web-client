@@ -131,7 +131,7 @@ export default function PatientDetail({ id }) {
       <Container>
         <ErrorBox
           title="Errore nel caricamento del paziente"
-          text={patientError}
+          text={patientError?.message}
         />
       </Container>
     );
@@ -140,7 +140,7 @@ export default function PatientDetail({ id }) {
       <Container>
         <ErrorBox
           title="Errore nel caricamento delle fatture"
-          text={invoicesError}
+          text={invoicesError?.message}
         />
       </Container>
     );

@@ -67,7 +67,7 @@ export default function InvoiceDetail({ id }) {
       <PaperContainer>
         <ErrorBox
           title="Errore nel caricamento della fattura"
-          text={invoiceError}
+          text={invoiceError?.message}
         />
       </PaperContainer>
     );
@@ -76,7 +76,7 @@ export default function InvoiceDetail({ id }) {
       <PaperContainer>
         <ErrorBox
           title="Errore nel caricamento del paziente"
-          text={patientError}
+          text={patientError?.message}
         />
       </PaperContainer>
     );

@@ -49,7 +49,7 @@ export default function SearchField() {
             {...params}
           />
         )}
-        disabled={error || isLoading}
+        disabled={error !== undefined || isLoading}
       />
     </ThemeProvider>
   );

@@ -76,7 +76,7 @@ export default function LastInvoices() {
     return (
       <ErrorBox
         title="Errore nel caricamento del paziente"
-        text={patientsError}
+        text={patientsError?.message}
       />
     );
 
@@ -84,7 +84,7 @@ export default function LastInvoices() {
     return (
       <ErrorBox
         title="Errore nel caricamento delle fatture"
-        text={invoicesError}
+        text={invoicesError?.message}
       />
     );
 

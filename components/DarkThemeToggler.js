@@ -14,7 +14,9 @@ export default function DarkThemeToggler() {
   const toggleLightTheme = useContext(SwitchThemeContext);
   const switchd = useContext(ToggleDContext);
   const handleLongPress = useCallback(() => {
-    switchd();
+    try {
+      switchd();
+    } catch (e) {}
   });
   const theme = useTheme();
   const longPressProps = useLongPress(handleLongPress, {

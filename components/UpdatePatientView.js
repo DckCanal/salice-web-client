@@ -231,7 +231,10 @@ export default function UpdatePatientView() {
   if (error)
     return (
       <Container>
-        <ErrorBox title="Errore nel caricamento del paziente" text={error} />
+        <ErrorBox
+          title="Errore nel caricamento del paziente"
+          text={error?.message}
+        />
       </Container>
     );
 

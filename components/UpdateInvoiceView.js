@@ -185,7 +185,7 @@ export default function UpdateInvoiceView() {
       <Container>
         <ErrorBox
           title="Errore nel caricamento della fattura"
-          text={invoiceError}
+          text={invoiceError?.message}
         />
       </Container>
     );
@@ -194,7 +194,7 @@ export default function UpdateInvoiceView() {
       <Container>
         <ErrorBox
           title="Errore nel caricamento del paziente"
-          text={patientError}
+          text={patientError?.message}
         />
       </Container>
     );

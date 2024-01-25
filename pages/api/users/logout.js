@@ -10,6 +10,8 @@ export default function handler(req, res) {
   } else {
     setCookie({ res }, "jwt", "", {
       maxAge: 0,
+      path: "/",
+      httpOnly: true,
     });
     res.status(200).json({
       status: "success",

@@ -121,7 +121,7 @@ export default function InvoiceList() {
       <Container>
         <ErrorBox
           title="Errore nel caricamento delle fatture"
-          text={invoicesError}
+          text={invoicesError?.message}
         />
       </Container>
     );
@@ -130,7 +130,7 @@ export default function InvoiceList() {
       <Container>
         <ErrorBox
           title="Errore nel caricamento dei pazienti"
-          text={patientsError}
+          text={patientsError?.message}
         />
       </Container>
     );

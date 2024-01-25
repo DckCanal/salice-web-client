@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -15,11 +16,13 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PersonIcon from "@mui/icons-material/Person";
 
+import { useTheme } from "@mui/material";
 import ListItems from "./listItems";
 import DarkThemeToggler from "./DarkThemeToggler";
 import { useUser } from "../lib/hooks";
@@ -27,6 +30,7 @@ import SearchField from "./SearchField";
 import { DContext } from "./DContext";
 import { ToggleDContext } from "./SwitchDContext";
 import { YearContext } from "../components/YearContext";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -81,9 +85,17 @@ export default function Layout({ children }) {
   const [selectedYears, setSelectedYears] = React.useState([
     new Date().getFullYear(),
   ]);
-  const { user, error, isLoading } = useUser();
-
+  const { user, error, isLoading, mutate, loggedOut } = useUser();
+  //console.log(user, error, isLoading);
+  //console.log(error?.response?.status);
   const router = useRouter();
+  const theme = useTheme();
+
+  useEffect(() => {
+    if (loggedOut) {
+      router.replace("/");
+    }
+  }, [loggedOut]);
 
   function switchd() {
     setD(!d);
@@ -94,7 +106,7 @@ export default function Layout({ children }) {
   };
   const yearContext = [selectedYears, setSelectedYears];
 
-  React.useEffect(() => {
+  useEffect(() => {
     const autoOpenOrCloseDrawer = () => {
       if (window.innerWidth > 1200) {
         setOpen(true);
@@ -125,24 +137,24 @@ export default function Layout({ children }) {
                 justifyContent: "space-between",
               }}
             >
-              {!error && (
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={toggleDrawer}
-                  sx={{
-                    marginRight: "36px",
-                    ...(open && { display: "none" }),
-                    display: {
-                      xs: "none",
-                      sm: "block",
-                    },
-                  }}
-                >
-                  <MenuIcon />
-                </IconButton>
-              )}
+              {/* {!loggedOut && ( */}
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              {/* )} */}
               <Typography
                 component="h1"
                 variant="h6"
@@ -160,37 +172,49 @@ export default function Layout({ children }) {
               <ToggleDContext.Provider value={switchd}>
                 <DarkThemeToggler />
               </ToggleDContext.Provider>
-            </Toolbar>
-          </AppBar>
-          {!error && (
-            <Drawer
-              variant="permanent"
-              open={open}
-              sx={{
-                display: {
-                  xs: "none",
-                  sm: "block",
-                },
-              }}
-            >
-              <Toolbar
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  px: [1],
+              <IconButton
+                onClick={async () => {
+                  await axios({
+                    method: "POST",
+                    url: "/api/users/logout",
+                    withCredentials: true,
+                  });
+
+                  mutate(null);
                 }}
               >
-                <IconButton onClick={toggleDrawer}>
-                  <ChevronLeftIcon />
-                </IconButton>
-              </Toolbar>
-              <Divider />
-              <List component="nav">
-                <ListItems />
-              </List>
-            </Drawer>
-          )}
+                <LogoutIcon htmlColor="#ffffff" />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            open={open}
+            sx={{
+              display: {
+                xs: "none",
+                sm: "block",
+              },
+            }}
+          >
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              <ListItems />
+            </List>
+          </Drawer>
+          {/* )} */}
           <Box
             component="main"
             sx={{

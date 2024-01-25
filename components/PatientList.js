@@ -137,7 +137,10 @@ export default function PatientList() {
   if (error)
     return (
       <Container>
-        <ErrorBox title="Errore nel caricamento dei pazienti" text={error} />
+        <ErrorBox
+          title="Errore nel caricamento dei pazienti"
+          text={error?.message}
+        />
       </Container>
     );
   const columns = [

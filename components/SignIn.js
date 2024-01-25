@@ -8,13 +8,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
 import validator from "validator";
+import { useUser } from "../lib/hooks";
 
-export default function SignIn({ loginUrl }) {
+export default function SignIn() {
   const [inputError, setInputError] = React.useState(false);
   const [emailError, setEmailError] = React.useState(false);
   const [waitingLoginAttempt, setWaitingLoginAttempt] = React.useState(false);
   const [successfulLogin, setSuccessfulLogin] = React.useState(false);
   const router = useRouter();
+  const { mutate } = useUser();
   const clearInputError = () => {
     inputError & setInputError(false);
   };
@@ -44,7 +46,7 @@ export default function SignIn({ loginUrl }) {
       setWaitingLoginAttempt(true);
       const res = await axios({
         method: "POST",
-        url: loginUrl,
+        url: "/api/users/login",
         withCredentials: true,
         data: {
           email,
@@ -56,7 +58,8 @@ export default function SignIn({ loginUrl }) {
         setSuccessfulLogin(true);
         setEmailError(false);
         setInputError(false);
-        router.push("/dashboard");
+        mutate(res?.data?.data);
+        // router.push("/dashboard");
       }
     } catch (err) {
       setWaitingLoginAttempt(false);
@@ -76,7 +79,7 @@ export default function SignIn({ loginUrl }) {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper sx={{ p: 3, mt: 12 }}>
+      <Paper sx={{ p: 3, mt: 6 }}>
         <Box
           sx={{
             marginTop: 8,
