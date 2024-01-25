@@ -171,6 +171,7 @@ export default function UpdateInvoiceView() {
 
   // VALIDATOR for STATE values
   function validateForm() {
+    console.log(`cashed=${cashed}; cashedDateTime=${cashedDateTime}`);
     return (
       !isNaN(invoiceAmountTextField) &&
       Number(invoiceAmountTextField) >= 0 &&
@@ -225,7 +226,8 @@ export default function UpdateInvoiceView() {
           <FormControlLabel
             control={
               <Checkbox
-                defaultChecked={cashed}
+                //defaultChecked={cashed}
+                checked={cashed}
                 id="cashed"
                 name="cashed"
                 onChange={(_ev, checked) => {
@@ -246,7 +248,7 @@ export default function UpdateInvoiceView() {
                 onChange={(newValue) => {
                   setCashedDateTime(newValue);
                 }}
-                value={cashedDateTime}
+                value={cashedDateTime ?? new Date()}
                 renderInput={(params) => (
                   <TextField
                     {...params}
