@@ -181,7 +181,7 @@ export default function UpdatePatientView() {
   }
 
   function vProvinciaResidenza() {
-    return provinciaNascita === "" || provRegEx.test(provinciaResidenza);
+    return provinciaResidenza === "" || provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {

@@ -88,8 +88,7 @@ export default function NewPatientView() {
         setWaiting(false);
         router.push(`/patients/${addedPatient._id}`);
       }
-            // else show error message modal window, reset fields and enable submit
-
+      // else show error message modal window, reset fields and enable submit
     } catch (err) {
       console.error(err);
     }
@@ -115,7 +114,7 @@ export default function NewPatientView() {
   }
 
   function vProvinciaResidenza() {
-    return provinciaNascita === "" || provRegEx.test(provinciaResidenza);
+    return provinciaResidenza === "" || provRegEx.test(provinciaResidenza);
   }
 
   function vCapResidenza() {
