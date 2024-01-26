@@ -86,8 +86,6 @@ export default function Layout({ children }) {
     new Date().getFullYear(),
   ]);
   const { user, error, isLoading, mutate, loggedOut } = useUser();
-  //console.log(user, error, isLoading);
-  //console.log(error?.response?.status);
   const router = useRouter();
   const theme = useTheme();
 

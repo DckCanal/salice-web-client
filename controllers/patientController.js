@@ -114,7 +114,6 @@ exports.updatePatient = catchAsync(async (req, res, next) => {
     });
   }
   if (filteredBody.luogoNascita !== undefined) {
-    console.log(typeof patient.luogoNascita);
     Object.keys(patient.luogoNascita).forEach((key) => {
       if (filteredBody.luogoNascita[key] == undefined)
         filteredBody.luogoNascita[key] = patient.luogoNascita[key];

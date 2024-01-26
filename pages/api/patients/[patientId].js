@@ -54,7 +54,6 @@ export default async function handler(req, res) {
         });
       }
       if (filteredBody.luogoNascita !== undefined) {
-        console.log(typeof patient.luogoNascita);
         Object.keys(patient.luogoNascita).forEach((key) => {
           if (filteredBody.luogoNascita[key] == undefined)
             filteredBody.luogoNascita[key] = patient.luogoNascita[key];

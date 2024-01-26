@@ -171,7 +171,6 @@ export default function UpdateInvoiceView() {
 
   // VALIDATOR for STATE values
   function validateForm() {
-    console.log(`cashed=${cashed}; cashedDateTime=${cashedDateTime}`);
     return (
       !isNaN(invoiceAmountTextField) &&
       Number(invoiceAmountTextField) >= 0 &&
