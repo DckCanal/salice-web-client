@@ -295,13 +295,13 @@ export default function PatientDetail({ id }) {
               </IconButton>
             </Link>
 
-            <IconButton
+            {/* <IconButton
               onClick={() => {
                 alert("TODO: download documents");
               }}
             >
               <HistoryEduIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton
               onClick={async (ev) => {
                 ev.preventDefault();

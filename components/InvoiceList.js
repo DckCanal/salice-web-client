@@ -36,9 +36,9 @@ function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
 }
 
 const Container = ({ children }) => (
-  <Box sx={{ width: "100%", height: "90%" }}>
-    <Paper sx={{ m: 2, p: 2, height: "95%" }}>{children}</Paper>
-  </Box>
+  // <Box sx={{ width: "100%", height: "90%" }}>
+  <Paper sx={{ m: 2, p: 2, height: "85%" }}>{children}</Paper>
+  /* </Box> */
 );
 
 export default function InvoiceList() {
@@ -314,7 +314,7 @@ export default function InvoiceList() {
           handleYearsChange={handleYearsChange}
         />
       </Box>
-      <Box sx={{ height: "85%" }}>
+      <Box sx={{ height: "80%" }}>
         <DataGrid
           rows={rows}
           columns={columns}

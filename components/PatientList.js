@@ -46,7 +46,7 @@ import { usePatients } from "../lib/hooks";
 // TODO: correct whatsapp link
 
 const Container = ({ children }) => (
-  <Paper sx={{ m: 2, p: 2, height: "90%" }}>{children}</Paper>
+  <Paper sx={{ m: 2, p: 2, height: "85%" }}>{children}</Paper>
 );
 
 export default function PatientList() {
@@ -223,13 +223,13 @@ export default function PatientList() {
               <PostAddIcon />
             </IconButton>
           </Link>
-          <IconButton
+          {/* <IconButton
             onClick={() => {
               alert("TODO: download documents");
             }}
           >
             <HistoryEduIcon />
-          </IconButton>
+          </IconButton> */}
           <Link href={`/patients/update/${params.row.patient._id}`} passHref>
             <IconButton>
               <EditIcon />
