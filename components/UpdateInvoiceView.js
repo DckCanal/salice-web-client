@@ -250,7 +250,7 @@ export default function UpdateInvoiceView() {
               <DateTimePicker
                 label="Data incasso"
                 onChange={(newValue) => {
-                  setCashedDateTime(newValue);
+                  setCashedDateTime(new Date(newValue));
                 }}
                 value={cashedDateTime ?? new Date()}
                 renderInput={(params) => (
@@ -298,7 +298,7 @@ export default function UpdateInvoiceView() {
             <DateTimePicker
               label="Data emissione"
               onChange={(newValue) => {
-                setIssueDateTime(newValue);
+                setIssueDateTime(new Date(newValue));
               }}
               value={issueDateTime}
               renderInput={(params) => (
