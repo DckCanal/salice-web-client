@@ -298,6 +298,7 @@ export default function UpdateInvoiceView() {
             <DateTimePicker
               label="Data emissione"
               onChange={(newValue) => {
+                console.log(newValue);
                 setIssueDateTime(newValue);
               }}
               value={issueDateTime}
