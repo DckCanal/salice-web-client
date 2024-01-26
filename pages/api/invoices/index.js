@@ -146,6 +146,7 @@ export default async function handler(req, res) {
           filteredBody.numeroOrdine = maxNumeroOrdine + 1;
         } else {
           // Check if given numeroOrdine already exists
+          // TODO: numeroOrdine puo venire replicato!!!
           if (
             invoices.find(
               (inv) => inv.numeroOrdine == filteredBody.numeroOrdine

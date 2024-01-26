@@ -184,10 +184,21 @@ export default function InvoiceDetail({ id }) {
             )}
             {patient.partitaIva && <TextLine>patient.partitaIva</TextLine>}
             <TextLine>
-              Residente a {patient.indirizzoResidenza.paese} (
-              {patient.indirizzoResidenza.provincia}),{" "}
-              {patient.indirizzoResidenza.cap}, {patient.indirizzoResidenza.via}{" "}
-              {patient.indirizzoResidenza.civico}
+              {patient.indirizzoResidenza?.paese && (
+                <span>Residente a {patient.indirizzoResidenza.paese} </span>
+              )}
+              {patient.indirizzoResidenza?.provincia && (
+                <span>({patient.indirizzoResidenza.provincia}), </span>
+              )}
+              {patient.indirizzoResidenza?.cap && (
+                <span>{patient.indirizzoResidenza.cap},</span>
+              )}
+              {patient.indirizzoResidenza?.via && (
+                <span>{patient.indirizzoResidenza.via}</span>
+              )}
+              {patient.indirizzoResidenza?.civico && (
+                <span>{patient.indirizzoResidenza.civico}</span>
+              )}
             </TextLine>
             {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
             {patient.email && <TextLine>{patient.email}</TextLine>}
