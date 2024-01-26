@@ -78,7 +78,7 @@ export default function NewPatientView() {
               ...cacheData,
               data: {
                 ...cacheData.data,
-                patients: [...cacheData.data.patients, addedPatient],
+                patients: [...cacheData.data.patients, addedPatient.newPatient],
               },
             };
           },

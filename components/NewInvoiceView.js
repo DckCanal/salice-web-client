@@ -88,7 +88,7 @@ export default function NewInvoiceView() {
               ...cacheData,
               data: {
                 ...cacheData.data,
-                invoices: [...cacheData.data.invoices, addedInvoice],
+                invoices: [...cacheData.data.invoices, addedInvoice.newInvoice],
               },
             };
           },
@@ -97,9 +97,10 @@ export default function NewInvoiceView() {
 
       if (addedInvoice._id) {
         setWaiting(false);
+
         router.push(`/invoices/${addedInvoice._id}`);
       }
-      // else show error message modal window, reset fields and enable submit
+      // TODO: else show error message modal window, reset fields and enable submit
     } catch (err) {
       console.error(err);
     }
