@@ -314,7 +314,7 @@ export default function InvoiceList() {
           handleYearsChange={handleYearsChange}
         />
       </Box>
-      <Box sx={{ height: "80%" }}>
+      <Box sx={{ height: "70%" }}>
         <DataGrid
           rows={rows}
           columns={columns}

@@ -40,10 +40,10 @@ export default function SearchField() {
         }}
         renderInput={(params) => (
           <TextField
-            variant="filled"
+            variant="outlined"
             size="small"
             label="Paziente"
-            margin="dense"
+            margin="normal"
             color="highlight"
             autoFocus={true}
             {...params}

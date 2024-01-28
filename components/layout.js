@@ -38,13 +38,14 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
+  boxShadow: theme.shadows[0],
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    //marginLeft: drawerWidth,
+    //width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -58,6 +59,7 @@ const Drawer = styled(MuiDrawer, {
   "& .MuiDrawer-paper": {
     position: "relative",
     whiteSpace: "nowrap",
+    //background: theme.palette.primary.main,
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -70,10 +72,11 @@ const Drawer = styled(MuiDrawer, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
+      width: theme.spacing(8),
+      // width: theme.spacing(7),
+      // [theme.breakpoints.up("sm")]: {
+      //   width: theme.spacing(9),
+      // },
     }),
   },
 }));
@@ -135,7 +138,6 @@ export default function Layout({ children }) {
                 justifyContent: "space-between",
               }}
             >
-              {/* {!loggedOut && ( */}
               <IconButton
                 edge="start"
                 color="inherit"
@@ -143,7 +145,6 @@ export default function Layout({ children }) {
                 onClick={toggleDrawer}
                 sx={{
                   marginRight: "36px",
-                  ...(open && { display: "none" }),
                   display: {
                     xs: "none",
                     sm: "block",
@@ -195,7 +196,7 @@ export default function Layout({ children }) {
               },
             }}
           >
-            <Toolbar
+            {/* <Toolbar
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -207,8 +208,8 @@ export default function Layout({ children }) {
                 <ChevronLeftIcon />
               </IconButton>
             </Toolbar>
-            <Divider />
-            <List component="nav">
+            <Divider /> */}
+            <List component="nav" sx={{ mt: 9 }}>
               <ListItems />
             </List>
           </Drawer>
@@ -223,6 +224,7 @@ export default function Layout({ children }) {
               flexGrow: 1,
               height: "100vh",
               overflow: "auto",
+              pb: { xs: 8, sm: 2 },
             }}
           >
             <Toolbar />

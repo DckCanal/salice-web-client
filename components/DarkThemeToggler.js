@@ -26,7 +26,7 @@ export default function DarkThemeToggler() {
   });
 
   return (
-    <IconButton {...longPressProps()} sx={{ ml: 5 }}>
+    <IconButton {...longPressProps()} sx={{ ml: 4, mr: 2 }}>
       {theme.palette.mode === "light" ? (
         <NightlightIcon htmlColor="#ffffff" />
       ) : (
