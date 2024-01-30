@@ -105,7 +105,9 @@ export default async function handler(req, res) {
         "dataEmissione",
         "dataIncasso",
         "numeroOrdine",
-        "d"
+        "d",
+        "incassata",
+        "pagamentoTracciabile"
       );
 
       if (!mongoose.Types.ObjectId.isValid(filteredBody.paziente))

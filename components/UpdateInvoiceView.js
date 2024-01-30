@@ -57,9 +57,12 @@ export default function UpdateInvoiceView() {
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
     invoice?.valore ? invoice.valore : 0
   );
-  const [cashed, setCashed] = React.useState(invoice?.dataIncasso != undefined);
+  const [cashed, setCashed] = React.useState(invoice?.incassata);
   const [cashedDateTime, setCashedDateTime] = React.useState(
     invoice?.dataIncasso ? new Date(invoice.dataIncasso) : undefined
+  );
+  const [pagamentoTracciabile, setPagamentoTracciabile] = React.useState(
+    invoice?.pagamentoTracciabile ? invoice.pagamentoTracciabile : false
   );
   const [issueDateTime, setIssueDateTime] = React.useState(
     invoice?.dataEmissione ? new Date(invoice.dataEmissione) : undefined
@@ -101,14 +104,16 @@ export default function UpdateInvoiceView() {
       Date.parse(new Date(invoice.dataIncasso))
     )
       newValues.dataIncasso = new Date(cashedDateTime);
-
+    if (pagamentoTracciabile !== invoice.pagamentoTracciabile) {
+      newValues.pagamentoTracciabile = pagamentoTracciabile;
+    }
     try {
       const { updatedInvoice } = await mutate(
         "/api/invoices",
         updateInvoice(invoice._id, newValues),
         {
           revalidate: false,
-          populateCache: (updatedInvoice, cacheData) => {
+          populateCache: ({ updatedInvoice }, cacheData) => {
             return {
               ...cacheData,
               data: {
@@ -289,6 +294,18 @@ export default function UpdateInvoiceView() {
               minWidth: 300,
               mt: 3,
             }}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={(_ev, value) => setPagamentoTracciabile(value)}
+                checked={pagamentoTracciabile}
+                id="pagamentoTracciabile"
+                name="pagamentoTracciabile"
+              />
+            }
+            label="Pagamento tracciabile"
+            sx={{ mt: 3 }}
           />
           <LocalizationProvider
             dateAdapter={AdapterLuxon}

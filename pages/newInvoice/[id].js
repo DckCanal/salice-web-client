@@ -8,3 +8,4 @@ export default function NewInvoicePage() {
 NewInvoicePage.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };
+//TODO: this file has to be DELETED???

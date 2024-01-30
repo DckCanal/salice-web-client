@@ -38,7 +38,9 @@ export default async function handler(req, res) {
         "testo",
         "dataEmissione",
         "dataIncasso",
-        "numeroOrdine"
+        "numeroOrdine",
+        "incassata",
+        "pagamentoTracciabile"
       );
 
       // paziente exists and is owned by logged in user?
@@ -79,9 +81,16 @@ export default async function handler(req, res) {
           400
         );
 
+      let queryData;
+      if (req.body.incassata == false)
+        queryData = {
+          $set: filteredBody,
+          $unset: { dataIncasso: true },
+        };
+      else queryData = filteredBody;
       const updatedInvoice = await Invoice.findByIdAndUpdate(
         invoiceId,
-        filteredBody,
+        queryData,
         {
           new: true,
           runValidators: true,

@@ -10,6 +10,18 @@ const invoiceSchema = new mongoose.Schema(
     dataIncasso: {
       type: Date,
     },
+    incassata: {
+      type: Boolean,
+      default: true,
+    },
+    pagamentoTracciabile: {
+      type: Boolean,
+      default: false,
+    },
+    comunicazioneTS: {
+      type: Boolean,
+      default: false,
+    },
     testo: {
       type: String,
       default: "Trattamento massoterapico",

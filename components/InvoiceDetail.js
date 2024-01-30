@@ -94,7 +94,7 @@ export default function InvoiceDetail({ id }) {
     );
 
   const date = new Date(invoice.dataEmissione);
-  const cashed = invoice.dataIncasso !== undefined;
+  const cashed = invoice.incassata; //invoice.dataIncasso !== undefined;
   return (
     <PaperContainer>
       <Box
@@ -287,6 +287,12 @@ export default function InvoiceDetail({ id }) {
             icon={<ErrorOutlineIcon fontSize="small" />}
             label="NON INCASSATA"
           />
+        )}
+
+        {invoice.pagamentoTracciabile ? (
+          <Typography variant="p">Pagamento tracciabile</Typography>
+        ) : (
+          <Typography variant="p">Non tracciabile</Typography>
         )}
       </Box>
     </PaperContainer>

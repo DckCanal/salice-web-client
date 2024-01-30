@@ -48,6 +48,8 @@ export default function NewInvoiceView() {
   const [invoiceAmountTextField, setInvoiceAmountTextField] = React.useState(
     initialPatient ? initialPatient.prezzo : 0
   );
+  const [cashed, setCashed] = React.useState(true);
+  const [pagamentoTracciabile, setPagamentoTracciabile] = React.useState(false);
   const [issueDateTime, setIssueDateTime] = React.useState(DateTime.now());
   const [invoiceAmountError, setInvoiceAmountError] = React.useState(false);
   const [autocompleteError, setAutocompleteError] = React.useState(
@@ -67,7 +69,7 @@ export default function NewInvoiceView() {
 
     const data = new FormData(event.currentTarget);
     const invoiceText = data.get("text").trim();
-    const cashed = data.get("cashed") === "on" ? true : false;
+    //const cashed = data.get("cashed") === "on" ? true : false;
     const dark = data.get("dark") === "on" ? true : false;
 
     try {
@@ -79,6 +81,7 @@ export default function NewInvoiceView() {
           Number(invoiceAmountTextField),
           invoiceText,
           new Date(issueDateTime),
+          pagamentoTracciabile,
           dark
         ),
         {
@@ -209,7 +212,14 @@ export default function NewInvoiceView() {
                 />
               )}
               <FormControlLabel
-                control={<Checkbox defaultChecked id="cashed" name="cashed" />}
+                control={
+                  <Checkbox
+                    onChange={(_ev, value) => setCashed(value)}
+                    checked={cashed}
+                    id="cashed"
+                    name="cashed"
+                  />
+                }
                 label="Incassa ora"
                 sx={{ mt: 3 }}
               />
@@ -238,6 +248,18 @@ export default function NewInvoiceView() {
                   minWidth: 300,
                   mt: 3,
                 }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(_ev, value) => setPagamentoTracciabile(value)}
+                    checked={pagamentoTracciabile}
+                    id="pagamentoTracciabile"
+                    name="pagamentoTracciabile"
+                  />
+                }
+                label="Pagamento tracciabile"
+                sx={{ mt: 3 }}
               />
               <LocalizationProvider
                 dateAdapter={AdapterLuxon}
