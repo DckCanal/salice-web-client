@@ -11,8 +11,12 @@ import IconButton from "@mui/material/IconButton";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 import DownloadIcon from "@mui/icons-material/Download";
 import { DataGrid } from "@mui/x-data-grid";
 import { CircularProgress } from "@mui/material";
@@ -356,9 +360,32 @@ export default function PatientDetail({ id }) {
           <Typography variant="h6">Anagrafica</Typography>
           <Box sx={{ ml: 2, mt: 1 }}>
             {patient.codiceFiscale && (
-              <Typography variant="body1">
-                Codice fiscale: {patient.codiceFiscale}
-              </Typography>
+              // <Typography variant="body1">
+              //   Codice fiscale: {patient.codiceFiscale}
+              // </Typography>
+              <TextField
+                disabled
+                variant="standard"
+                size="small"
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Copia" arrow>
+                        <IconButton
+                          onClick={() =>
+                            navigator.clipboard.writeText(patient.codiceFiscale)
+                          }
+                        >
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ m: 1 }}
+                defaultValue={patient.codiceFiscale}
+              />
             )}
             {patient.partitaIva && (
               <Typography variant="body1">
@@ -387,13 +414,33 @@ export default function PatientDetail({ id }) {
                   <Typography variant="body1">{patient.telefono}</Typography>
                 )}
                 {patient.email && (
-                  <Chip
-                    component="a"
-                    variant="filled"
-                    label={`${patient.email}`}
-                    href={`mailto:${patient.email}`}
-                    clickable
-                  />
+                  // <Chip
+                  //   component="a"
+                  //   variant="filled"
+                  //   label={`${patient.email}`}
+                  //   href={`mailto:${patient.email}`}
+                  //   clickable
+                  // />
+                  <>
+                    <Chip
+                      component="a"
+                      variant="filled"
+                      label={`${patient.email}`}
+                      href={`mailto:${patient.email}`}
+                      clickable
+                      sx={{ mb: 1 }}
+                    />
+                    <Tooltip title="Copia" arrow>
+                      <IconButton
+                        sx={{ m: 1 }}
+                        onClick={() =>
+                          navigator.clipboard.writeText(patient.email)
+                        }
+                      >
+                        <ContentCopyIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 )}
               </Box>
             </Box>

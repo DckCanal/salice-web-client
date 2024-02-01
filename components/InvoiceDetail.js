@@ -187,6 +187,7 @@ export default function InvoiceDetail({ id }) {
               // <TextLine>{patient.codiceFiscale}</TextLine>
               <TextField
                 disabled
+                size="small"
                 InputProps={{
                   readOnly: true,
                   endAdornment: (
@@ -226,7 +227,26 @@ export default function InvoiceDetail({ id }) {
               )}
             </TextLine>
             {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
-            {patient.email && <TextLine>{patient.email}</TextLine>}
+            {patient.email && (
+              <>
+                <Chip
+                  component="a"
+                  variant="filled"
+                  label={`${patient.email}`}
+                  href={`mailto:${patient.email}`}
+                  clickable
+                  sx={{ mb: 1 }}
+                />
+                <Tooltip title="Copia" arrow>
+                  <IconButton
+                    sx={{ m: 1 }}
+                    onClick={() => navigator.clipboard.writeText(patient.email)}
+                  >
+                    <ContentCopyIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
           </Box>
         </Box>
       </Box>
@@ -276,6 +296,11 @@ export default function InvoiceDetail({ id }) {
         </Box>
         <Box sx={{ width: { xs: "100%", md: "66%" }, p: 2, pt: 1, mt: 1 }}>
           <Typography>{invoice.valore}€</Typography>
+          {invoice.pagamentoTracciabile ? (
+            <Typography variant="body2">Pagamento tracciabile</Typography>
+          ) : (
+            <Typography variant="body2">Pagamento non tracciabile</Typography>
+          )}
         </Box>
       </Box>
       <Divider />
@@ -312,12 +337,6 @@ export default function InvoiceDetail({ id }) {
             icon={<ErrorOutlineIcon fontSize="small" />}
             label="NON INCASSATA"
           />
-        )}
-
-        {invoice.pagamentoTracciabile ? (
-          <Typography variant="p">Pagamento tracciabile</Typography>
-        ) : (
-          <Typography variant="p">Non tracciabile</Typography>
         )}
       </Box>
     </PaperContainer>

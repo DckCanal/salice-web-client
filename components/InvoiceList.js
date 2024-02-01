@@ -12,7 +12,10 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CreditScoreIcon from "@mui/icons-material/Payment";
+import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import { CircularProgress } from "@mui/material";
@@ -202,10 +205,15 @@ export default function InvoiceList() {
         const [year, number] = value.split("-");
         return `${Number.parseInt(number)}/${year}`;
       },
-      renderCell: (params) =>
-        `${params.row.invoice.numeroOrdine}/${new Date(
-          params.row.invoice.dataEmissione
-        ).getFullYear()}`,
+      renderCell: (params) => (
+        <Link href={`/invoices/${params.row.invoice._id}`} passHref>
+          <Button variant="text" size="small">
+            {`${params.row.invoice.numeroOrdine}/${new Date(
+              params.row.invoice.dataEmissione
+            ).getFullYear()}`}
+          </Button>
+        </Link>
+      ),
     },
     {
       field: "patientName",
@@ -227,10 +235,23 @@ export default function InvoiceList() {
     {
       field: "value",
       headerName: "Valore",
-      align: "center",
+      align: "right",
       headerAlign: "center",
       flex: 0.3,
-      renderCell: (params) => `${params.row.invoice.valore} €`,
+      renderCell: (params) => (
+        <>
+          {`${params.row.invoice.valore} €`}
+          {params.row.invoice.pagamentoTracciabile ? (
+            <Tooltip title="Pagamento tracciabile" arrow>
+              <CreditScoreIcon fontSize="small" sx={{ ml: 1 }} />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Pagamento non tracciabile" arrow>
+              <CreditCardOffIcon fontSize="small" sx={{ ml: 1 }} />
+            </Tooltip>
+          )}
+        </>
+      ),
     },
     {
       field: "issueDate",
@@ -331,9 +352,9 @@ export default function InvoiceList() {
           //   toolbar: { csvOptions: { allColumns: true, fields: ["id"] } },
           // }}
           checkboxSelection={false}
-          onRowClick={(params) =>
-            router.push(`/invoices/${params.row.invoice._id}`)
-          }
+          // onRowClick={(params) =>
+          //   router.push(`/invoices/${params.row.invoice._id}`)
+          // }
         />
       </Box>
     </Container>
