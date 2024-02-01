@@ -38,7 +38,7 @@ const TextLine = ({ children, width }) => {
 const PaperContainer = ({ children }) => (
   <Paper
     sx={{
-      mt: 2,
+      mt: { xs: 2, md: 4 },
       p: 4,
       mx: "auto",
       maxWidth: "700px",

@@ -17,6 +17,7 @@ export default function Home() {
             flexDirection: "column",
             height: 240 + 80,
             margin: 2,
+            mt: 4,
           }}
         >
           <Chart />
@@ -31,6 +32,7 @@ export default function Home() {
             flexDirection: "column",
             height: 240 + 80,
             margin: 2,
+            mt: 4,
           }}
         >
           <IncomePaper />

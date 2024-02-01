@@ -6,6 +6,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -46,7 +47,18 @@ import { usePatients } from "../lib/hooks";
 // TODO: correct whatsapp link
 
 const Container = ({ children }) => (
-  <Paper sx={{ m: 2, p: 2, height: "85%" }}>{children}</Paper>
+  <Paper
+    sx={{
+      m: { xs: 0, md: 2 },
+      mt: { xs: 0, md: 4 },
+      p: 2,
+      pt: { xs: 4, md: 2 },
+
+      //height: "85%"
+    }}
+  >
+    {children}
+  </Paper>
 );
 
 export default function PatientList() {
@@ -164,7 +176,23 @@ export default function PatientList() {
       headerName: "Codice fiscale",
       width: 170,
       sortable: false,
-      renderCell: (params) => params.row.patient.codiceFiscale,
+      renderCell: (params) =>
+        params.row.patient.codiceFiscale ? (
+          <Tooltip title="Copia" enterDelay={300} arrow>
+            <Chip
+              color="primary"
+              variant="outlined"
+              label={params.row.patient.codiceFiscale}
+              onClick={() =>
+                navigator.clipboard.writeText(params.row.patient.codiceFiscale)
+              }
+              sx={{ my: 1 }}
+            />
+          </Tooltip>
+        ) : (
+          ""
+        ),
+      //renderCell: (params) => params.row.patient.codiceFiscale,
     },
     {
       field: "ultimaModifica",
@@ -269,6 +297,7 @@ export default function PatientList() {
         <DataGrid
           rows={rows}
           columns={columns}
+          autoHeight
           density="compact"
           columnVisibilityModel={colVisibilityModel}
           onColumnVisibilityModelChange={(newModel) =>

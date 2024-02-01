@@ -40,8 +40,10 @@ const Container = ({ children }) => (
   >
     <Paper
       sx={{
-        mt: 2,
-        p: 4,
+        m: { xs: 0, md: 2 },
+        mt: { xs: 0, md: 4 },
+        p: { xs: 2, md: 4 },
+        pt: { xs: 4, md: 2 },
         maxWidth: "700px",
         width: { xs: "100%", sm: "96%" },
       }}
@@ -284,8 +286,9 @@ export default function PatientDetail({ id }) {
     >
       <Paper
         sx={{
-          mt: 2,
-          p: 4,
+          mt: { xs: 2, md: 4 },
+          p: { xs: 2, md: 4 },
+          //pt: { xs: 0, md: 4 },
           maxWidth: "700px",
           width: { xs: "100%", sm: "96%" },
         }}
@@ -485,7 +488,7 @@ export default function PatientDetail({ id }) {
           mt: 2,
           // ml: 2,
           // mr: 2,
-          p: 4,
+          p: { xs: 2, md: 4 },
           width: { xs: "100%", sm: "96%" },
           maxWidth: "900px",
         }}
@@ -496,19 +499,19 @@ export default function PatientDetail({ id }) {
         <DataGrid
           rows={rows}
           columns={columns}
+          autoHeight
           columnVisibilityModel={colVisibilityModel}
           onColumnVisibilityModelChange={(newModel) =>
             setColVisibilityModel(newModel)
           }
-          autoHeight={true}
           disableSelectionOnClick={true}
           components={{
             Toolbar: ListTableToolbar,
           }}
           checkboxSelection={false}
-          onRowClick={(params) => {
-            router.push(`/invoices/${params.row.id}`);
-          }}
+          // onRowClick={(params) => {
+          //   router.push(`/invoices/${params.row.id}`);
+          // }}
         />
       </Paper>
     </Box>

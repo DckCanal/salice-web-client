@@ -16,6 +16,7 @@ import CreditScoreIcon from "@mui/icons-material/Payment";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
 import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import { CircularProgress } from "@mui/material";
@@ -40,7 +41,19 @@ function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
 
 const Container = ({ children }) => (
   // <Box sx={{ width: "100%", height: "90%" }}>
-  <Paper sx={{ m: 2, p: 2, height: "85%" }}>{children}</Paper>
+  <Paper
+    // variant="elevation"
+    sx={{
+      m: { xs: 0, md: 2 },
+      mt: { xs: 0, md: 4 },
+      p: 2,
+      pt: { xs: 4, md: 2 },
+
+      //height: "85%"
+    }}
+  >
+    {children}
+  </Paper>
   /* </Box> */
 );
 
@@ -231,6 +244,22 @@ export default function InvoiceList() {
       field: "codFisc",
       headerName: "Codice fiscale",
       flex: 1,
+      renderCell: (params) =>
+        params.row.patient.codiceFiscale ? (
+          <Tooltip title="Copia" enterDelay={300} arrow>
+            <Chip
+              color="primary"
+              variant="outlined"
+              label={params.row.patient.codiceFiscale}
+              onClick={() =>
+                navigator.clipboard.writeText(params.row.patient.codiceFiscale)
+              }
+              sx={{ my: 1 }}
+            />
+          </Tooltip>
+        ) : (
+          ""
+        ),
     },
     {
       field: "value",
@@ -238,6 +267,8 @@ export default function InvoiceList() {
       align: "right",
       headerAlign: "center",
       flex: 0.3,
+      minWidth: 80,
+
       renderCell: (params) => (
         <>
           {`${params.row.invoice.valore} €`}
@@ -328,36 +359,40 @@ export default function InvoiceList() {
       <Typography variant="h6" component="div" sx={{ mb: 1 }}>
         Fatture
       </Typography>
-      <Box sx={{ mb: 2 }}>
+      {/* <Box sx={{ mb: { xs: 0, md: 2 } }}> */}
+      <Box>
         <YearButtonGroup
           years={years}
           selectedYears={selectedYears}
           handleYearsChange={handleYearsChange}
         />
       </Box>
-      <Box sx={{ height: "70%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          density="compact"
-          columnVisibilityModel={colVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) =>
-            setColVisibilityModel(newModel)
-          }
-          pageSize={25}
-          disableSelectionOnClick={true}
-          components={{
-            Toolbar: ListTableToolbar,
-          }}
-          // slotProps={{
-          //   toolbar: { csvOptions: { allColumns: true, fields: ["id"] } },
-          // }}
-          checkboxSelection={false}
-          // onRowClick={(params) =>
-          //   router.push(`/invoices/${params.row.invoice._id}`)
-          // }
-        />
-      </Box>
+      {/* <Box
+      </Container>sx={{ height: "70%" }}
+      > */}
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoHeight
+        density="compact"
+        columnVisibilityModel={colVisibilityModel}
+        onColumnVisibilityModelChange={(newModel) =>
+          setColVisibilityModel(newModel)
+        }
+        pageSize={25}
+        disableSelectionOnClick={true}
+        components={{
+          Toolbar: ListTableToolbar,
+        }}
+        // slotProps={{
+        //   toolbar: { csvOptions: { allColumns: true, fields: ["id"] } },
+        // }}
+        checkboxSelection={false}
+        // onRowClick={(params) =>
+        //   router.push(`/invoices/${params.row.invoice._id}`)
+        // }
+      />
+      {/* </Box> */}
     </Container>
   );
 }
