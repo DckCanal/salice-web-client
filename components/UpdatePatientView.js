@@ -123,7 +123,7 @@ export default function UpdatePatientView() {
         updatePatient(patient._id, newValues),
         {
           revalidate: false,
-          populateCache: (updatedPatient, cacheData) => {
+          populateCache: ({ updatedPatient }, cacheData) => {
             return {
               ...cacheData,
               data: {
