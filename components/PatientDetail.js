@@ -11,7 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CreditScoreIcon from "@mui/icons-material/Payment";
+import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 // import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
@@ -156,6 +158,7 @@ export default function PatientDetail({ id }) {
       id: i._id,
       ordinal: i.numeroOrdine,
       value: i.valore,
+      pagamentoTracciabile: i.pagamentoTracciabile,
       issueDate: new Date(i.dataEmissione),
       collectDate: new Date(i.dataIncasso),
       ordinalWithYear: `${new Date(i.dataEmissione).getFullYear()}-${String(
@@ -187,6 +190,20 @@ export default function PatientDetail({ id }) {
       align: "center",
       headerAlign: "center",
       flex: 0.3,
+      renderCell: (params) => (
+        <>
+          {`${params.row.value} €`}
+          {params.row.pagamentoTracciabile ? (
+            <Tooltip title="Pagamento tracciabile" arrow>
+              <CreditScoreIcon fontSize="small" sx={{ ml: 1 }} />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Pagamento non tracciabile" arrow>
+              <CreditCardOffIcon fontSize="small" sx={{ ml: 1 }} />
+            </Tooltip>
+          )}
+        </>
+      ),
     },
     {
       field: "issueDate",
@@ -363,29 +380,40 @@ export default function PatientDetail({ id }) {
               // <Typography variant="body1">
               //   Codice fiscale: {patient.codiceFiscale}
               // </Typography>
-              <TextField
-                disabled
-                variant="standard"
-                size="small"
-                InputProps={{
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Tooltip title="Copia" arrow>
-                        <IconButton
-                          onClick={() =>
-                            navigator.clipboard.writeText(patient.codiceFiscale)
-                          }
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ m: 1 }}
-                defaultValue={patient.codiceFiscale}
-              />
+              // <TextField
+              //   //disabled
+              //   variant="standard"
+              //   size="small"
+              //   InputProps={{
+              //     readOnly: true,
+              //     endAdornment: (
+              //       <InputAdornment position="end">
+              //         <Tooltip title="Copia" arrow>
+              //           <IconButton
+              //             onClick={() =>
+              //               navigator.clipboard.writeText(patient.codiceFiscale)
+              //             }
+              //           >
+              //             <ContentCopyIcon />
+              //           </IconButton>
+              //         </Tooltip>
+              //       </InputAdornment>
+              //     ),
+              //   }}
+              //   sx={{ m: 1 }}
+              //   defaultValue={patient.codiceFiscale}
+              // />
+              <Tooltip title="Copia" enterDelay={300} arrow>
+                <Chip
+                  color="primary"
+                  variant="outlined"
+                  label={patient.codiceFiscale}
+                  onClick={() =>
+                    navigator.clipboard.writeText(patient.codiceFiscale)
+                  }
+                  sx={{ my: 1 }}
+                />
+              </Tooltip>
             )}
             {patient.partitaIva && (
               <Typography variant="body1">
@@ -422,23 +450,27 @@ export default function PatientDetail({ id }) {
                   //   clickable
                   // />
                   <>
-                    <Chip
-                      component="a"
-                      variant="filled"
-                      label={`${patient.email}`}
-                      href={`mailto:${patient.email}`}
-                      clickable
-                      sx={{ mb: 1 }}
-                    />
                     <Tooltip title="Copia" arrow>
-                      <IconButton
+                      <Chip
+                        //component="a"
+                        variant="outlined"
+                        color="primary"
+                        label={`${patient.email}`}
+                        //href={`mailto:${patient.email}`}
+                        //clickable
+                        onClick={() =>
+                          navigator.clipboard.writeText(patient.email)
+                        }
+                        sx={{ mb: 1 }}
+                      />
+                      {/* <IconButton
                         sx={{ m: 1 }}
                         onClick={() =>
                           navigator.clipboard.writeText(patient.email)
                         }
                       >
                         <ContentCopyIcon />
-                      </IconButton>
+                      </IconButton> */}
                     </Tooltip>
                   </>
                 )}

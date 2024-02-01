@@ -163,14 +163,15 @@ export default function LastInvoices() {
       renderCell: (params) =>
         params.row.p.email && (
           <Chip
-            component="a"
-            variant="filled"
+            //component="a"
+            variant="outlined"
+            color="primary"
             label={`${params.row.p.email}`}
-            href={`mailto:${params.row.p.email}`}
-            clickable
-            onClick={(ev) => {
-              ev.stopPropagation();
-            }}
+            //href={`mailto:${params.row.p.email}`}
+            onClick={() => navigator.clipboard.writeText(params.row.p.email)}
+            // onClick={(ev) => {
+            //   ev.stopPropagation();
+            // }}
           />
         ),
     },
@@ -199,9 +200,9 @@ export default function LastInvoices() {
         disableExtendRowFullWidth={false}
         disableSelectionOnClick={true}
         hideFooter={true}
-        onRowClick={(params) => {
-          router.push(`/patients/${params.row.p._id}`);
-        }}
+        // onRowClick={(params) => {
+        //   router.push(`/patients/${params.row.p._id}`);
+        // }}
       />
     </>
   );

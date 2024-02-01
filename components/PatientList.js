@@ -182,11 +182,15 @@ export default function PatientList() {
       renderCell: (params) =>
         params.row.patient.email && (
           <Chip
-            component="a"
-            variant="filled"
+            //component="a"
+            variant="outlined"
+            color="primary"
             label={`${params.row.patient.email}`}
-            href={`mailto:${params.row.patient.email}`}
-            clickable
+            onClick={() =>
+              navigator.clipboard.writeText(params.row.patient.email)
+            }
+            // href={`mailto:${params.row.patient.email}`}
+            //clickable
           />
         ),
     },
@@ -265,6 +269,7 @@ export default function PatientList() {
         <DataGrid
           rows={rows}
           columns={columns}
+          density="compact"
           columnVisibilityModel={colVisibilityModel}
           onColumnVisibilityModelChange={(newModel) =>
             setColVisibilityModel(newModel)
@@ -274,7 +279,7 @@ export default function PatientList() {
           components={{
             Toolbar: ListTableToolbar,
           }}
-          onRowClick={(params) => router.push(`/patients/${params.row.id}`)}
+          //onRowClick={(params) => router.push(`/patients/${params.row.id}`)}
         />
       </Box>
     </Container>

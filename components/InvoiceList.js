@@ -339,6 +339,7 @@ export default function InvoiceList() {
         <DataGrid
           rows={rows}
           columns={columns}
+          density="compact"
           columnVisibilityModel={colVisibilityModel}
           onColumnVisibilityModelChange={(newModel) =>
             setColVisibilityModel(newModel)

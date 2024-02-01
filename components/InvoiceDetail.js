@@ -185,28 +185,39 @@ export default function InvoiceDetail({ id }) {
           <Box sx={{ p: { xs: 2, md: 0 } }}>
             {patient.codiceFiscale && (
               // <TextLine>{patient.codiceFiscale}</TextLine>
-              <TextField
-                disabled
-                size="small"
-                InputProps={{
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Tooltip title="Copia" arrow>
-                        <IconButton
-                          onClick={() =>
-                            navigator.clipboard.writeText(patient.codiceFiscale)
-                          }
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ m: 1 }}
-                defaultValue={patient.codiceFiscale}
-              />
+              // <TextField
+              //   disabled
+              //   size="small"
+              //   InputProps={{
+              //     readOnly: true,
+              //     endAdornment: (
+              //       <InputAdornment position="end">
+              //         <Tooltip title="Copia" arrow>
+              //           <IconButton
+              //             onClick={() =>
+              //               navigator.clipboard.writeText(patient.codiceFiscale)
+              //             }
+              //           >
+              //             <ContentCopyIcon />
+              //           </IconButton>
+              //         </Tooltip>
+              //       </InputAdornment>
+              //     ),
+              //   }}
+              //   sx={{ m: 1 }}
+              //   defaultValue={patient.codiceFiscale}
+              // />
+              <Tooltip title="Copia" enterDelay={300} arrow>
+                <Chip
+                  color="primary"
+                  variant="outlined"
+                  label={patient.codiceFiscale}
+                  onClick={() =>
+                    navigator.clipboard.writeText(patient.codiceFiscale)
+                  }
+                  sx={{ my: 1 }}
+                />
+              </Tooltip>
             )}
             {patient.partitaIva && <TextLine>patient.partitaIva</TextLine>}
             <TextLine>
@@ -228,24 +239,34 @@ export default function InvoiceDetail({ id }) {
             </TextLine>
             {patient.telefono && <TextLine>{patient.telefono}</TextLine>}
             {patient.email && (
-              <>
+              // <>
+              //   <Chip
+              //     component="a"
+              //     variant="filled"
+              //     label={`${patient.email}`}
+              //     href={`mailto:${patient.email}`}
+              //     clickable
+              //     sx={{ mb: 1 }}
+              //   />
+              //   <Tooltip title="Copia" arrow>
+              //     <IconButton
+              //       sx={{ m: 1 }}
+              //       onClick={() => navigator.clipboard.writeText(patient.email)}
+              //     >
+              //       <ContentCopyIcon />
+              //     </IconButton>
+              //   </Tooltip>
+              // </>
+              <Tooltip title="Copia" arrow>
                 <Chip
-                  component="a"
-                  variant="filled"
+                  //component="a"
+                  variant="outlined"
+                  color="primary"
                   label={`${patient.email}`}
-                  href={`mailto:${patient.email}`}
-                  clickable
+                  onClick={() => navigator.clipboard.writeText(patient.email)}
                   sx={{ mb: 1 }}
                 />
-                <Tooltip title="Copia" arrow>
-                  <IconButton
-                    sx={{ m: 1 }}
-                    onClick={() => navigator.clipboard.writeText(patient.email)}
-                  >
-                    <ContentCopyIcon />
-                  </IconButton>
-                </Tooltip>
-              </>
+              </Tooltip>
             )}
           </Box>
         </Box>
