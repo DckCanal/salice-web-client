@@ -5,6 +5,7 @@ import { mutate } from "swr";
 
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -183,8 +184,16 @@ export default function PatientDetail({ id }) {
         const [year, number] = value.split("-");
         return `${Number.parseInt(number)}/${year}`;
       },
-      renderCell: (params) =>
-        `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
+      renderCell: (params) => (
+        <Link href={`/invoices/${params.row.id}`} passHref>
+          <Button variant="text" size="small">
+            {`${params.row.ordinal}/${new Date(
+              params.row.issueDate
+            ).getFullYear()}`}
+          </Button>
+        </Link>
+      ),
+      // `${params.row.ordinal}/${new Date(params.row.issueDate).getFullYear()}`,
     },
     {
       field: "value",
