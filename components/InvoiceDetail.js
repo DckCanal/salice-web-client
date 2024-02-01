@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
+// import { useState } from "react";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -9,12 +10,15 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import DoneIcon from "@mui/icons-material/Done";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import InputAdornment from "@mui/material/InputAdornment";
+import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 
 import { italianMonth } from "../lib/dateUtils";
 import excelInvoice from "../lib/excelLib";
@@ -180,7 +184,28 @@ export default function InvoiceDetail({ id }) {
           <Divider />
           <Box sx={{ p: { xs: 2, md: 0 } }}>
             {patient.codiceFiscale && (
-              <TextLine>{patient.codiceFiscale}</TextLine>
+              // <TextLine>{patient.codiceFiscale}</TextLine>
+              <TextField
+                disabled
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Copia" arrow>
+                        <IconButton
+                          onClick={() =>
+                            navigator.clipboard.writeText(patient.codiceFiscale)
+                          }
+                        >
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ m: 1 }}
+                defaultValue={patient.codiceFiscale}
+              />
             )}
             {patient.partitaIva && <TextLine>patient.partitaIva</TextLine>}
             <TextLine>
