@@ -60,7 +60,7 @@ export default function UpdatePatientView() {
   const [telefono, setTelefono] = React.useState(patient?.telefono || "");
   const [email, setEmail] = React.useState(patient?.email || "");
   const [dataNascita, setDataNascita] = React.useState(
-    patient?.dataNascita ? new Date(patient.dataNascita) : ""
+    patient?.dataNascita !== null ? new Date(patient.dataNascita) : ""
   );
   const [paeseNascita, setPaeseNascita] = React.useState(
     patient?.luogoNascita?.paese || ""
@@ -79,8 +79,6 @@ export default function UpdatePatientView() {
   const capRegEx = /\d{5}/;
   const provRegEx = /[A-Z]{2}/i;
   const pIvaRegEx = /\d{11}/;
-
-  console.log(name);
 
   // HANDLER for Form submit event
   async function submit(event) {
@@ -106,8 +104,13 @@ export default function UpdatePatientView() {
       newValues.indirizzoResidenza.civico = civicoResidenza;
     if (telefono !== patient.telefono) newValues.telefono = telefono;
     if (email !== patient.email) newValues.email = email;
-    if (new Date(dataNascita) !== new Date(patient.dataNascita))
-      newValues.dataNascita = new Date(dataNascita);
+    if (
+      new Date(dataNascita) !== new Date(patient.dataNascita) ||
+      dataNascita === ""
+    ) {
+      // newValues.dataNascita = new Date(dataNascita);
+      newValues.dataNascita = dataNascita;
+    }
     newValues.luogoNascita = {};
     if (paeseNascita !== patient.luogoNascita?.paese)
       newValues.luogoNascita.paese = paeseNascita;
@@ -196,9 +199,8 @@ export default function UpdatePatientView() {
   }
   function vDataNascita() {
     return (
-      dataNascita === "" ||
-      dataNascita == null ||
-      !isNaN(Date.parse(dataNascita))
+      //dataNascita === "" ||
+      dataNascita == null || !isNaN(Date.parse(dataNascita))
     );
   }
   function vProvinciaNascita() {

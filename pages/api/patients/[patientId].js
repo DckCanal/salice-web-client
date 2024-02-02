@@ -59,9 +59,20 @@ export default async function handler(req, res) {
             filteredBody.luogoNascita[key] = patient.luogoNascita[key];
         });
       }
+      let queryData;
+      if (
+        filteredBody.dataNascita === undefined ||
+        new Date(filteredBody.dataNascita).toString() === "Invalid Date" ||
+        isNaN(new Date(filteredBody.dataNascita))
+      ) {
+        queryData = {
+          $set: filteredBody,
+          $unset: { dataNascita: true },
+        };
+      } else queryData = filteredBody;
       const updatedPatient = await Patient.findByIdAndUpdate(
         patientId,
-        filteredBody,
+        queryData,
         {
           new: true,
           runValidators: true,
