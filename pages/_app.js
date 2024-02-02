@@ -2,31 +2,43 @@ import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { teal, purple } from "@mui/material/colors";
 import { CssBaseline } from "@mui/material";
-
+import { itIT } from "@mui/material/locale";
+import { itIT as itITdataGrid } from "@mui/x-data-grid";
+import { itIT as itITdateTimePicker } from "@mui/x-date-pickers";
 import "../styles/globals.css";
 import { SwitchThemeContext } from "../components/ThemeContext";
 
-const mdTheme = createTheme({
-  palette: {
-    primary: {
-      main: teal[500],
-    },
-    secondary: {
-      main: purple[500],
-    },
-  },
-});
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: teal[300],
-    },
-    secondary: {
-      main: purple[300],
+const mdTheme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: teal[500],
+      },
+      secondary: {
+        main: purple[500],
+      },
     },
   },
-});
+  itIT,
+  itITdataGrid,
+  itITdateTimePicker
+);
+const darkTheme = createTheme(
+  {
+    palette: {
+      mode: "dark",
+      primary: {
+        main: teal[300],
+      },
+      secondary: {
+        main: purple[300],
+      },
+    },
+  },
+  itIT,
+  itITdataGrid,
+  itITdateTimePicker
+);
 
 function MyApp({ Component, pageProps }) {
   const [lightTheme, setLightTheme] = useState(false);
