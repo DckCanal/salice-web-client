@@ -4,7 +4,7 @@ import { teal, purple } from "@mui/material/colors";
 import { CssBaseline } from "@mui/material";
 import { itIT } from "@mui/material/locale";
 import { itIT as itITdataGrid } from "@mui/x-data-grid";
-import { itIT as itITdateTimePicker } from "@mui/x-date-pickers";
+//import { itIT as itITdateTimePicker } from "@mui/x-date-pickers";
 import "../styles/globals.css";
 import { SwitchThemeContext } from "../components/ThemeContext";
 
@@ -20,8 +20,8 @@ const mdTheme = createTheme(
     },
   },
   itIT,
-  itITdataGrid,
-  itITdateTimePicker
+  itITdataGrid
+  //itITdateTimePicker
 );
 const darkTheme = createTheme(
   {
@@ -36,8 +36,8 @@ const darkTheme = createTheme(
     },
   },
   itIT,
-  itITdataGrid,
-  itITdateTimePicker
+  itITdataGrid
+  //itITdateTimePicker
 );
 
 function MyApp({ Component, pageProps }) {
