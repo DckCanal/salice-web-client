@@ -18,7 +18,7 @@ export default function SignInLayout({ children }) {
     if (user && !loggedOut) {
       router.replace("/dashboard");
     }
-  }, [user, loggedOut]);
+  }, [user, loggedOut, router]);
 
   return (
     <Box sx={{ display: "flex" }}>

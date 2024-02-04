@@ -17,7 +17,7 @@ export default function DarkThemeToggler() {
     try {
       switchd();
     } catch (e) {}
-  });
+  }, [switchd]);
   const theme = useTheme();
   const longPressProps = useLongPress(handleLongPress, {
     isPreventDefault: true,

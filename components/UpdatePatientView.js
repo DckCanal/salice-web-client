@@ -60,7 +60,9 @@ export default function UpdatePatientView() {
   const [telefono, setTelefono] = React.useState(patient?.telefono || "");
   const [email, setEmail] = React.useState(patient?.email || "");
   const [dataNascita, setDataNascita] = React.useState(
-    patient?.dataNascita !== null ? new Date(patient.dataNascita) : ""
+    patient?.dataNascita !== null && patient?.dataNascita !== undefined
+      ? new Date(patient.dataNascita)
+      : ""
   );
   const [paeseNascita, setPaeseNascita] = React.useState(
     patient?.luogoNascita?.paese || ""

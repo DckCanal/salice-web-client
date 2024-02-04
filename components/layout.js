@@ -96,7 +96,7 @@ export default function Layout({ children }) {
     if (loggedOut) {
       router.replace("/");
     }
-  }, [loggedOut]);
+  }, [loggedOut, router]);
 
   function switchd() {
     setD(!d);
