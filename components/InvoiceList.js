@@ -63,10 +63,10 @@ export default function InvoiceList() {
     id: false,
     ordinalWithYear: true,
     patientName: true,
-    codFisc: false,
+    codFisc: true,
     value: true,
     issueDate: true,
-    collectDate: true,
+    collectDate: false,
     download: true,
   });
   const {
@@ -102,7 +102,7 @@ export default function InvoiceList() {
             id: false,
             ordinalWithYear: true,
             patientName: true,
-            codFisc: false,
+            codFisc: true,
             value: true,
             issueDate: true,
             collectDate: false,
@@ -115,10 +115,10 @@ export default function InvoiceList() {
             id: false,
             ordinalWithYear: true,
             patientName: true,
-            codFisc: false,
+            codFisc: true,
             value: true,
             issueDate: true,
-            collectDate: true,
+            collectDate: false,
             download: true,
           };
         });
