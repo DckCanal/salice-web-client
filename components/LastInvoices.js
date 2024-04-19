@@ -11,7 +11,6 @@ import Title from "./Title";
 import ErrorBox from "./ErrorBox";
 import { italianShortDate } from "../lib/dateUtils";
 import { useInvoices, usePatients } from "../lib/hooks";
-import { TurnedIn } from "@mui/icons-material";
 
 export default function LastInvoices() {
   const [colVisibilityModel, setColVisibilityModel] = React.useState({

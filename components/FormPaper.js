@@ -1,7 +1,7 @@
-import { Paper } from "@mui/material";
+import StyledPaper from "./StyledPaper";
 export default function FormPaper(params) {
   return (
-    <Paper
+    <StyledPaper
       {...params}
       sx={{
         display: "flex",

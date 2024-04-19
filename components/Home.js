@@ -1,16 +1,18 @@
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import { useTheme } from "@emotion/react";
 
 import IncomePaper from "./IncomePaper";
 import LastInvoices from "./LastInvoices";
 import Chart from "./Chart";
+import StyledPaper from "./StyledPaper";
 
 export default function Home() {
+  const theme = useTheme();
   return (
     <Grid container spacing={3}>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
-        <Paper
+        <StyledPaper
           sx={{
             p: 2,
             display: "flex",
@@ -21,11 +23,11 @@ export default function Home() {
           }}
         >
           <Chart />
-        </Paper>
+        </StyledPaper>
       </Grid>
       {/* Income Paper */}
       <Grid item xs={12} md={4} lg={3}>
-        <Paper
+        <StyledPaper
           sx={{
             p: 2,
             display: "flex",
@@ -36,13 +38,22 @@ export default function Home() {
           }}
         >
           <IncomePaper />
-        </Paper>
+        </StyledPaper>
       </Grid>
       {/* Last invoices */}
       <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column", m: 2 }}>
+        <StyledPaper
+          variant="outlined"
+          sx={{
+            bgcolor: theme.palette.mode === "light" ? "#fff" : "#000",
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            m: 2,
+          }}
+        >
           <LastInvoices />
-        </Paper>
+        </StyledPaper>
       </Grid>
     </Grid>
   );

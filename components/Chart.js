@@ -3,8 +3,10 @@ import { useTheme } from "@mui/material/styles";
 import { CircularProgress, Box } from "@mui/material";
 
 import {
-  LineChart,
-  Line,
+  //LineChart,
+  AreaChart,
+  //Line,
+  Area,
   XAxis,
   YAxis,
   Label,
@@ -78,7 +80,7 @@ export default function Chart() {
     <React.Fragment>
       {/* <Title>Today</Title> */}
       <ResponsiveContainer width="99%">
-        <LineChart
+        <AreaChart
           data={data}
           margin={{
             top: 16,
@@ -87,6 +89,16 @@ export default function Chart() {
             left: 24,
           }}
         >
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <XAxis
             dataKey="mese"
             stroke={theme.palette.text.secondary}
@@ -114,21 +126,25 @@ export default function Chart() {
             }}
           />
           <Legend />
-          <Line
+          <Area
             isAnimationActive={true}
             type="monotone"
             dataKey={currentLabel}
             stroke={theme.palette.primary.main}
-            dot={true}
+            //dot={true}
+            fillOpacity={1}
+            fill="url(#colorPv)"
           />
-          <Line
+          <Area
             isAnimationActive={true}
             type="monotone"
             dataKey={previousLabel}
             stroke={theme.palette.secondary.main}
-            dot={true}
+            //dot={true}
+            fillOpacity={1}
+            fill="url(#colorUv)"
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </React.Fragment>
   );

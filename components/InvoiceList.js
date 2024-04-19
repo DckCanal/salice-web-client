@@ -6,7 +6,6 @@ import { mutate } from "swr";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -21,6 +20,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
 import { CircularProgress } from "@mui/material";
 
+import StyledPaper from "./StyledPaper";
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -41,7 +41,7 @@ function YearButtonGroup({ years, selectedYears, handleYearsChange }) {
 
 const Container = ({ children }) => (
   // <Box sx={{ width: "100%", height: "90%" }}>
-  <Paper
+  <StyledPaper
     // variant="elevation"
     sx={{
       m: { xs: 0, md: 2 },
@@ -53,7 +53,7 @@ const Container = ({ children }) => (
     }}
   >
     {children}
-  </Paper>
+  </StyledPaper>
   /* </Box> */
 );
 

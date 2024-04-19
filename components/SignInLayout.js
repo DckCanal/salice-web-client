@@ -1,5 +1,5 @@
 import * as React from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";

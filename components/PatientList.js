@@ -2,7 +2,6 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -16,6 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { CircularProgress } from "@mui/material";
 
+import StyledPaper from "./StyledPaper";
 import ListTableToolbar from "./ListTableToolbar";
 import ErrorBox from "./ErrorBox";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -47,7 +47,7 @@ import { usePatients } from "../lib/hooks";
 // TODO: correct whatsapp link
 
 const Container = ({ children }) => (
-  <Paper
+  <StyledPaper
     sx={{
       m: { xs: 0, md: 2 },
       mt: { xs: 0, md: 4 },
@@ -58,7 +58,7 @@ const Container = ({ children }) => (
     }}
   >
     {children}
-  </Paper>
+  </StyledPaper>
 );
 
 export default function PatientList() {

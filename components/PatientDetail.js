@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
 
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -14,16 +13,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CreditScoreIcon from "@mui/icons-material/Payment";
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff";
-// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-// import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
 import DownloadIcon from "@mui/icons-material/Download";
 import { DataGrid } from "@mui/x-data-grid";
 import { CircularProgress } from "@mui/material";
 
+import StyledPaper from "./StyledPaper";
 import ListTableToolbar from "./ListTableToolbar";
 import excelInvoice from "../lib/excelLib";
 import { sortDate, italianShortDate } from "../lib/dateUtils";
@@ -39,7 +35,7 @@ const Container = ({ children }) => (
       alignItems: "center",
     }}
   >
-    <Paper
+    <StyledPaper
       sx={{
         m: { xs: 0, md: 2 },
         mt: { xs: 0, md: 4 },
@@ -50,7 +46,7 @@ const Container = ({ children }) => (
       }}
     >
       {children}
-    </Paper>
+    </StyledPaper>
   </Box>
 );
 
@@ -293,7 +289,7 @@ export default function PatientDetail({ id }) {
         alignItems: "center",
       }}
     >
-      <Paper
+      <StyledPaper
         sx={{
           mt: { xs: 2, md: 4 },
           p: { xs: 2, md: 4 },
@@ -491,8 +487,8 @@ export default function PatientDetail({ id }) {
             <Divider />
           </>
         )}
-      </Paper>
-      <Paper
+      </StyledPaper>
+      <StyledPaper
         sx={{
           mt: 2,
           // ml: 2,
@@ -522,7 +518,7 @@ export default function PatientDetail({ id }) {
           //   router.push(`/invoices/${params.row.id}`);
           // }}
         />
-      </Paper>
+      </StyledPaper>
     </Box>
   );
 }

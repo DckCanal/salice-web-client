@@ -9,12 +9,13 @@ import {
   FormControlLabel,
   InputAdornment,
   Box,
-  Paper,
   Typography,
   CircularProgress,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+
+import StyledPaper from "./StyledPaper";
 
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -143,7 +144,9 @@ export default function NewInvoiceView() {
   const enableSubmit = validateForm();
 
   return (
-    <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
+    <StyledPaper
+      sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -304,6 +307,6 @@ export default function NewInvoiceView() {
           </>
         )}
       </Box>
-    </Paper>
+    </StyledPaper>
   );
 }

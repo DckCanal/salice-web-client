@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { mutate } from "swr";
 // import { useState } from "react";
 
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -20,6 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 import { CircularProgress, TextField } from "@mui/material";
 
+import StyledPaper from "./StyledPaper";
 import { italianMonth } from "../lib/dateUtils";
 import excelInvoice from "../lib/excelLib";
 import { deleteInvoice } from "../lib/controller";
@@ -36,7 +36,7 @@ const TextLine = ({ children, width }) => {
 };
 
 const PaperContainer = ({ children }) => (
-  <Paper
+  <StyledPaper
     sx={{
       mt: { xs: 2, md: 4 },
       p: 4,
@@ -49,7 +49,7 @@ const PaperContainer = ({ children }) => (
     }}
   >
     {children}
-  </Paper>
+  </StyledPaper>
 );
 
 // TODO: manage undefined patient while loading

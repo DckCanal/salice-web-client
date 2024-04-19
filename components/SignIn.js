@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import { Paper } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -9,6 +8,7 @@ import Container from "@mui/material/Container";
 import axios from "axios";
 import validator from "validator";
 import { useUser } from "../lib/hooks";
+import StyledPaper from "./StyledPaper";
 
 export default function SignIn() {
   const [inputError, setInputError] = React.useState(false);
@@ -79,7 +79,7 @@ export default function SignIn() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper sx={{ p: 3, mt: 6 }}>
+      <StyledPaper sx={{ p: 3, mt: 6 }}>
         <Box
           sx={{
             marginTop: 8,
@@ -143,7 +143,7 @@ export default function SignIn() {
             )}
           </Box>
         </Box>
-      </Paper>
+      </StyledPaper>
     </Container>
   );
 }

@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   InputAdornment,
   Box,
-  Paper,
   Typography,
   CircularProgress,
 } from "@mui/material";
@@ -18,13 +17,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
+import StyledPaper from "./StyledPaper";
 import { useInvoice, usePatient } from "../lib/hooks";
 import { updateInvoice } from "../lib/controller";
 import ErrorBox from "./ErrorBox";
 // TODO: manage response errors
 
 const Container = ({ children }) => (
-  <Paper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
+  <StyledPaper sx={{ p: 3, mt: 12, maxWidth: "500px", mr: "auto", ml: "auto" }}>
     <Box
       sx={{
         display: "flex",
@@ -34,7 +34,7 @@ const Container = ({ children }) => (
     >
       {children}
     </Box>
-  </Paper>
+  </StyledPaper>
 );
 
 export default function UpdateInvoiceView() {
