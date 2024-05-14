@@ -1,3 +1,4 @@
+'use client';
 import { useRouter } from "next/router";
 import { TextField, Autocomplete } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
