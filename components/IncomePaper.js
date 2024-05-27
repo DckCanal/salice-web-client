@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import {
@@ -40,7 +40,8 @@ export default function IncomePaper() {
       />
     );
 
-  if (invoices === undefined || isLoading)
+  if (invoices === undefined)
+    // || isLoading)
     return (
       <Container>
         <Box

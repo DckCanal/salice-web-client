@@ -39,7 +39,7 @@ export default function Chart() {
       />
     );
 
-  if (invoices === undefined || isLoading)
+  if (invoices === undefined)// || isLoading)
     return (
       <Box
         sx={{

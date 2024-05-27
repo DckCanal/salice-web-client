@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
@@ -67,7 +67,8 @@ export default function InvoiceDetail({ id }) {
     error: patientError,
   } = usePatient(invoice?.paziente);
 
-  if (invoiceError)
+  if (invoiceError) {
+    console.log("Invoice error: ", invoiceError);
     return (
       <PaperContainer>
         <ErrorBox
@@ -76,7 +77,9 @@ export default function InvoiceDetail({ id }) {
         />
       </PaperContainer>
     );
-  if (patientError)
+  }
+  if (patientError) {
+    console.log("Patient error: ", patientError);
     return (
       <PaperContainer>
         <ErrorBox
@@ -85,10 +88,11 @@ export default function InvoiceDetail({ id }) {
         />
       </PaperContainer>
     );
+  }
 
   if (
-    isLoadingInvoice ||
-    isLoadingPatient ||
+    //isLoadingInvoice ||
+    //isLoadingPatient ||
     invoice === undefined ||
     patient === undefined
   )

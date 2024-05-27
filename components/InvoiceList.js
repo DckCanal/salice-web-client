@@ -153,8 +153,8 @@ export default function InvoiceList() {
     );
 
   if (
-    isLoadingInvoices ||
-    isLoadingPatients ||
+    // isLoadingInvoices ||
+    // isLoadingPatients ||
     invoices === undefined ||
     patients === undefined
   )
