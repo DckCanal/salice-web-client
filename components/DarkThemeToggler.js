@@ -21,7 +21,7 @@ export default function DarkThemeToggler() {
   const theme = useTheme();
   const longPressProps = useLongPress(handleLongPress, {
     isPreventDefault: true,
-    threshold: 2000, // Modifica il valore del ritardo a tuo piacimento
+    threshold: 1000, // Modifica il valore del ritardo a tuo piacimento
     onCancel: toggleLightTheme,
   });
 
