@@ -98,7 +98,16 @@ export default function Layout({ children }) {
     }
   }, [loggedOut, router]);
 
+  useEffect(() => {
+    if (window.localStorage.getItem("d-value")) {
+      setD(JSON.parse(window.localStorage.getItem("d-value")));
+    }
+  }, []);
+
   function switchd() {
+    if (typeof window !== undefined) {
+      window.localStorage.setItem("d-value", JSON.stringify(!d));
+    }
     setD(!d);
   }
 

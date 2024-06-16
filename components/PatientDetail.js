@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -116,7 +117,8 @@ export default function PatientDetail({ id }) {
       window.removeEventListener("resize", toggleColVisibilityOnResize);
   }, []);
 
-  if (isLoadingInvoices || isLoadingPatient)
+  // if (isLoadingInvoices || isLoadingPatient)
+  if (invoices === undefined || patient === undefined)
     return (
       <Container>
         <Box

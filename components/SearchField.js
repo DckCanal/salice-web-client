@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/router";
 import { TextField, Autocomplete } from "@mui/material";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
@@ -49,7 +50,7 @@ export default function SearchField() {
             {...params}
           />
         )}
-        disabled={error !== undefined || isLoading}
+        disabled={error !== undefined || patients === undefined} //isLoading}
       />
     </ThemeProvider>
   );

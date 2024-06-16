@@ -1,3 +1,4 @@
+'use client';
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { CircularProgress, Box } from "@mui/material";
@@ -38,7 +39,7 @@ export default function Chart() {
       />
     );
 
-  if (invoices === undefined || isLoading)
+  if (invoices === undefined)// || isLoading)
     return (
       <Box
         sx={{

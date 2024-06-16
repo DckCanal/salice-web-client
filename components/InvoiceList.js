@@ -1,3 +1,4 @@
+'use client';
 import * as React from "react";
 import { useContext } from "react";
 import Link from "next/link";
@@ -152,8 +153,8 @@ export default function InvoiceList() {
     );
 
   if (
-    isLoadingInvoices ||
-    isLoadingPatients ||
+    // isLoadingInvoices ||
+    // isLoadingPatients ||
     invoices === undefined ||
     patients === undefined
   )

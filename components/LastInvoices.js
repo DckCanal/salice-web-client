@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -89,9 +90,9 @@ export default function LastInvoices() {
 
   if (
     invoices === undefined ||
-    patients === undefined ||
-    isLoadingPatients ||
-    isLoadingInvoices
+    patients === undefined // ||
+    //isLoadingPatients ||
+    //isLoadingInvoices
   )
     return (
       <>
